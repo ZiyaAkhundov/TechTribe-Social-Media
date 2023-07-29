@@ -1,0 +1,194 @@
+section::-webkit-scrollbar {
+    width: 0.5rem;
+}
+section::-webkit-scrollbar-thumb {
+    height:0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    background-color: #a6a6a6;
+}
+section{
+    overflow: auto;
+    height: calc(100% - 60px);
+}
+.content-profile{
+    background-color: #fafaff85;
+}
+.profile{
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+    
+}
+.profile-header{
+    display: flex;
+    padding: 30px 10px 50px 10px;
+    border-bottom: 1px solid rgb(215, 215, 215);
+}
+.profile-header .profile-img{
+    width: 200px;
+    height: calc(148px + 2px);
+}
+.profile-header .profile-img > .profile-img-section{
+    border-radius: 50%;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+.profile-header .profile-img > .profile-img-section > .change-img{
+    border: 0;
+    cursor: pointer;
+    height: 100%;
+    padding: 0;
+    width: 100%;
+}
+.profile-header .profile-img img{
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    vertical-align: baseline;
+    width: 100%;
+    object-fit: cover;
+}
+.profile-header > .profile-section{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 5px 70px;
+}
+.profile-header > .profile-section >.profile-actions{
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
+}
+.profile-header > .profile-section >.profile-actions>.profile-username p{
+    font-size: 25px;
+}
+.profile-header > .profile-section >.profile-actions>.profile-edit a{
+    padding: 7px 17px;
+    background-color: gray;
+    color: #fff;
+    border-radius: 10px;
+} 
+.profile-header > .profile-section >.profile-actions>.profile-logout button{
+    padding: 6px 17px;
+    background-color: rgb(211, 2, 2);
+    color: #fff;
+    border-radius: 10px;
+}
+.profile-header > .profile-section > .profile-activity{
+    padding: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    column-gap: 20px;
+}
+.profile-header > .profile-section > .profile-activity > .profile-activity-main{
+    display: flex;
+    column-gap: 20px;
+    padding: 5px 0;
+    font-size: 18px;
+}
+.profile-header > .profile-section > .profile-activity > .profile-activity-bio{
+    font-size: 17px;
+    padding: 10px 0;
+}
+.profile-body > .profile-body-header{
+    display: flex;
+    justify-content: center;
+}
+.profile-body > .profile-body-header button{
+    border-top: 1px solid rgb(85, 85, 85);
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+}
+.profile-body > .profile-body-header button svg{
+    color: black;
+    width: 17px;
+    height: 17px;
+}
+.profile-body > .profile-body-content{
+    width: 100%;
+}
+.profile-body > .profile-body-content > article{
+    position: relative;
+    width: 70%;
+    margin: auto;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 10px;
+    margin-block: 10px;
+    background-color: #f9f9f9;
+}
+.content-profile .profile .profile-body .profile-body-content article  .context-img  img{
+    max-height: 512px;
+    display: block;
+    max-width: 100%;
+    position: relative;
+    border-radius: 6px;
+}
+.content-profile .profile .profile-body .profile-body-content article  .context-img{
+    display: flex;
+    justify-content: center;
+    margin: 8px auto;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container{
+    padding: 20px;
+    width: 95%;
+    margin: auto;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .article-head{
+    width: 100%;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .article-head a{
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .article-head .profile-img{
+    width: 30px;
+    height: 30px;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .article-head .profile-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .context{
+    display: inline;
+    position: relative;
+    text-decoration: none;
+    word-break: break-word;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .article-actions .btns{
+    column-gap: 10px;
+    padding: 5px 10px 0;
+}
+.content-profile .profile .profile-body .profile-body-content article .article-container .article-actions .btns button{
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+}

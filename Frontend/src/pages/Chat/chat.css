@@ -1,0 +1,38 @@
+.chat-box{
+    height: calc(100% - 60px) !important;
+}
+#messages::-webkit-scrollbar {
+    width: 0.5rem;
+}
+#messages::-webkit-scrollbar-thumb {
+    height:0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    background-color: #a6a6a6;
+}
+textarea::-webkit-scrollbar {
+    width: 0.5rem;
+}
+textarea::-webkit-scrollbar-thumb {
+    height:0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    background-color: #a6a6a6;
+}
+.EmojiPickerReact {
+    height: 450px !important;
+    position: absolute !important;
+    width: 350px  !important;
+    right: 20px !important;
+    bottom: 50px !important;
+}
+textarea {
+    resize: none  !important;
+}
+em-emoji-picker{
+    position: absolute;
+    bottom: 54px;
+    right: 60px;
+}

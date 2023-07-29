@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+    html,body,#root{
+        @apply h-full bg-bgMain antialiased
+    }
+    #root{
+        @apply flex flex-col
+    }
+    .content{
+        /* height: calc(100% - theme('spacing.16')); */
+        @apply flex;
+    }
+    .asideNav{
+        height: calc(100% - theme('spacing.4'));
+    }
+}
+.navbar{
+    border-bottom: 1px solid #ecf1f6;
+}
+.nav-aside{
+    border-right: 1px solid #ecf1f6;
+}
