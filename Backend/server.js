@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const authRoutes =require("./routes/auth.js")
 const userRoutes =require("./routes/users.js")
 const postRoutes = require("./routes/posts.js")
+const mesRoomRoutes = require("./routes/mesRoom.js")
+const MessageRoutes = require("./routes/message.js")
 const morgan = require('morgan');
 
 const port =5000;
@@ -26,7 +28,9 @@ app.use(morgan("common"))
 
 app.use("/auth" ,authRoutes);
 app.use("/users" ,userRoutes);
-app.use("/posts",postRoutes)
+app.use("/posts",postRoutes);
+app.use("/messageroom",mesRoomRoutes);
+app.use("/message",MessageRoutes);
 
 app.listen(port,()=>{
     connect()
