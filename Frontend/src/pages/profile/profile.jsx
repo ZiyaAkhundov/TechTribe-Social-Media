@@ -1,15 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import img from "../../assets/image/Ziya.jpg"
 import logo from "../../assets/image/Programmers (5).png"
 import img1 from "../../assets/image/_DSC0187.jpg"
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import Post from "./Post/post"
 import "./profile.css"
 export default function profile() {
+
+  const [posts, setPosts] =useState([])
+  const [user, setUser] =useState(null)
+
+  const username = useParams().username
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await axios.get(import.meta.env.VITE_API_URL + '/users/' + username);
+      setUser(response.data);
+      console.log(response.data);
+    };
+  
+    const getPost = async () => {
+      try {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/posts/profile/' + username, {
+          withCredentials: true,
+        });
+        setPosts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    getUser();
+    getPost();
+  }, [username]);
+  
+  if(!user){
+    return(
+      <div>Sorry this page is not avaiable</div>
+    )
+  }
+
   return (
     <section>
       <div className="content-profile">
@@ -19,14 +55,13 @@ export default function profile() {
               <div className='profile-img-section'>
                 <button className='change-img'>
                   <img alt="user" src={img} sx={{ width: 140, height: 140 }} />
-
                 </button>
               </div>
             </div>
             <div className='profile-section'>
               <div className="profile-actions">
                 <div className='profile-username'>
-                  <p>akhundov_ziya</p>
+                  <p> {username}</p>
                 </div>
                 <div className="profile-edit">
                   <NavLink to={"edit"}>
@@ -42,18 +77,18 @@ export default function profile() {
               <div className='profile-activity'>
                 <div className="profile-activity-main">
                   <div className="profile-post">
-                    <span className='mx-1'>1</span>
+                    <span className='mx-1'>{posts && posts.length}</span>
                     <span className='mx-1'>post</span>
                   </div>
                   <div className='profile-followers'>
                     <button>
-                      <span className='mx-1'>20</span>
+                      <span className='mx-1'>{user && user.followers.length}</span>
                       <span className='mx-1'>followers</span>
                     </button>
                   </div>
                   <div className='profile-followings'>
                     <button>
-                      <span className='mx-1'>10</span>
+                      <span className='mx-1'>{user && user.followings.length}</span>
                       <span className='mx-1'>followings</span>
                     </button>
                   </div>
@@ -69,132 +104,20 @@ export default function profile() {
               </button>
             </div>
             <div className='profile-body-content justify-start'>
-            <article>
-                <div >
-                  <div className='article-container'>
-                    <div className='article-head'>
-                      <a href="">
-                        <div className="profile-img">
-                          <img src={img} alt="" />
-                        </div>
-                        <div className="profile-name">
-                          <h2>@akhundov_ziya</h2>
-                        </div>
-                      </a>
-                      <div className="article-head-action">
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                    </div>
-                    <div className='context'>
-                      <h3>Hey, Programmers School! The Airmen who make up the U.S. Air Force Special Warfare are some of the most-specialized
-                        warriors on the planet. Master Sergeant Kristopher Tomes is a PJ (Pararescue) in Air Force Special Warfare.
-                        He’s been in lifesaving missions around the world. Now’s your chance. Ask him anything!
-                      </h3>
-                    </div>
-                    <div className='context-img'>
-                      <img src={img} alt="" />
-                    </div>
-                    <div className="article-actions">
-                      <div className='btns flex'>
-                        <button className='mx-1'>
-                          <ThumbUpOutlinedIcon />
-                          <span>25 </span> <span>likes</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ModeCommentOutlinedIcon />
-                          <span>2 </span> <span>comments</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ShareOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-              <article>
-                <div >
-                  <div className='article-container'>
-                    <div className='article-head'>
-                      <a href="">
-                        <div className="profile-img">
-                          <img src={img} alt="" />
-                        </div>
-                        <div className="profile-name">
-                          <h2>@akhundov_ziya</h2>
-                        </div>
-                      </a>
-                      <div className="article-head-action">
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                    </div>
-                    <div className='context'>
-                      <h3>Hey, Programmers School! The Airmen who make up the U.S. Air Force Special Warfare are some of the most-specialized
-                        warriors on the planet. Master Sergeant Kristopher Tomes is a PJ (Pararescue) in Air Force Special Warfare.
-                        He’s been in lifesaving missions around the world. Now’s your chance. Ask him anything!
-                      </h3>
-                    </div>
-                    <div className='context-img'>
-                      <img src={logo} alt="" />
-                    </div>
-                    <div className="article-actions">
-                      <div className='btns flex'>
-                        <button className='mx-1'>
-                          <ThumbUpOutlinedIcon />
-                          <span>20 </span> <span>likes</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ModeCommentOutlinedIcon />
-                        </button>
-                        <button className='mx-1'>
-                          <ShareOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-              <article>
-                <div >
-                  <div className='article-container'>
-                    <div className='article-head'>
-                      <a href="">
-                        <div className="profile-img">
-                          <img src={img} alt="" />
-                        </div>
-                        <div className="profile-name">
-                          <h2>@akhundov_ziya</h2>
-                        </div>
-                      </a>
-                      <div className="article-head-action">
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                    </div>
-                    <div className='context'>
-                      <h3>Hey, Reddit! The Airmen who make up the U.S. Air Force Special Warfare are some of the most-specialized
-                        warriors on the planet. Master Sergeant Kristopher Tomes is a PJ (Pararescue) in Air Force Special Warfare.
-                        He’s been in lifesaving missions around the world. Now’s your chance. Ask him anything!
-                      </h3>
-                    </div>
-                    <div className='context-img'>
-                      <img src={img1} alt="" />
-                    </div>
-                    <div className="article-actions">
-                      <div className='btns flex'>
-                        <button className='mx-1'>
-                          <ThumbUpOutlinedIcon />
-                        </button>
-                        <button className='mx-1'>
-                          <ModeCommentOutlinedIcon />
-                        </button>
-                        <button className='mx-1'>
-                          <ShareOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              {posts.length > 0 ? (
+                posts.map(post => (
+                  <Post
+                    key={post._id} // Don't forget to add a unique key prop when rendering in a loop
+                    username={user.username}
+                    context={post.desc}
+                    contextImg={post.img}
+                    likes={post.likes}
+                    comments={post.comments.length + post.comments.reduce((totalReplies, comment) => totalReplies + comment.replies.length, 0)}
+                  />
+                ))
+              ) : (
+                <p>Loading...</p>
+              )}
             </div>
           </div>
         </div>

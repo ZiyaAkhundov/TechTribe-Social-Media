@@ -1,10 +1,29 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const Post = require('../models/Post');
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
+const session = require('express-session');
+const dotenv = require('dotenv');
+dotenv.config()
 
-
+function verifyClientToken(req, res, next) {
+    const token = req.cookies.jwtToken;
+  
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ error: 'Invalid token' });
+      }
+  
+      req.userId = decoded.userId;
+      next();
+    });
+  }
 //create a post
 router.post('/', async(req,res)=>{
     const newPost = await new Post(req.body)
@@ -53,7 +72,7 @@ router.delete('/:id', async(req,res)=>{
 })
 
 //get a post
-router.get('/:id', async(req,res)=>{
+router.get('/:id',verifyClientToken, async(req,res)=>{
     
     try {
         const post = await Post.findById(req.params.id);
@@ -84,7 +103,7 @@ router.get('/timeline/:userId', async(req,res)=>{
 })
 
 //get a user's posts
-router.get('/profile/:username', async(req,res)=>{
+router.get('/profile/:username',verifyClientToken, async(req,res)=>{
     try {
        const user = await User.findOne({username: req.params.username});
        if(!user){

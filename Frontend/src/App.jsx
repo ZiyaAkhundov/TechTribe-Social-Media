@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import logo from "./assets/image/logo-transparent.png"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"; 
 import { useSelector } from "react-redux";
 import Sidebar from "./layouts/web/components/sidebar";
 import Messenger from "./layouts/web/components/messenger/conversation";
 import Navbar from "./layouts/web/components/navbar/index";
 import routes from "./routes";
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux'
+import { login,logout } from './stores/auth';
+import {get, post} from "./utils/request"
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 
 
 function App() {
@@ -13,12 +23,36 @@ function App() {
   const sidebarAction = () => {
     setSidebar((prev) => !prev);
   };
+  const [loading, setLoading] = useState(true);
 
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-
+  useEffect(() => {
+    setLoading(true);
+    axios.get('http://localhost:5000/auth/user-data', { withCredentials: true })
+      .then(response => {
+            dispatch(login(response.data)); 
+      })
+      .catch(error => {
+        console.log('Error fetching user data:', error);
+      }).finally(() => {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+    });
+  }, []); 
+if(loading){
+  return (
+    <div className="absolute h-100dvh w-full top-0 left-0 flex justify-center items-center flex-col">
+      <img src={logo} alt="" className="w-24 h-24 object-contain"/>
+      <h2>Loading...</h2>
+    </div>
+  )
+}
   return (
     <Router>
       <div className="content overflow-hidden">
+      <ToastContainer />
         <Routes>
           {routes.map((route) => {
             if (route.layout === "main") {
@@ -64,6 +98,11 @@ function App() {
               )
             } 
             else {
+              if(user){
+                return (
+                  <Route key={route.path} path={route.path} element={<Navigate to="/" replace />} />
+                )
+              }
               return (
                 <Route
                   key={route.path}
