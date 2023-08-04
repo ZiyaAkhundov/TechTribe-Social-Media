@@ -1,6 +1,3 @@
-.chat-box{
-    height: calc(100% - 60px) !important;
-}
 #messages::-webkit-scrollbar {
     width: 0.5rem;
 }

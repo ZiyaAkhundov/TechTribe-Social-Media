@@ -6,26 +6,11 @@ const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
 const dotenv = require('dotenv');
+const isAuthenticated =require('../middleware/authentication.js')
 dotenv.config()
 
-function verifyClientToken(req, res, next) {
-    const token = req.cookies.jwtToken;
-  
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-  
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(403).json({ error: 'Invalid token' });
-      }
-  
-      req.userId = decoded.userId;
-      next();
-    });
-  }
 //create a post
-router.post('/', async(req,res)=>{
+router.post('/', isAuthenticated, async(req,res)=>{
     const newPost = await new Post(req.body)
     try {
         const savedPost = await newPost.save();
@@ -36,8 +21,7 @@ router.post('/', async(req,res)=>{
 })
 
 //update a post
-router.put('/:id', async(req,res)=>{
-    
+router.put('/:id',isAuthenticated, async(req,res)=>{
     try {
         const post = await  Post.findById(req.params.id);
         if(post.userId === req.body.userId){
@@ -54,7 +38,7 @@ router.put('/:id', async(req,res)=>{
 })
 
 //delete a post
-router.delete('/:id', async(req,res)=>{
+router.delete('/:id',isAuthenticated, async(req,res)=>{
     
     try {
         const post = await  Post.findById(req.params.id);
@@ -72,7 +56,7 @@ router.delete('/:id', async(req,res)=>{
 })
 
 //get a post
-router.get('/:id',verifyClientToken, async(req,res)=>{
+router.get('/:id',isAuthenticated, async(req,res)=>{
     
     try {
         const post = await Post.findById(req.params.id);
@@ -86,24 +70,38 @@ router.get('/:id',verifyClientToken, async(req,res)=>{
     }
 })
 
-//get timeline posts
-router.get('/timeline/:userId', async(req,res)=>{
-    try {
-        const currentUser = await User.findById(req.params.userId);
-        const userPosts = await Post.find({userId: currentUser._id});
-        const friendPosts = await Promise.all(
-            currentUser.followings.map((friendId) =>{
-                return Post.find({userId: friendId})
-            })
-        )
-        res.status(200).json(userPosts.concat(...friendPosts));
-    } catch (err){
-        res.status(500).json(err)
-    }
-})
+//get feed posts
+router.get('/feed/posts',isAuthenticated, async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.session.userId);
+    const userPosts = await Post.find({ userId: currentUser._id });
+    const friendPosts = await Promise.all(
+      currentUser.followings.map((friendId) => {
+        return Post.find({ userId: friendId });
+      })
+    );
+    const concatedData=userPosts.concat(...friendPosts);
+    const postsWithUsername = await Promise.all(
+        concatedData.map(async (post) => {
+          const { userId } = post;
+          const user = await User.findById(userId);
+          const username=user.username;
+          return {
+            ...post.toObject(),
+            username,
+          };
+        })
+      );
+  
+
+    res.status(200).json(postsWithUsername);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 //get a user's posts
-router.get('/profile/:username',verifyClientToken, async(req,res)=>{
+router.get('/profile/:username',isAuthenticated, async(req,res)=>{
     try {
        const user = await User.findOne({username: req.params.username});
        if(!user){
@@ -122,7 +120,7 @@ router.get('/profile/:username',verifyClientToken, async(req,res)=>{
 })
 
 // like and dislike a post
-router.put('/like/:id', async(req,res)=>{
+router.put('/like/:id',isAuthenticated, async(req,res)=>{
     try {
        const post = await Post.findById(req.params.id);
        if(post.likes.includes(req.body.userId)){
@@ -139,7 +137,7 @@ router.put('/like/:id', async(req,res)=>{
 })
 
 // comment a post
-router.put('/comment/:id', async (req, res) => {
+router.put('/comment/:id', isAuthenticated,async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
 
@@ -157,7 +155,7 @@ router.put('/comment/:id', async (req, res) => {
     }
 });
 // comment a reply
-router.put('/comment/:id/:userId/:commentId', async (req, res) => {
+router.put('/comment/:id/:userId/:commentId',isAuthenticated, async (req, res) => {
     try {
         const postId = req.params.id;
         const userId = req.params.userId;

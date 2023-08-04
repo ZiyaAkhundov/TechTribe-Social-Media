@@ -1,7 +1,27 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken');
+const isAuthenticated = (req, res, next) => {
+    const jwtToken = req.cookies.jwtToken;
+    if (jwtToken) {
+      try {
+        const decodedToken = jwt.verify(jwtToken, process.env.ACCESS_TOKEN_SECRET);
+        const userIdFromToken = decodedToken.userId;
+  
+        if (req.session && req.session.userId && req.session.userId.toString() === userIdFromToken) {
+          next();
+        } else {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+      } catch (error) {
+        console.error('Error verifying JWT:', error.message);
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+    } else {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+  };
 //update user
 router.put('/:id', async(req,res)=>{
     if(req.body.userId = req.params.id || req.body.isAdmin){
@@ -38,7 +58,7 @@ router.delete('/:id', async(req,res)=>{
 })
 
 //get a user
-router.get('/:username', async(req,res)=>{
+router.get('/:username',isAuthenticated, async(req,res)=>{
     const username = req.params.username;
     try {
         const user = await User.findOne({username: username});

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import img from "../../assets/image/Ziya.jpg"
 import logo from "../../assets/image/Programmers (5).png"
 import img1 from "../../assets/image/_DSC0187.jpg"
@@ -10,146 +10,61 @@ import './feed.css'
 import Modal from './modal/modal'
 import Button from '@mui/material/Button';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import Post from '../../layouts/web/components/article/article'
+import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 export default function Feeds() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [posts, setPosts] =useState([])
+ 
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/posts/feed/posts', {
+          withCredentials: true,
+        });
+        setPosts(response.data.sort((p1,p2)=>{
+          return new Date(p2.createdAt) - new Date(p1.createdAt)
+        }));
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    getPost();
+  }, [])
   return (
-    <div className='content overflow-auto flex-1 scroll-smooth'>
+    <div className='content overflow-auto flex-1 scroll-smooth relative'>
+      {posts.length<=0?  (
+      <div className=' w-full h-full  spinner' >
+        <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+      </div>
+      
+    ) : (
       <div className='content-inner w-full'>
         <h2 className='Feed'>Feeds</h2>
         <div className='flex w-full'>
           <div className='w-80 md:w-90'>
-          <article>
-                <div >
-                  <div className='article-container'>
-                    <div className='article-head'>
-                      <a href="">
-                        <div className="profile-img">
-                          <img src={img} alt="" />
-                        </div>
-                        <div className="profile-name">
-                          <h2>@akhundov_ziya</h2>
-                        </div>
-                      </a>
-                      <div className="article-head-action">
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                    </div>
-                    <div className='context'>
-                      <h3>Hey, Programmers School! The Airmen who make up the U.S. Air Force Special Warfare are some of the most-specialized
-                        warriors on the planet. Master Sergeant Kristopher Tomes is a PJ (Pararescue) in Air Force Special Warfare.
-                        He’s been in lifesaving missions around the world. Now’s your chance. Ask him anything!
-                      </h3>
-                    </div>
-                    <div className='context-img'>
-                      <img src={img} alt="" />
-                    </div>
-                    <div className="article-actions">
-                      <div className='btns flex'>
-                        <button className='mx-1'>
-                          <ThumbUpOutlinedIcon />
-                          <span>25 </span> <span>likes</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ModeCommentOutlinedIcon />
-                          <span>2 </span> <span>comments</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ShareOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-              <article>
-                <div >
-                  <div className='article-container'>
-                    <div className='article-head'>
-                      <a href="">
-                        <div className="profile-img">
-                          <img src={img} alt="" />
-                        </div>
-                        <div className="profile-name">
-                          <h2>@akhundov_ziya</h2>
-                        </div>
-                      </a>
-                      <div className="article-head-action">
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                    </div>
-                    <div className='context'>
-                      <h3>Hey, Programmers School! The Airmen who make up the U.S. Air Force Special Warfare are some of the most-specialized
-                        warriors on the planet. Master Sergeant Kristopher Tomes is a PJ (Pararescue) in Air Force Special Warfare.
-                        He’s been in lifesaving missions around the world. Now’s your chance. Ask him anything!
-                      </h3>
-                    </div>
-                    <div className='context-img'>
-                      <img src={img1} alt="" />
-                    </div>
-                    <div className="article-actions">
-                      <div className='btns flex'>
-                        <button className='mx-1'>
-                          <ThumbUpOutlinedIcon />
-                          <span>25 </span> <span>likes</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ModeCommentOutlinedIcon />
-                          <span>2 </span> <span>comments</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ShareOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-              <article>
-                <div >
-                  <div className='article-container'>
-                    <div className='article-head'>
-                      <a href="">
-                        <div className="profile-img">
-                          <img src={img} alt="" />
-                        </div>
-                        <div className="profile-name">
-                          <h2>@akhundov_ziya</h2>
-                        </div>
-                      </a>
-                      <div className="article-head-action">
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                    </div>
-                    <div className='context'>
-                      <h3>Hey, Programmers School! The Airmen who make up the U.S. Air Force Special Warfare are some of the most-specialized
-                        warriors on the planet. Master Sergeant Kristopher Tomes is a PJ (Pararescue) in Air Force Special Warfare.
-                        He’s been in lifesaving missions around the world. Now’s your chance. Ask him anything!
-                      </h3>
-                    </div>
-                    <div className='context-img'>
-                      <img src={logo} alt="" />
-                    </div>
-                    <div className="article-actions">
-                      <div className='btns flex'>
-                        <button className='mx-1'>
-                          <ThumbUpOutlinedIcon />
-                          <span>25 </span> <span>likes</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ModeCommentOutlinedIcon />
-                          <span>2 </span> <span>comments</span>
-                        </button>
-                        <button className='mx-1'>
-                          <ShareOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
+            {posts.length > 0 ? (
+                posts.map(post => (
+                  <Post
+                    key={post._id} // Don't forget to add a unique key prop when rendering in a loop
+                    username={post.username}
+                    context={post.desc}
+                    contextImg={post.img}
+                    likes={post.likes.length}
+                    comments={post.comments.length + post.comments.reduce((totalReplies, comment) => totalReplies + comment.replies.length, 0)}
+                    time={post.createdAt}
+                  />
+                ))
+              ) : (
+                <p>Loading...</p>
+              )}
           </div>
           <div className='w-1/2 feeds-action relative'>
             <aside>
@@ -202,6 +117,8 @@ export default function Feeds() {
           </div>
         </div>
       </div>
+    )}
+      
     </div>
   )
 }

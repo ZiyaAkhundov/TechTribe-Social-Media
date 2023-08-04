@@ -16,30 +16,6 @@ export default function Menu({funct}){
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to={"/Article"} onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        Articles
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to={"/Languages"} onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        Languages
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to={"/Questions"} onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        Questions
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to={"/About"} onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        About
-                    </NavLink>
-                </li>
-                <li>
                     <NavLink to={"/Contact"} onClick={funct} className={({ isActive, isPending }) =>
                         isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
                         Contact

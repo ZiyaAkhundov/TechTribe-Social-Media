@@ -120,7 +120,11 @@ article .article-container .article-actions .btns button{
     align-items: center;
     column-gap: 5px;
 }
-
+.spinner{
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
 /* @media  screen and (max-width: 1500px){ 
     main .content .content-inner article{
         width: 600px !important;

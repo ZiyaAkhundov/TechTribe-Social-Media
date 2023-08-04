@@ -19,7 +19,13 @@
 }
 .navbar{
     border-bottom: 1px solid #ecf1f6;
+    box-shadow: 2px 0 4px 1px rgba(0,0,0,.1);
+    position: relative;
+    z-index: 50;
 }
 .nav-aside{
     border-right: 1px solid #ecf1f6;
+}
+aside{
+    box-shadow: 2px 0 4px 1px rgba(0,0,0,.1);
 }

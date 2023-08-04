@@ -9,7 +9,7 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import Post from "./Post/post"
+import Post from "../../layouts/web/components/article/article"
 import "./profile.css"
 export default function profile() {
 
@@ -19,7 +19,9 @@ export default function profile() {
   const username = useParams().username
   useEffect(() => {
     const getUser = async () => {
-      const response = await axios.get(import.meta.env.VITE_API_URL + '/users/' + username);
+      const response = await axios.get(import.meta.env.VITE_API_URL + '/users/' + username, {
+        withCredentials: true,
+      });
       setUser(response.data);
       console.log(response.data);
     };

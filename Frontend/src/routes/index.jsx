@@ -1,9 +1,5 @@
 import Home from '../pages/Home/Home'
-import Article from "../pages/Articles/Article"
-import Languages from "../pages/Languages/languages"
 import Error from "../pages/Error/error"
-import Questions from "../pages/Questions/questions"
-import About from "../pages/About/about"
 import Settings from "../pages/Settings/settings"
 import Contact from "../pages/Contact/contact"
 import Register from "../pages/Auth/Register/Register"
@@ -15,30 +11,6 @@ import Profile from "../pages/profile/profile"
     {
       path:"/",
       component: Home,
-      auth:false,
-      layout:"main"
-    },
-    {
-      path:"/Article",
-      component: Article,
-      auth:false,
-      layout:"main"
-    },
-    {
-      path:"/Languages",
-      component: Languages,
-      auth:false,
-      layout:"main"
-    },
-    {
-      path:"/Questions",
-      component: Questions,
-      auth:false,
-      layout:"main"
-    },
-    {
-      path:"/About",
-      component: About,
       auth:false,
       layout:"main"
     },
