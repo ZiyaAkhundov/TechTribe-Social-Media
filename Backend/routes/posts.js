@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const isAuthenticated =require('../middleware/authentication.js')
+const csrfProtection = require('../middleware/csrfProtection')
 dotenv.config()
 
 //create a post
@@ -71,7 +72,7 @@ router.get('/:id',isAuthenticated, async(req,res)=>{
 })
 
 //get feed posts
-router.get('/feed/posts',isAuthenticated, async (req, res) => {
+router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
   try {
     const currentUser = await User.findById(req.session.userId);
     const userPosts = await Post.find({ userId: currentUser._id });

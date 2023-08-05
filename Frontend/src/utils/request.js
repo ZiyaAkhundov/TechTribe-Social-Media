@@ -1,12 +1,12 @@
 // utils/request.js
-export const request = async (url, data = false, method = 'GET', withCredentials = false) => {
-  console.log(url, data,method,withCredentials);
+export const request = async (url, data = false, method = 'GET') => {
+  console.log(url, data,method);
   const options = {
     method,
+    credentials: "include",
     headers: {
       'Content-Type': 'application/json'
-    },
-    credentials: withCredentials ? 'include' : 'omit' // This sets the 'credentials' option for the fetch request
+    }
   };
 
   if (data && method === 'POST') {
@@ -26,5 +26,5 @@ export const request = async (url, data = false, method = 'GET', withCredentials
   }
 };
 
-export const post = (url, data, withCredentials = false) => request(url, data, 'POST', withCredentials);
-export const get = (url, withCredentials = false) => request(url, false, 'GET', withCredentials);
+export const post = (url, data) => request(url, data, 'POST');
+export const get = (url) => request(url, false, 'GET');

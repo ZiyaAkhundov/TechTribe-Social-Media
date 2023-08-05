@@ -14,6 +14,7 @@ import Post from '../../layouts/web/components/article/article'
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import {getPosts} from "../../services/Login"
 
 export default function Feeds() {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,11 @@ export default function Feeds() {
       try {
         const response = await axios.get(import.meta.env.VITE_API_URL + '/posts/feed/posts', {
           withCredentials: true,
+          headers:{
+            'X-CSRF-Token': getCookie('csrf-token'),
+          }
         });
+        // const response = await getPosts()
         setPosts(response.data.sort((p1,p2)=>{
           return new Date(p2.createdAt) - new Date(p1.createdAt)
         }));
@@ -121,4 +126,9 @@ export default function Feeds() {
       
     </div>
   )
+}
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
 }

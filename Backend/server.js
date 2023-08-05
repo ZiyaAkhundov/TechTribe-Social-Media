@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const nocache = require("nocache");
 const helmet = require('helmet')
+const csrf = require('./middleware/csrf')
 
 const port =5000;
 
@@ -53,12 +54,13 @@ app.use(helmet())
 app.use(nocache());
 app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use(csrf)
 app.use(express.json())
 app.use(morgan("common"))
 app.use(
   session({
     secret: process.env.ACCESS_TOKEN_SECRET,
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     store: store,
     cookie: {
@@ -117,6 +119,7 @@ app.use("/message", cors(corsOptions), MessageRoutes);
       }
       res.clearCookie("ps_session")
       res.clearCookie('jwtToken'); 
+      res.clearCookie('csrf-token')
       res.status(200).json({ message: 'Logged out successfully' });
     });
   });

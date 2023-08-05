@@ -1,0 +1,52 @@
+.settings-container::-webkit-scrollbar {
+    width: 0.5rem;
+}
+.settings-container::-webkit-scrollbar-thumb {
+    height:0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    background-color: #a6a6a6;
+}
+.settings-container {
+    padding: 10px;
+    height: calc(100% - 55px);
+    background-color: #fff;
+}
+.settings-card{
+    width: 725px;
+    margin: auto;
+}
+.settings-header{
+    margin-block: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.settings-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.settings-image img{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.settings-user{
+    margin-block: 15px;
+    font-size: 25px;
+    font-weight: 600;
+}
+.userData ,.userPassword{
+    border-bottom: 1px solid rgb(193, 192, 192);
+    margin-top: 5px;
+    margin-bottom: 15px;
+    line-height: 40px;
+    font-weight: 600;
+}
+label{
+    margin-inline: 15px;
+    color: rgb(92, 92, 92);
+}
