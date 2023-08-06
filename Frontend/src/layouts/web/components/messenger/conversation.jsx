@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { NavLink } from 'react-router-dom'
-import logo from '../../../../assets/image/programmers-logo.png'
+import logo from '../../../../assets/image/cover.png'
 import  List  from './User list/list'
 
 export default function conversation({func,state}) {
@@ -13,7 +13,7 @@ export default function conversation({func,state}) {
         <div className='flex flex-row'>
           <NavLink to={"/"} onClick={func} className='mb-5 px-5'>
             <div className='flex justify-center items-center'>
-              <img src={logo} alt="Logo" className='h-6 object-contain' />
+              <img src={logo} alt="Logo" className='h-12 object-contain' />
             </div>
           </NavLink>
           <div>

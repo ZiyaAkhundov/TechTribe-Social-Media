@@ -1,10 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const Post = require('../models/Post');
-const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-const session = require('express-session');
 const dotenv = require('dotenv');
 const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')

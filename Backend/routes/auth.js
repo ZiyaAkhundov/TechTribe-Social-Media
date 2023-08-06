@@ -4,10 +4,11 @@ const dotenv = require('dotenv');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const generateCSRFToken = require('../csrf/csrf')
+const isAuthenticated =require('../middleware/authentication.js')
 const crypto = require('crypto');
 dotenv.config()
 
-router.get('/user-data', async (req, res) => {
+router.get('/user-data',isAuthenticated, async (req, res) => {
   try {
     if (req.session && req.session.isAuth && req.session.userId) {
         const user = await User.findById(req.session.userId);
@@ -77,12 +78,15 @@ router.post('/login', async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     req.session.isAuth = true;
     req.session.userId = user._id;
+    req.session.username = user.username;
 
     return res.status(200).json({
       success: true,
       username: user.username,
       email: user.email,
-      img: user.picture,
+      picture: user.picture,
+      followers: user.followers,
+      followings: user.followings
     });
   } catch (err) {
     console.error('Error:', err);

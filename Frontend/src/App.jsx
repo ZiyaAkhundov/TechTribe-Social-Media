@@ -1,5 +1,7 @@
 import React, { useState,useEffect } from "react";
-import logo from "./assets/image/logo-transparent.png"
+import logo from "./assets/image/profile.png"
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"; 
 import { useSelector } from "react-redux";
 import Sidebar from "./layouts/web/components/sidebar";
@@ -7,13 +9,10 @@ import Messenger from "./layouts/web/components/messenger/conversation";
 import Navbar from "./layouts/web/components/navbar/index";
 import routes from "./routes";
 import { ToastContainer } from 'react-toastify';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux'
 import { login,logout } from './stores/auth';
 import {get, post} from "./utils/request"
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 
 
@@ -34,7 +33,7 @@ function App() {
             dispatch(login(response.data)); 
       })
       .catch(error => {
-        console.log('Error fetching user data:', error);
+        // console.log('Error fetching user data:', error);
       }).finally(() => {
         setTimeout(() => {
           setLoading(false);
@@ -44,8 +43,12 @@ function App() {
 if(loading){
   return (
     <div className="absolute h-100dvh w-full top-0 left-0 flex justify-center items-center flex-col">
-      <img src={logo} alt="" className="w-24 h-24 object-contain"/>
-      <h2>Loading...</h2>
+      <img src={logo} alt="" className="h-24 object-contain" />
+      <div className="mt-5 loading">
+        <Box sx={{ display: 'flex'}}>
+          <CircularProgress/>
+        </Box>
+      </div>
     </div>
   )
 }
@@ -69,7 +72,7 @@ if(loading){
                     <>
                       <Sidebar state={sidebar} func={sidebarAction} />
                       <main className="flex-auto height-100%">
-                        <Navbar />
+                        <Navbar func={sidebarAction}/>
                         <route.component />
                       </main>
                     </>

@@ -1,15 +1,20 @@
 // utils/request.js
 export const request = async (url, data = false, method = 'GET') => {
-  console.log(url, data,method);
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
   const options = {
     method,
     credentials: "include",
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': getCookie('csrf-token'),
     }
   };
 
-  if (data && method === 'POST') {
+  if (data && (method === 'POST' || method === 'PUT')) {
     options.body = JSON.stringify(data);
   }
 
@@ -27,4 +32,5 @@ export const request = async (url, data = false, method = 'GET') => {
 };
 
 export const post = (url, data) => request(url, data, 'POST');
+export const put = (url, data) => request(url, data, 'PUT');
 export const get = (url) => request(url, false, 'GET');

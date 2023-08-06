@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import img from "../../assets/image/Ziya.jpg"
-import logo from "../../assets/image/Programmers (5).png"
-import img1 from "../../assets/image/_DSC0187.jpg"
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import './feed.css'
 import Modal from './modal/modal'
-import Button from '@mui/material/Button';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Post from '../../layouts/web/components/article/article'
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import {getPosts} from "../../services/Login"
+import {getPosts} from "../../services/Posts"
 
 export default function Feeds() {
   const [open, setOpen] = useState(false);
@@ -25,14 +16,8 @@ export default function Feeds() {
   useEffect(() => {
     const getPost = async () => {
       try {
-        const response = await axios.get(import.meta.env.VITE_API_URL + '/posts/feed/posts', {
-          withCredentials: true,
-          headers:{
-            'X-CSRF-Token': getCookie('csrf-token'),
-          }
-        });
-        // const response = await getPosts()
-        setPosts(response.data.sort((p1,p2)=>{
+        const response = await getPosts()
+        setPosts(response.sort((p1,p2)=>{
           return new Date(p2.createdAt) - new Date(p1.createdAt)
         }));
       } catch (error) {

@@ -1,4 +1,4 @@
-import logo from '../../../../assets/image/programmers-logo.png'
+import logo from '../../../../assets/image/cover.png'
 import Menu from './menu'
 import DownloadApp from './DownloadApp'
 import classNames from 'classnames'
@@ -13,7 +13,7 @@ export default function Sidebar({state,func}) {
       <div className='flex flex-row'>
         <NavLink to={"/"} onClick={func} className='mb-5 px-5'>
           <div className='flex justify-center items-center'>
-            <img src={logo} alt="Logo" className='h-6 object-contain' />
+            <img src={logo} alt="Logo" className='h-12 object-contain' />
           </div>
         </NavLink>
         <div>

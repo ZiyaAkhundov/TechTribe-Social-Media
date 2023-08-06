@@ -38,8 +38,9 @@ export default function Navbar({func}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const PF= import.meta.env.VITE_API_IMAGE_URL
   return (
-    <div className="navbar  bg-bgMain h-14 flex justify-between px-3 relative items-center">
+    <div className="navbar  bg-bgMain h-14 flex justify-between px-3 md:z-50 relative items-center">
       <button type="button" className="md:hidden" onClick={func}>
         <i className="fa-solid fa-bars"></i>
       </button>
@@ -47,8 +48,6 @@ export default function Navbar({func}) {
       <div>
       {user ? (
         <div className="flex">
-          {/* <p className="mx-2 font-semibold text-base">{user.username}</p>
-          <button onClick={handleLogout} className="py-1 px-3 bg-red-600 text-white rounded-md">Log out</button> */}
           <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
@@ -61,7 +60,7 @@ export default function Navbar({func}) {
             aria-expanded={open ? 'true' : undefined}
           >
             <Typography sx={{ minWidth: 100,marginInline:1 }}>{user.username}</Typography>
-            <Avatar sx={{ width: 32, height: 32 }}>Z</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }} src={PF + user.picture}></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -102,7 +101,7 @@ export default function Navbar({func}) {
       >
         <MenuItem onClick={handleClose}>
           <NavLink to={`/profile/${user.username}`} className='flex items-center'>
-          <Avatar /> Profile
+          <Avatar src={PF + user.picture}/> Profile
           </NavLink>
         </MenuItem>
         <Divider />

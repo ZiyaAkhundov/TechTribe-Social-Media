@@ -2,45 +2,106 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const isAuthenticated = (req, res, next) => {
-    const jwtToken = req.cookies.jwtToken;
-    if (jwtToken) {
-      try {
-        const decodedToken = jwt.verify(jwtToken, process.env.ACCESS_TOKEN_SECRET);
-        const userIdFromToken = decodedToken.userId;
-  
-        if (req.session && req.session.userId && req.session.userId.toString() === userIdFromToken) {
-          next();
-        } else {
-          return res.status(401).json({ message: 'Unauthorized' });
-        }
-      } catch (error) {
-        console.error('Error verifying JWT:', error.message);
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-    } else {
-      return res.status(401).json({ message: 'Unauthorized' });
+const isAuthenticated =require('../middleware/authentication.js')
+const csrfProtection = require('../middleware/csrfProtection')
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req,file,cb)=>{
+      cb(null,"public/img")
+    },
+    filename: (req,file,cb)=>{
+      cb(null, req.body.name)
+      console.log(true)
     }
-  };
+  })
+  const upload = multer({storage:storage})
 //update user
-router.put('/:id', async(req,res)=>{
-    if(req.body.userId = req.params.id || req.body.isAdmin){
-        if(req.body.password){
-            try {
-                const salt = await bcrypt.genSalt(10);
-                req.body.password = await bcrypt.hash(req.body.password, salt);
-            } catch (err) {
-                return res.status(500).send(err);
+router.put('/update',csrfProtection,isAuthenticated, async(req,res)=>{
+        if (req.body.currentPassword && req.body.newPassword && req.body.repeatNewPassword) {
+            if (req.body.newPassword == req.body.repeatNewPassword) {
+                try {
+                    const salt = await bcrypt.genSalt(10);
+                    const user = await User.findById(req.session.userId);
+                    const userPassword = user.password;
+                    const samePassword = await bcrypt.compare(req.body.newPassword, userPassword);
+                    const validPassword = await bcrypt.compare(req.body.currentPassword, userPassword);
+                    if (validPassword) {
+                        req.body.password = await bcrypt.hash(req.body.newPassword, salt);
+                    }
+                    else{
+                        return res.status(400).json({message:"Invalid password", status:'error'})
+                    }
+                    if(samePassword){
+                        return res.status(400).json({message:"Your new password is the same as your current password. Please choose a different password.",status:"warning"})
+                    }
+                } catch (err) {
+                    return res.status(500).send(err);
+                }
+            }
+            else {
+                return res.status(400).json({message:'The new password and the repeated new password do not match.', status:'Error'})
             }
         }
+        if (req.body.username || req.body.email) {
+            
+            if (req.body.username) {
+                try {
+                    const checkUsername = await User.findOne({ username: req.body.username })
+                    if (checkUsername && checkUsername.username !== req.session.username) {
+                        return res.status(409).json({message:'The new username is already taken. Please choose another one.',status:'error'})
+                    }
+                } catch (err) {
+                    return res.status(500).send(err);
+                }
+            }
+            if (req.body.email) {
+                try {
+                    const checkEmail = await User.findOne({ email: req.body.email })
+                    if (checkEmail && checkEmail.username !== req.session.username) {
+                        return res.status(409).json({message:'The new email is already taken. Please choose another one.',status: 'error'})
+                    }
+                } catch (err) {
+                    return res.status(500).send(err);
+                }
+            }
+
+        }
         try {
-            const user = await User.findByIdAndUpdate(req.params.id,{
-                $set:req.body
+            const user = await User.findByIdAndUpdate(req.session.userId, {
+                $set: req.body
             })
-            res.status(200).json("Account has been updated");
+            if(req.body.username){
+                req.session.username = req.body.username
+            }
+            const data = {
+                username: user.username,
+                email: user.email,
+                img: user.picture,
+            }
+            res.status(200).json({message:"Account has been updated",status: "success",data:data});
         } catch (err) {
             return res.status(500).send(err);
         }
+    
+})
+
+//upload photo
+router.post('/upload',csrfProtection,isAuthenticated,upload.single('file'), async(req,res) =>{
+    try {
+        return res.status(200).json('Photo uploaded successfully')
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+
+//set photo
+router.put('/picture',csrfProtection,isAuthenticated, async(req,res) =>{
+    try {
+        const currentUser = await User.findById(req.session.userId);
+        await currentUser.updateOne({$set:{picture: req.body.picture}})
+        return res.status(200).json({message:'Photo uploaded successfully', status: 'success'})
+    } catch (error) {
+        res.status(500).json(error)
     }
 })
 
