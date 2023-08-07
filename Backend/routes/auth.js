@@ -5,7 +5,6 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const generateCSRFToken = require('../csrf/csrf')
 const isAuthenticated =require('../middleware/authentication.js')
-const crypto = require('crypto');
 dotenv.config()
 
 router.get('/user-data',isAuthenticated, async (req, res) => {

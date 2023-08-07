@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import './settings.css'
 import Avatar from '@mui/material/Avatar';
-import EditIcon from '@mui/icons-material/Edit';
 import { Formik, ErrorMessage, Form, Field } from 'formik'
 import { toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 import { login } from '../../stores/auth';
 import { validation } from "./validation/userData"
 import { passwordValidation } from "./validation/password"
-import img from '../../assets/image/Ziya.jpg'
 import {changeUserData} from '../../services/Settings'
 import { useDispatch } from 'react-redux'
 import Modal from './modalPicture/modal'
-import {userData} from "../../services/Auth"
 
 export default function settings() {
   const PF= import.meta.env.VITE_API_IMAGE_URL

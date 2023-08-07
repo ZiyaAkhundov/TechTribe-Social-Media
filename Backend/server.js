@@ -29,19 +29,20 @@ const corsOptions = {
   };
   
 
-const connect = async ()=>{ 
-    try {
-        await mongoose.connect(process.env.MONGOOSE)
-        console.log("Connected to mongodb")
-    } catch (err) {
-        console.log(err);
-    }
-}
+  mongoose.connect( process.env.MONGOOSE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+      console.error('Error connecting to MongoDB:', error);
+    });
 
-const MONGODB_URI = process.env.MONGOOSE;
 
 const store = new MongoDBSession({
-  uri: MONGODB_URI,
+  uri: process.env.MONGOOSE,
   collection: 'Sessions',
 });
 app.set('trust proxy', 1)
@@ -71,7 +72,7 @@ app.use(
     httpOnly: true,
     secret: process.env.ACCESS_TOKEN_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: store,
     cookie: {
       secure: false,
@@ -103,6 +104,6 @@ app.use("/message", cors(corsOptions), MessageRoutes);
   });
 
 app.listen(port,()=>{
-    connect()
+   
     console.log("Server listening on port: " + port)
 })

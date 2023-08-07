@@ -1,9 +1,7 @@
-import React,{useRef, useState,useEffect} from 'react'
-import Backdrop from '@mui/material/Backdrop';
+import React,{useRef} from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { toast } from 'react-toastify';
 import {UploadPhoto,setPhoto} from '../../../services/Settings'
@@ -14,7 +12,6 @@ import { useSelector } from "react-redux";
 import {userData} from "../../../services/Auth"
 
 export default function modal({open,setLoader,handleClose}) {
-    const [success, setSuccess] = useState(false)
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     function getCookie(name) {
@@ -47,11 +44,19 @@ export default function modal({open,setLoader,handleClose}) {
                 withCredentials: true,
             });
             const photoResponse = await setPhoto({ picture: filename });
+            const getData = async () => {
+                try {
+                    const response = await userData();
+                    dispatch(login(response))
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            };
+            getData();
 
             if (photoResponse.status === "success") {
                 toast.success("Photo Successfully Uploaded");
                 setLoader(false);
-                setSuccess(true)
                 formData = null;
             } else {
                 toast.error(uploadResponse.message);
@@ -61,19 +66,6 @@ export default function modal({open,setLoader,handleClose}) {
         }
     };
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await userData();
-                dispatch(login(response))
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        };
-        if (success) {
-            getData();
-        }
-    }, [success])
     return (
         <div>
             <Modal open={open} onClose={handleClose} className='modal flex justify-center items-center' 

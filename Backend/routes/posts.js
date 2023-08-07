@@ -84,9 +84,11 @@ router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
           const { userId } = post;
           const user = await User.findById(userId);
           const username=user.username;
+          const userPicture = user.picture;
           return {
             ...post.toObject(),
             username,
+            userPicture
           };
         })
       );
@@ -111,7 +113,12 @@ router.get('/profile/:username',isAuthenticated, async(req,res)=>{
         res.status(404).json("There are no posts");
         return;
        }
-        res.status(200).json(posts);
+       const userPicture = user.picture;
+       const userPosts = posts.map((post) => ({
+        ...post.toObject(),
+        userPicture: userPicture,
+      }));
+        res.status(200).json({userPosts});
     } catch (err){
         res.status(500).json(err)
     }

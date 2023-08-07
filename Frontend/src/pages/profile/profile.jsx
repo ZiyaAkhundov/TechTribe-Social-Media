@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
-import img from "../../assets/image/Ziya.jpg"
-import logo from "../../assets/image/Programmers (5).png"
-import img1 from "../../assets/image/_DSC0187.jpg"
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Skeleton from '@mui/material/Skeleton';
+import '../../layouts/web/components/article/article.css'
 import { NavLink, useParams } from 'react-router-dom';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import Post from "../../layouts/web/components/article/article"
+import { useSelector } from "react-redux";
 import "./profile.css"
+import 'react-loading-skeleton/dist/skeleton.css'
 export default function profile() {
 
   const [posts, setPosts] =useState([])
-  const [user, setUser] =useState(null)
-
+  const [User, setUser] =useState(null)
+  const PIC =import.meta.env.VITE_API_IMAGE_URL
   const username = useParams().username
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     const getUser = async () => {
-      const response = await axios.get(import.meta.env.VITE_API_URL + '/users/' + username, {
-        withCredentials: true,
-      });
-      setUser(response.data);
-      console.log(response.data);
+      try {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/users/' + username, {
+          withCredentials: true,
+        });
+        setUser(response.data);
+      } catch (error) {
+        return(
+          <div>Sorry this page is not avaiable</div>
+        )
+        
+      }
     };
   
     const getPost = async () => {
@@ -31,8 +40,7 @@ export default function profile() {
         const response = await axios.get(import.meta.env.VITE_API_URL + '/posts/profile/' + username, {
           withCredentials: true,
         });
-        setPosts(response.data);
-        console.log(response.data);
+        setPosts(response.data.userPosts);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -42,11 +50,6 @@ export default function profile() {
     getPost();
   }, [username]);
   
-  if(!user){
-    return(
-      <div>Sorry this page is not avaiable</div>
-    )
-  }
 
   return (
     <section>
@@ -56,7 +59,11 @@ export default function profile() {
             <div className='profile-img'>
               <div className='profile-img-section'>
                 <button className='change-img'>
-                  <img alt="user" src={img} sx={{ width: 140, height: 140 }} />
+                  {User ?
+                    <Avatar src={PIC + User.picture} alt="" sx={{ width: 140, height: 140 }} className='border' />
+                    :
+                      <Skeleton animation="wave" variant="circular" width={140} height={140} />
+                    }
                 </button>
               </div>
             </div>
@@ -66,14 +73,12 @@ export default function profile() {
                   <p> {username}</p>
                 </div>
                 <div className="profile-edit">
-                  <NavLink to={"edit"}>
+                  {username != user.username ?null :
+                    <NavLink to={"/settings"}>
                     Edit profile
                   </NavLink>
-                </div>
-                <div className="profile-logout">
-                  <button>
-                    Log Out
-                  </button>
+
+                  }
                 </div>
               </div>
               <div className='profile-activity'>
@@ -109,16 +114,41 @@ export default function profile() {
               {posts.length > 0 ? (
                 posts.map(post => (
                   <Post
-                    key={post._id} // Don't forget to add a unique key prop when rendering in a loop
-                    username={user.username}
-                    context={post.desc}
-                    contextImg={post.img}
-                    likes={post.likes}
-                    comments={post.comments.length + post.comments.reduce((totalReplies, comment) => totalReplies + comment.replies.length, 0)}
+                    key={post._id} 
+                    post={post}
                   />
                 ))
               ) : (
-                <p>Loading...</p>
+                <Card className='w-[80%] mx-auto'>
+                <CardHeader
+                  avatar={
+                    <Skeleton animation="wave" variant="circular" width={40} height={40} />
+                  }
+                  action={
+                    <IconButton aria-label="settings">
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={
+                    <Skeleton
+                      animation="wave"
+                      height={10}
+                      width="80%"
+                      style={{ marginBottom: 6 }}
+                    />
+                  }
+                  subheader={
+                    <Skeleton animation="wave" height={10} width="40%" />
+                  }
+                />
+                <Skeleton sx={{ height: 190 }} animation="wave" variant="rectangular" />
+                <CardContent>
+                  <React.Fragment>
+                    <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+                    <Skeleton animation="wave" height={10} width="80%" />
+                  </React.Fragment>
+                </CardContent>
+              </Card>
               )}
             </div>
           </div>
