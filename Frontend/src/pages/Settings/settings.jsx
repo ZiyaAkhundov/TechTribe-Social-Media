@@ -28,7 +28,7 @@ export default function settings() {
         <div className="settings-header">
           <div className="settings-image">
             <div onClick={handleOpen} className='relative overflow-hidden'>
-              <Avatar sx={{ width: 200, height: 200 }} src={PF + user.picture} className='cursor-pointer border' title="Change Profile Picture"></Avatar>
+              <Avatar sx={{ width: 200, height: 200 }} src={user.picture ? PF + user.picture : null} className='cursor-pointer border' title="Change Profile Picture"></Avatar>
               {loader ? (
                 <div className='absolute top-0 left-0 w-full h-full spinner-container'>
                   <div className="spinner center absolute top-0 left-0">

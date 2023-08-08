@@ -26,7 +26,8 @@ export default {
       bgMain: '#fff',
       messengerAside:" #f0f0f0",
       searchFocus: "#fdfdff",
-      search:"#f7f7f7"
+      search:"#f7f7f7",
+      auth:"#4d018a"
       
     },
     backgroundImage:{

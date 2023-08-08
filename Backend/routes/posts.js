@@ -105,18 +105,19 @@ router.get('/profile/:username',isAuthenticated, async(req,res)=>{
     try {
        const user = await User.findOne({username: req.params.username});
        if(!user){
-        res.status(404).json("User not found");
+        res.status(404).json({message:"User not found",status: "warning"});
         return;
        }
        const posts = await Post.find({userId: user._id});
        if(posts.length==0){
-        res.status(404).json("There are no posts");
+        res.status(200).json({message:"There are no posts",status: "warning"})
         return;
        }
        const userPicture = user.picture;
        const userPosts = posts.map((post) => ({
         ...post.toObject(),
         userPicture: userPicture,
+        username: user.username
       }));
         res.status(200).json({userPosts});
     } catch (err){
