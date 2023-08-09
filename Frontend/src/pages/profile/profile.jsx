@@ -44,7 +44,10 @@ export default function profile() {
         if(response.data.status == "warning"){
           setNoPost(true)
         }
-        setPosts(response.data.userPosts);
+        setPosts(response.data.userPosts.sort((p1,p2)=>{
+          return new Date(p2.createdAt) - new Date(p1.createdAt)
+        }));
+        
       } catch (error) {
       }
     };

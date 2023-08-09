@@ -72,7 +72,7 @@ app.use(
     httpOnly: true,
     secret: process.env.ACCESS_TOKEN_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: store,
     cookie: {
       secure: false,

@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import {getPosts} from "../../services/Posts"
 
 export default function Feeds() {
+  const [noPost,setNoPost] = useState(false)
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -32,9 +33,14 @@ export default function Feeds() {
     const getPost = async () => {
       try {
         const response = await getPosts()
-        setPosts(response.sort((p1,p2)=>{
-          return new Date(p2.createdAt) - new Date(p1.createdAt)
-        }));
+        if(response.status == "warning"){
+          setNoPost(true)
+        }
+        else{
+          setPosts(response.sort((p1,p2)=>{
+            return new Date(p2.createdAt) - new Date(p1.createdAt)
+          }));
+        }
       } catch (error) {
         console.error('Error:', error);
       }
@@ -73,7 +79,8 @@ export default function Feeds() {
                 </div>
             </div>
             <div>
-              {posts.length > 0 ? (
+              {noPost ? <div>No Post</div> :
+              posts.length > 0 ? (
                 posts.map(post => (
                   <Post
                     key={post._id}

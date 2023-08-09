@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useEffect, useState } from 'react'
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
@@ -8,47 +8,160 @@ import TimeAgo from 'react-timeago'
 import EnStrings from 'react-timeago/lib/language-strings/en'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {PostLike, PostDelete} from "../../../../services/Posts"
+import { toast } from 'react-toastify';
+import * as React from 'react';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
+
+const ITEM_HEIGHT = 20;
 
 export default function post(props) {
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDelete = async()=>{
+    const response = await PostDelete({postId:props.post._id})
+    if(response.status == "success"){
+      toast.success(response.message)
+    }
+  }
+
+  const [islike,setIsLike] =useState(false)
+  const [likelength, setLikeLength] = useState(props.post.likes.length)
+  const { user } = useSelector((state) => state.auth);
+  useEffect(()=>{
+    const userLikes = props.post.likes.some(likes => likes.includes(user.id));
+    if(userLikes){
+      setIsLike(true);
+    }
+    else{
+      setIsLike(false);
+    }
+  },[user.id, props.post.likes])
+
+    const handleLike = async () =>{
+      try {
+        await PostLike({postId:props.post._id})
+      } catch (error) {
+        console.log(error)
+      }
+      setLikeLength(islike ? likelength - 1 : likelength + 1)
+      setIsLike(prev=>!prev)
+    }
   const formatter = buildFormatter(EnStrings)
-  console.log(props.post.username)
   const PIC =import.meta.env.VITE_API_IMAGE_URL
-  console.log(props.post.picture)
+  console.log(user)
   return (
     <article>
-      <div >
-        <div className='article-container'>
-          <div className='article-head'>
-            <Link to={"/profile/" + props.post.username} className='flex items-center'>
+      <div>
+        <div className="article-container">
+          <div className="article-head">
+            <Link
+              to={"/profile/" + props.post.username}
+              className="flex items-center"
+            >
               <div className="profile-img">
-                <Avatar src={PIC + props.post.userPicture} alt="" sx={{ width: 45, height: 45 }} className='border'/>
+                <Avatar
+                  src={PIC + props.post.userPicture}
+                  alt=""
+                  sx={{ width: 45, height: 45 }}
+                  className="border"
+                />
               </div>
               <div className="profile-name">
-                <h2 className='font-bold text-base leading-5'>{props.post.username}</h2> 
-                <TimeAgo date={props.post.createdAt} formatter={formatter} className='text-gray-500 text-sm font-time font-bold'/>
+                <h2 className="font-bold text-base leading-5">
+                  {props.post.username}
+                </h2>
+                <TimeAgo
+                  date={props.post.createdAt}
+                  formatter={formatter}
+                  className="text-gray-500 text-sm font-time font-bold"
+                />
               </div>
             </Link>
             <div className="article-head-action">
-              <MoreHorizOutlinedIcon />
+              <div>
+                <IconButton
+                  aria-label="more"
+                  id="long-button"
+                  aria-controls={open ? "long-menu" : undefined}
+                  aria-expanded={open ? "true" : undefined}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="long-menu"
+                  MenuListProps={{
+                    "aria-labelledby": "long-button",
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  PaperProps={{
+                    style: {
+                      maxHeight: ITEM_HEIGHT * 4.5,
+                      width: "20ch",
+                    },
+                  }}
+                >
+                  {user.id==props.post.userId ? 
+                  <MenuItem onClick={handleDelete} className=' !text-red-500'>
+                    Delete
+                  </MenuItem>: null}
+                  {user.id!=props.post.userId ? 
+                  <MenuItem onClick={handleClose} >
+                    Report
+                  </MenuItem> : null}
+                </Menu>
+              </div>
             </div>
           </div>
-          <div className='context py-3'>
-            <h3 className='px-3 pt-3'>{props.post.desc}</h3>
+          <div className="context py-3">
+            <h3 className="px-3 pt-3">{props.post.desc}</h3>
           </div>
-          <div className='context-img'>
+          <div className="context-img">
             <img src={props.post.contextImg} alt="" />
           </div>
           <div className="article-actions">
-            <div className='btns flex'>
-              <button className='mx-1'>
-                <ThumbUpOutlinedIcon />
-                <span>{props.post.likes.length ? props.post.likes.length : null}</span> <span>likes</span>
+            <div className="btns flex">
+              <button className="mx-1" onClick={handleLike}>
+                <ThumbUpOutlinedIcon
+                  className={islike ? "text-blue-500" : null}
+                />
+                <span className={islike ? "text-blue-500" : null}>
+                  {likelength ? likelength : null}
+                </span>{" "}
+                <span className={islike ? "text-blue-500" : null}>likes</span>
               </button>
-              <button className='mx-1'>
+              <button className="mx-1">
                 <ModeCommentOutlinedIcon />
-                <span>{props.post.comments ? props.post.comments.length + props.post.comments.reduce((totalReplies, comment) => totalReplies + comment.replies.length, 0) : null}</span> <span>comments</span>
+                <span>
+                  {props.post.comments
+                    ? props.post.comments.length +
+                      props.post.comments.reduce(
+                        (totalReplies, comment) =>
+                          totalReplies + comment.replies.length,
+                        0
+                      )
+                    : null}
+                </span>{" "}
+                <span>comments</span>
               </button>
-              <button className='mx-1'>
+              <button className="mx-1">
                 <ShareOutlinedIcon />
               </button>
             </div>
@@ -56,7 +169,6 @@ export default function post(props) {
         </div>
       </div>
     </article>
-
-  )
+  );
 }
 

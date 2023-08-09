@@ -40,7 +40,7 @@ main .content .feeds-action aside{
     position: sticky;
     top: 76px;
     width: 300px;
-    margin: auto;
+    margin: 50px auto;
 }
 main .content .feeds-action aside .techtribe{
     background-size: contain !important;

@@ -36,13 +36,12 @@ router.put('/:id',isAuthenticated, async(req,res)=>{
 })
 
 //delete a post
-router.delete('/:id',isAuthenticated, async(req,res)=>{
-    
+router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     try {
         const post = await  Post.findById(req.params.id);
-        if(post.userId === req.body.userId){
+        if(post.userId === req.session.userId.toString()){
             await post.deleteOne();
-            res.status(200).json("Post has been deleted!");
+            res.status(200).json({message:"Post has been deleted!", status:"success"});
         }
         else{
             res.status(403).json("You can't delete this post");
@@ -92,7 +91,9 @@ router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
           };
         })
       );
-  
+  if(!postsWithUsername.length){
+    return res.status(200).json({message:"There are no posts",status: "warning"})
+  }
 
     res.status(200).json(postsWithUsername);
   } catch (err) {
@@ -126,15 +127,16 @@ router.get('/profile/:username',isAuthenticated, async(req,res)=>{
 })
 
 // like and dislike a post
-router.put('/like/:id',isAuthenticated, async(req,res)=>{
+router.put('/like/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     try {
+        console.log(req.session.userId.toString())
        const post = await Post.findById(req.params.id);
-       if(post.likes.includes(req.body.userId)){
-            await Post.updateOne({$pull:{likes:req.body.userId}})
+       if(post.likes.includes(req.session.userId.toString())){
+            await post.updateOne({$pull:{likes:req.session.userId.toString()}})
             res.status(200).json("The post was unliked successfully");
        }
        else{
-        await post.updateOne({$push:{likes:req.body.userId}})
+        await post.updateOne({$push:{likes:req.session.userId.toString()}})
         res.status(200).json("The post was liked successfully");
        }
     } catch (err){
