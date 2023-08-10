@@ -26,6 +26,10 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
     const handleFileOpen = ()=>{
       fileInputRef.current.click();
     }
+    const handleEmpty = ()=>{
+      setFile(null)
+      fileInputRef.current.value = null
+    }
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
@@ -113,8 +117,8 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
             </div>
             {file && (
               <div className="share-img-wrapper">
-                <img className="share-img" src={URL.createObjectURL(file)} alt="" />
-                <CancelOutlinedIcon className="cancel-icon" color="error" onClick={()=>setFile(null)} />
+                <img className="share-img" src={file && URL.createObjectURL(file)} alt="" />
+                <CancelOutlinedIcon className="cancel-icon" color="error" onClick={handleEmpty} />
               </div>
             )}
           </form>

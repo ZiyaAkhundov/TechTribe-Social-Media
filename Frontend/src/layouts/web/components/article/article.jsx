@@ -16,11 +16,13 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
 
 
 const ITEM_HEIGHT = 20;
 
 export default function post(props) {
+  let navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -152,7 +154,7 @@ export default function post(props) {
                 </span>{" "}
                 <span className={islike ? "text-blue-500" : null}>likes</span>
               </button>
-              <button className="mx-1">
+              <button className="mx-1" onClick={()=>navigate(`/${props.post.username}/status/${props.post._id}`)}>
                 <ModeCommentOutlinedIcon />
                 <span>
                   {props.post.comments
