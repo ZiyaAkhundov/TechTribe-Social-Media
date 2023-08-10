@@ -1,20 +1,34 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const path= require('path');
 const jwt = require('jsonwebtoken');
 const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')
 const multer = require('multer')
-const storage = multer.diskStorage({
-    destination: (req,file,cb)=>{
-      cb(null,"public/img")
-    },
-    filename: (req,file,cb)=>{
-      cb(null, req.body.name)
-      console.log(true)
+
+const fileFilter = (req, file, cb) => {
+    var filetypes = /jpeg|jpg|png/;
+    var mimetype = filetypes.test(file.mimetype);
+    var extname = filetypes.test(path.extname(file.originalname).toLowerCase()); // Fixed typo here
+  
+    if (mimetype && extname) {
+      return cb(null, true);
     }
-  })
-  const upload = multer({storage:storage})
+    cb("Error: file upload only supports the following filetype - " + filetypes);
+  };
+  
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "public/img");
+    },
+    filename: (req, file, cb) => {
+      cb(null, req.body.name);
+      console.log(true);
+    },
+  });
+  
+  const upload = multer({ storage: storage, fileFilter: fileFilter });
 //update user
 router.put('/update',csrfProtection,isAuthenticated, async(req,res)=>{
         if (req.body.currentPassword && req.body.newPassword && req.body.repeatNewPassword) {

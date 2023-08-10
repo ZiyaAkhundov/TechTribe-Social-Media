@@ -9,7 +9,7 @@ import EnStrings from 'react-timeago/lib/language-strings/en'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {PostLike, PostDelete} from "../../../../services/Posts"
+import {PostLike, PostDelete,getPosts} from "../../../../services/Posts"
 import { toast } from 'react-toastify';
 import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
@@ -35,6 +35,10 @@ export default function post(props) {
     const response = await PostDelete({postId:props.post._id})
     if(response.status == "success"){
       toast.success(response.message)
+      const getPost = await getPosts()
+      props.setPosts(getPost.sort((p1,p2)=>{
+              return new Date(p2.createdAt) - new Date(p1.createdAt)
+            }))
     }
   }
 
@@ -62,7 +66,6 @@ export default function post(props) {
     }
   const formatter = buildFormatter(EnStrings)
   const PIC =import.meta.env.VITE_API_IMAGE_URL
-  console.log(user)
   return (
     <article>
       <div>
@@ -131,10 +134,12 @@ export default function post(props) {
             </div>
           </div>
           <div className="context py-3">
-            <h3 className="px-3 pt-3">{props.post.desc}</h3>
+            <h3 className="px-3 pt-3">{props.post.desc && props.post.desc}</h3>
           </div>
           <div className="context-img">
-            <img src={props.post.contextImg} alt="" />
+            {props.post.img &&
+              <img src={PIC+props.post.img} alt="" />
+            }
           </div>
           <div className="article-actions">
             <div className="btns flex">

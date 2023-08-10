@@ -9,10 +9,17 @@ dotenv.config()
 
 //create a post
 router.post('/', isAuthenticated, async(req,res)=>{
+    if (req.body.userId != req.session.userId.toString()) {
+        console.log(req.body)
+        console.log(req.session.userId.toString())
+
+        return res.status(403).json({ message: "You are not permission to perform this action!",status: "error"})
+    }
     const newPost = await new Post(req.body)
+    console.log(newPost)
     try {
-        const savedPost = await newPost.save();
-        res.status(200).json(newPost);
+       await newPost.save();
+        res.status(200).json({message:"Post created succesfully!", status:"success"});
     } catch (err){
         res.status(500).json(err)
     }

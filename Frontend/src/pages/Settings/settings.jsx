@@ -68,7 +68,6 @@ export default function settings() {
                 toast.success(response.message);
               }
               else {
-                console.log(response)
                 toast.error(response.message)
               }
 

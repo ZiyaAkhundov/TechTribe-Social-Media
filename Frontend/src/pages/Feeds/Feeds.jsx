@@ -85,6 +85,7 @@ export default function Feeds() {
                   <Post
                     key={post._id}
                     post = {post}
+                    setPosts={setPosts}
                   />
                 ))
               ) : (
@@ -122,7 +123,7 @@ export default function Feeds() {
               )}
             </div>
               </div>
-              <Modal open={open} handleClose={handleClose} handleOpen={handleOpen} />
+              <Modal open={open} handleClose={handleClose} handleOpen={handleOpen} setPosts={setPosts}/>
             <div className='w-1/2 feeds-action relative'>
             <aside>
               <Card sx={{ maxWidth: 300 }} className='w-[300px]'>
