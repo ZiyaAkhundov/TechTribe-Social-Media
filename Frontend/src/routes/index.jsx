@@ -7,7 +7,6 @@ import Login from "../pages/Auth/Login/Login"
 import Chat from "../pages/Chat/chat"
 import Feeds from "../pages/Feeds/feeds"
 import Profile from "../pages/profile/profile"
-import Status from "../pages/Status/Status"
   export const routes = [
     {
       path:"/",
@@ -36,12 +35,6 @@ import Status from "../pages/Status/Status"
     {
       path:"/Feeds",
       component: Feeds,
-      auth:true,
-      layout:"main"
-    },
-    {
-      path:"/:username/status/:id",
-      component: Status,
       auth:true,
       layout:"main"
     },

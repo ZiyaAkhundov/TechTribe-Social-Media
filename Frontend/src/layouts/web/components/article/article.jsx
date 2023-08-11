@@ -16,13 +16,14 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from 'react-router-dom';
-
+import Modal from "./modal/modal"
 
 const ITEM_HEIGHT = 20;
 
 export default function post(props) {
-  let navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -70,6 +71,7 @@ export default function post(props) {
   const PIC =import.meta.env.VITE_API_IMAGE_URL
   return (
     <article>
+      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal}/>
       <div>
         <div className="article-container">
           <div className="article-head">
@@ -136,7 +138,7 @@ export default function post(props) {
             </div>
           </div>
           <div className="context py-3">
-            <h3 className="px-3 pt-3">{props.post.desc && props.post.desc}</h3>
+            <h3 className="post-desc pt-3">{props.post.desc && props.post.desc}</h3>
           </div>
           <div className="context-img">
             {props.post.img &&
@@ -154,7 +156,7 @@ export default function post(props) {
                 </span>{" "}
                 <span className={islike ? "text-blue-500" : null}>likes</span>
               </button>
-              <button className="mx-1" onClick={()=>navigate(`/${props.post.username}/status/${props.post._id}`)}>
+              <button className="mx-1" onClick={handleOpenModal}>
                 <ModeCommentOutlinedIcon />
                 <span>
                   {props.post.comments

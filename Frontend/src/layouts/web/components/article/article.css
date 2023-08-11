@@ -1,6 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
 article{
     position: relative;
-    width: 80%;
+    width: 75%;
     margin: auto;
     border: 1px solid rgb(200, 200, 200);
     border-radius: 6px;
@@ -17,8 +18,12 @@ article{
 }
  article  .context-img{
     display: flex;
-    justify-content: center;
     margin: 8px auto;
+    padding-inline: 45px;
+}
+article .post-desc{
+    padding-inline: 45px;
+    font-family: 'Rubik', sans-serif;
 }
  article .article-container{
     padding: 23px 3px;
@@ -55,12 +60,12 @@ article .article-container .article-head .profile-img{
     text-decoration: none;
     word-break: break-word;
     font-size: 18px;
-    /* font-weight: 500; */
     line-height: 22px;
 }
  article .article-container .article-actions .btns{
     column-gap: 10px;
-    padding: 5px 10px 0;
+    padding-inline: 45px;
+    padding-top: 5px;
 }
 article .article-container .article-actions .btns button{
     display: flex;

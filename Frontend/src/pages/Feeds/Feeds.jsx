@@ -89,6 +89,7 @@ export default function Feeds() {
                   />
                 ))
               ) : (
+                <>
                 <Card className='w-[80%] mx-auto'>
                   <CardHeader
                     avatar={
@@ -119,6 +120,38 @@ export default function Feeds() {
                     </React.Fragment>
                   </CardContent>
                 </Card>
+                <Card className='w-[80%] mx-auto mt-6'>
+                  <CardHeader
+                    avatar={
+                      <Skeleton animation="wave" variant="circular" width={40} height={40} />
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={
+                      <Skeleton
+                        animation="wave"
+                        height={10}
+                        width="80%"
+                        style={{ marginBottom: 6 }}
+                      />
+                    }
+                    subheader={
+                      <Skeleton animation="wave" height={10} width="40%" />
+                    }
+                  />
+                  <Skeleton sx={{ height: 190 }} animation="wave" variant="rectangular" />
+                  <CardContent>
+                    <React.Fragment>
+                      <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+                      <Skeleton animation="wave" height={10} width="80%" />
+                    </React.Fragment>
+                  </CardContent>
+                </Card>
+                </>
+                
                 
               )}
             </div>
