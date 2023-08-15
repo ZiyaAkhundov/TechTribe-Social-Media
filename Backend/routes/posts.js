@@ -152,7 +152,7 @@ router.put('/like/:id',isAuthenticated,csrfProtection, async(req,res)=>{
 })
 
 // comment a post
-router.put('/comment/:id', isAuthenticated,async (req, res) => {
+router.put('/comment/:id', isAuthenticated,csrfProtection, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
 
@@ -160,11 +160,15 @@ router.put('/comment/:id', isAuthenticated,async (req, res) => {
             res.status(404).json("Post not found");
             return;
         }
-
-        const newComment = { _id:uuidv4(),userId: req.body.userId, context: req.body.context,replies:[] };
+        const user = await User.findById(req.body.userId)
+        if(!user){
+            res.status(404).json("User not found");
+            return;
+        }
+        const newComment = { _id:uuidv4(),username: user.username, context: req.body.context,userImg:user.picture };
         await Post.updateOne({ _id: req.params.id }, { $push: { comments: newComment } });
 
-        res.status(200).json("The post was commented successfully");
+        res.status(200).json({message:"The post was commented successfully",status:"success"});
     } catch (err) {
         res.status(500).json(err);
     }

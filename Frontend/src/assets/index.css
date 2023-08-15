@@ -33,3 +33,8 @@ aside{
     height: 25px !important;
     width: 25px !important;
 }
+@media only screen and (max-width: 440px){
+    .nav-username{
+        display: none !important;
+    }
+}

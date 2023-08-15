@@ -1,5 +1,4 @@
 import  { useEffect, useState } from 'react'
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
@@ -71,7 +70,7 @@ export default function post(props) {
   const PIC =import.meta.env.VITE_API_IMAGE_URL
   return (
     <article>
-      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal}/>
+      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post}/>
       <div>
         <div className="article-container">
           <div className="article-head">
@@ -163,7 +162,7 @@ export default function post(props) {
                     ? props.post.comments.length +
                       props.post.comments.reduce(
                         (totalReplies, comment) =>
-                          totalReplies + comment.replies.length,
+                          totalReplies,
                         0
                       )
                     : null}

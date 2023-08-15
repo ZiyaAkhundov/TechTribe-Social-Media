@@ -22,11 +22,10 @@ const PostSchema = new mongoose.Schema(
             type: [{
                 _id:'string',
                 userId: 'string',
+                username: 'string',
                 context: 'string',
-                replies: [{
-                    userId: 'string',
-                    context: 'string'
-                }]
+                userImg: 'string'
+                
             }],
             default: []
         }

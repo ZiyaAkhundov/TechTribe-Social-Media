@@ -51,8 +51,8 @@ export default function Feeds() {
     <div className='content overflow-auto flex-1 scroll-smooth relative'>
           <div className='content-inner w-full'>
             <div className='flex w-full'>
-              <div className='w-80 md:w-90'>
-                <div className='w-[85%] mx-auto'>
+              <div className=' w-full md:w-90'>
+                <div className='w-[85%] mx-auto feed-top'>
                 <div className='m-5 bg-white border rounded-md shadow-feed'>
                   <div className='flex gap-3 items-center w-full p-3 justify-center'>
                     <div>
@@ -90,7 +90,7 @@ export default function Feeds() {
                 ))
               ) : (
                 <>
-                <Card className='w-[80%] mx-auto'>
+                <Card className='w-[100%] md:w-[80%] mx-auto mt-6'>
                   <CardHeader
                     avatar={
                       <Skeleton animation="wave" variant="circular" width={40} height={40} />
@@ -120,7 +120,7 @@ export default function Feeds() {
                     </React.Fragment>
                   </CardContent>
                 </Card>
-                <Card className='w-[80%] mx-auto mt-6'>
+                <Card className='w-[100%] md:w-[80%] mx-auto mt-6'>
                   <CardHeader
                     avatar={
                       <Skeleton animation="wave" variant="circular" width={40} height={40} />

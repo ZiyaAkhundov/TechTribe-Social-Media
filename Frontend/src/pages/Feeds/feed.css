@@ -51,3 +51,18 @@ main .content .feeds-action aside .techtribe{
  justify-content: center;
  align-items: center;
 }
+
+@media only screen and (max-width: 1200px) {
+    .feeds-action{
+        display: none;
+    }
+}
+@media only screen and (max-width: 610px){
+    .feed-top{
+        margin: 0;
+        width: 100% !important;
+    }
+    .feed-top .m-5{
+        margin: 0;
+    }
+}

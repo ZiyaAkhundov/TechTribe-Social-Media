@@ -59,7 +59,7 @@ export default function Navbar({func}) {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Typography sx={{ minWidth: 100,marginInline:1 }}>{user.username}</Typography>
+            <Typography sx={{ minWidth: 100,marginInline:1 }} className="nav-username">{user.username}</Typography>
             <Avatar sx={{ width: 32, height: 32 }} src={user.picture ? PF + user.picture : null} className="border"></Avatar>
           </IconButton>
         </Tooltip>

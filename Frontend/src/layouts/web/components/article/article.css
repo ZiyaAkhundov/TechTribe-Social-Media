@@ -72,3 +72,41 @@ article .article-container .article-actions .btns button{
     align-items: center;
     column-gap: 5px;
 }
+
+@media only screen and (max-width: 610px){
+    article {
+        width: 100% !important;
+    }
+}
+@media only screen and (max-width: 440px){
+    article .btns{
+        padding-inline: 15px !important;
+        font-size: 17px;
+    }
+    article .btns svg{
+        height: 17px;
+        width: 17px;
+    }
+    article .btns span{
+        font-size: 15px;
+    }
+    article .post-desc{
+        font-size: 16px;
+        padding-inline: 15px;
+    }
+    article .profile-img div{
+        width: 35px;
+        height: 35px;
+    }
+    article .profile-name h2{
+        font-size: 14px;
+        line-height: 5px;
+    }
+    article .profile-name time{
+        font-size: 10px;
+        line-height: 5px;
+    }
+    article .context-img{
+        padding-inline: 15px;
+    }
+}
