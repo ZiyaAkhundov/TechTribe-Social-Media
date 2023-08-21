@@ -22,12 +22,42 @@
     height: 100%;
     border-radius: 10px;
     display: flex;
+
     justify-content: space-between;
+}
+.commentInput{
+    height: 10%;
+    background-color: #fff;
+    border-top: 1px solid rgb(147, 147, 147);
+}
+.commentInput div{
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-inline: 10px;
+}
+.commentInput input{
+    border: 1px solid gray;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    height: 35px;
+    width: 80%;
+    font-size: 14px;
+    caret-color: rgb(0, 85, 255);
+}
+.commentInput button{
+    color: #fff;
+    font-size: 16px;
+    padding: 5px 10px;
+    background-color: rgb(25, 25, 210);
+    border-radius: 10px;
 }
 .article-modal-comment{
     width: 400px;
     background-color: #fff;
-    height: 100%;
+    height: 90%;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -76,12 +106,17 @@
     align-items: center;
     column-gap: 5px;
 }
+.article-m-c{
+    background-color: #fff;
+}
+
 @media only screen and (max-width: 768px){
     .article-modal-box{
         flex-direction: column;
     }
     .article-modal-comment{
         width: 100%;
+        height: 67%;
     }
     .article-modal-img{
         height: 86%;
@@ -93,7 +128,7 @@
     }
     .article-modal-img-section{
         width: 100%;
-        height: 51%;
+        height: 50%;
     }
     .article-user-comment h3{
         font-size: 15px;
@@ -104,6 +139,11 @@
     .article-comment-cm h4{
         font-size: 15px;
     }
+    .article-m-c{
+        height: 62%;
+        display: flex;
+        flex-direction: column;
+    }
 }
 @media only screen and (max-width: 550px){
     .article-m-img{
@@ -112,5 +152,5 @@
     .article-modal-img{
         height: 86%;
     }
-    
+
 }

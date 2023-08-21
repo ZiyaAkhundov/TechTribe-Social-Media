@@ -70,7 +70,7 @@ export default function post(props) {
   const PIC =import.meta.env.VITE_API_IMAGE_URL
   return (
     <article>
-      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post}/>
+      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post} islike={islike} setIsLike={setIsLike} setLikeLength={setLikeLength} likelength={likelength}/>
       <div>
         <div className="article-container">
           <div className="article-head">

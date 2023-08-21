@@ -8,6 +8,15 @@ export const getPosts = async () => {
     }
   };
 
+  export const getAPost = async (data) => {
+    try {
+      const response = await get('posts/' + data.id)
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   export const createPost = async (data) => {
     try {
       const response = await post('posts/',data)
@@ -20,6 +29,15 @@ export const getPosts = async () => {
   export const PostLike = async (data) => {
     try {
       const response = await put('posts/like/'+data.postId)
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  export const PostComment = async (data) => {
+    try {
+      const response = await put('posts/comment/'+ data.postId)
       return response;
     } catch (error) {
       throw error;
