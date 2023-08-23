@@ -5,10 +5,13 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import Avatar from "@mui/material/Avatar";
-import { useSelector } from "react-redux";
-import { getAPost, PostLike } from "../../../../../services/Posts";
+import { PostLike,PostComment } from "../../../../../services/Posts";
 import "./modal.css";
 import img from "../../../../../assets/image/no image.png";
+import { useState } from "react";
+import { toast } from "react-toastify";
+
+import Comment from "../comments/comment"
 
 export default function articleModal({
   open,
@@ -18,12 +21,16 @@ export default function articleModal({
   setIsLike,
   setLikeLength,
   likelength,
+  setCommentsLength
 }) {
-  const { user } = useSelector((state) => state.auth);
+
   const PF = import.meta.env.VITE_API_IMAGE_URL;
+  const [comments,setComments] = useState(data.comments)
+  const [value,setValue] = useState("");
+
   const handleLike = async () => {
     try {
-      await PostLike({ postId: data._id });
+      await PostLike({ postId: data._id});
     } catch (error) {
       console.log(error);
     }
@@ -31,8 +38,29 @@ export default function articleModal({
     setIsLike((prev) => !prev);
   };
 
-  const handleComment = () => {};
+  const handleComment = async() => {
+    if(value){
+      const response = await PostComment({postId: data._id,context:value})
+      if(response.status == "success"){
+        setComments(response.data)
+        setCommentsLength(prev=> prev+1)
+        setValue("")
+      }
+      else{
+        toast.error(response.message)
+      }
+    }
+    else{
+      toast.warning("Write comment!")
+    }
+  };
+  const handleKeyUp = (event) => {
+    if (event.key === "Enter") {
+      handleComment();
+    }
+  };
 
+  
   return (
     <div>
       <Modal open={open} onClose={handleClose} className="article-modal">
@@ -76,7 +104,7 @@ export default function articleModal({
                       <span>{likelength ? likelength : null}</span>
                       <span>likes</span>
                     </button>
-                    <button className="mx-1" onClick={handleComment}>
+                    <button className="mx-1">
                       <ModeCommentOutlinedIcon />
                       <span>comments</span>
                     </button>
@@ -86,42 +114,18 @@ export default function articleModal({
                   </div>
                 </div>
               </div>
-              {data.comments.length > 0 ? (
-                data.comments.map((comment) => {
-                  return (
-                    <div className="comments-section" key={comment._id}>
-                      <div className="article-comment">
-                        <div className="flex justify-start items-center p-3">
-                          <Avatar
-                            src={PF + comment.userImg}
-                            sx={{ height: 30, width: 30 }}
-                            className="rounded-full"
-                          ></Avatar>
-                          <h3 className="mx-2 text-1 article-comment-username">
-                            {comment.username}
-                          </h3>
-                        </div>
-                        <div className="article-comment-cm">
-                          <h4>{comment.context}</h4>
-                        </div>
-                        <div className="cm-actions">
-                          <button className="mx-1">
-                            <ThumbUpOutlinedIcon />
-                            <span>likes</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
+              {comments.length > 0 ? (
+                comments.map((comment) => 
+                  <Comment comment = {comment} postId={data._id} key={comment._id} setComments={setComments} setCommentsLength={setCommentsLength}/>
+                )
               ) : (
                 <div className="text-center p-4">No comments found!</div>
               )}
             </div>
             <div className="commentInput">
               <div>
-                <input type="text" placeholder="Write a comment" />
-                <button>Post</button>
+                <input type="text" placeholder="Write a comment" value={value} onChange={(e)=>setValue(e.target.value)} onKeyUp={handleKeyUp}/>
+                <button onClick={handleComment}>Post</button>
               </div>
             </div>
           </div>

@@ -1,5 +1,18 @@
 const mongoose = require('mongoose');
 
+const CommentSchema = new mongoose.Schema({
+    _id: 'string',
+    userId: 'string',
+    username: 'string',
+    context: 'string',
+    userImg: 'string',
+    commentLikes: {
+        type: [String], // Change this to an array of strings
+        default: []
+    },
+    createdAt: { type: Date, default: Date.now }
+});
+
 const PostSchema = new mongoose.Schema(
     {
         userId: {
@@ -15,25 +28,15 @@ const PostSchema = new mongoose.Schema(
             max: 1000
         },
         likes: {
-            type: 'Array',
+            type: [String], // Change this to an array of strings
             default: []
         },
         comments: {
-            type: [{
-                _id:'string',
-                userId: 'string',
-                username: 'string',
-                context: 'string',
-                userImg: 'string'
-                
-            }],
+            type: [CommentSchema], // Use the CommentSchema defined above
             default: []
         }
     },
     { timestamps: true }
 );
-
-
-
 
 module.exports = mongoose.model("Post", PostSchema);

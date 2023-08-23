@@ -37,7 +37,15 @@ export const getPosts = async () => {
 
   export const PostComment = async (data) => {
     try {
-      const response = await put('posts/comment/'+ data.postId)
+      const response = await put('posts/comment/'+ data.postId,data)
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+  export const CommentLike = async (data) => {
+    try {
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId)
       return response;
     } catch (error) {
       throw error;
@@ -47,6 +55,15 @@ export const getPosts = async () => {
   export const PostDelete = async (data) => {
     try {
       const response = await del('posts/'+data.postId)
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  export const CommentDelete = async (data) => {
+    try {
+      const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/delete',data)
       return response;
     } catch (error) {
       throw error;

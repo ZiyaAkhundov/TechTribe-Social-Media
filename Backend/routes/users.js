@@ -11,11 +11,11 @@ const fileFilter = (req, file, cb) => {
     var filetypes = /jpeg|jpg|png/;
     var mimetype = filetypes.test(file.mimetype);
     var extname = filetypes.test(path.extname(file.originalname).toLowerCase()); // Fixed typo here
-  
     if (mimetype && extname) {
       return cb(null, true);
     }
-    cb("Error: file upload only supports the following filetype - " + filetypes);
+
+    cb(new Error('Invalid File Type'))
   };
   
   const storage = multer.diskStorage({
@@ -100,12 +100,15 @@ router.put('/update',csrfProtection,isAuthenticated, async(req,res)=>{
 })
 
 //upload photo
-router.post('/upload',csrfProtection,isAuthenticated,upload.single('file'), async(req,res) =>{
-    try {
-        return res.status(200).json('Photo uploaded successfully')
-    } catch (error) {
-        res.status(500).json(error)
-    }
+router.post('/upload',csrfProtection,isAuthenticated, async(req,res) =>{
+    upload.single("file")(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+          return res.status(400).json({ error: err.message });
+        } else if (err) {
+          return res.status(400).json({ error: err.message });
+        }
+        res.status(200).json({ message: "File uploaded successfully" });
+      });
 })
 
 //set photo

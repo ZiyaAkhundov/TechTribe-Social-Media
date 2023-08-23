@@ -46,9 +46,11 @@ export default function post(props) {
 
   const [islike,setIsLike] =useState(false)
   const [likelength, setLikeLength] = useState(props.post.likes.length)
+  const [commentsLength,setCommentsLength] = useState(0)
   const { user } = useSelector((state) => state.auth);
   useEffect(()=>{
     const userLikes = props.post.likes.some(likes => likes.includes(user.id));
+    setCommentsLength(props.post.comments.length)
     if(userLikes){
       setIsLike(true);
     }
@@ -70,7 +72,7 @@ export default function post(props) {
   const PIC =import.meta.env.VITE_API_IMAGE_URL
   return (
     <article>
-      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post} islike={islike} setIsLike={setIsLike} setLikeLength={setLikeLength} likelength={likelength}/>
+      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post} islike={islike} setIsLike={setIsLike} setLikeLength={setLikeLength} likelength={likelength} setCommentsLength={setCommentsLength}/>
       <div>
         <div className="article-container">
           <div className="article-head">
@@ -158,13 +160,8 @@ export default function post(props) {
               <button className="mx-1" onClick={handleOpenModal}>
                 <ModeCommentOutlinedIcon />
                 <span>
-                  {props.post.comments
-                    ? props.post.comments.length +
-                      props.post.comments.reduce(
-                        (totalReplies, comment) =>
-                          totalReplies,
-                        0
-                      )
+                  {commentsLength
+                    ? commentsLength
                     : null}
                 </span>{" "}
                 <span>comments</span>

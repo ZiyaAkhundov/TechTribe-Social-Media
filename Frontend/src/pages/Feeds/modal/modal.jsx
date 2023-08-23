@@ -42,6 +42,9 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
         desc: textInputRef.current.value,
       };
       if (file) {
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') {
+          return toast.error("Invalid File Type");
+        }
         let formData = new FormData();
         const filename = Date.now() + file.name;
         formData.append("name", filename);
@@ -58,7 +61,12 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
               withCredentials: true,
             }
           );
-        } catch (error) {}
+          console.log(uploadResponse)
+        } catch (error) {
+          if (error.response) {
+            toast.error(error.response.data.error);
+          }
+        }
       }
 
       try {
