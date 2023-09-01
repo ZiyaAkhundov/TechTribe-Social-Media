@@ -6,7 +6,7 @@ import Register from "../pages/Auth/Register/Register"
 import Login from "../pages/Auth/Login/Login"
 import Chat from "../pages/Chat/chat"
 import Feeds from "../pages/Feeds/feeds"
-import Profile from "../pages/profile/profile"
+import {Profile} from "../pages/profile/profile"
   export const routes = [
     {
       path:"/",
@@ -40,6 +40,18 @@ import Profile from "../pages/profile/profile"
     },
     {
       path:"/Profile/:username",
+      component: Profile,
+      auth:true,
+      layout:"main"
+    },
+    {
+      path:"/Profile/:username/followers",
+      component: Profile,
+      auth:true,
+      layout:"main"
+    },
+    {
+      path:"/Profile/:username/followings",
       component: Profile,
       auth:true,
       layout:"main"

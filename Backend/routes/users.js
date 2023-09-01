@@ -136,7 +136,7 @@ router.delete('/:id', async(req,res)=>{
 })
 
 //get a user
-router.get('/:username',isAuthenticated, async(req,res)=>{
+router.get('/:username',csrfProtection,isAuthenticated, async(req,res)=>{
     const username = req.params.username;
     try {
         const user = await User.findOne({username: username});
@@ -150,7 +150,7 @@ router.get('/:username',isAuthenticated, async(req,res)=>{
 })
 
 //get all users
-router.get('/list', async(req,res)=>{
+router.get('/list',csrfProtection,isAuthenticated, async(req,res)=>{
     try {
         const users = await User.find({});
         res.status(200).json(users);
@@ -159,49 +159,76 @@ router.get('/list', async(req,res)=>{
     }
 })
 
-//follow a user
-router.put('/:id/follow', async(req,res)=>{
-    if(req.body.userId !== req.params.id){
+//follow-unfollow a user
+router.put('/:username/follow',csrfProtection,isAuthenticated, async(req,res)=>{
+    if(req.session.username !== req.params.username){
         try {
-            const user = await User.findById(req.params.id);
-            const currentUser = await User.findById(req.body.userId);
-            if(!user.followers.includes(req.body.userId)){
-                await user.updateOne({$push:{followers: req.body.userId}})
-                await currentUser.updateOne({$push:{followings: req.params.id}})
-                res.status(200).json("User has been followed!");
+            const user = await User.findOne({username:req.params.username});
+            const currentUser = await User.findById(req.session.userId.toString());
+            if (!user.followers.some(obj => obj.id === req.session.userId.toString())) {
+                const newFollower = { id: req.session.userId.toString(), username: req.session.username, userPic: currentUser.picture };
+                await user.updateOne({ $push: { followers: newFollower } });
+                await currentUser.updateOne({ $push: { followings: { id: user._id.toString(), username: user.username, userPic: user.picture } } });
+                
+                const updatedUser = await User.findById(user._id);
+                res.status(200).json({ message: "User has been followed!", status: "success",data:updatedUser.followers });
+            } else {
+                await user.updateOne({ $pull: { followers: { id: req.session.userId.toString() } } });
+                await currentUser.updateOne({ $pull: { followings: { id: user._id.toString() } } });
+
+                const updatedUser = await User.findOne(user._id);
+                res.status(200).json({message:"User has been unfollowed!",status:"success",data:updatedUser.followers});
             }
-            else{
-                res.status(403).send("You are already following this user!")
-            }
+            
         } catch (err) {
+            console.log(err)
             res.status(500).send(err)
         }
     }
     else{
-        res.status(403).send("You can't follow yourself!")
+        res.status(403).send({message:"You can't follow yourself!",status:"error"})
     }
 }) 
 
-//unfollow a user
-router.put('/:id/unfollow', async(req,res)=>{
-    if(req.body.userId !== req.params.id){
+//remove follow a user
+router.put('/:username/follow/remove',csrfProtection,isAuthenticated, async(req,res)=>{
+    if(req.session.username !== req.params.username){
         try {
-            const user = await User.findById(req.params.id);
-            const currentUser = await User.findById(req.body.userId);
-            if(user.followers.includes(req.body.userId)){
-                await user.updateOne({$pull:{followers: req.body.userId}})
-                await currentUser.updateOne({$pull:{followings: req.params.id}})
-                res.status(200).json("User has been unfollowed!");
+            const user = await User.findOne({username:req.params.username});
+            const currentUser = await User.findById(req.session.userId.toString());
+            if (user.followings.some(obj => obj.id === req.session.userId.toString())) {
+                await user.updateOne({ $pull: { followings: { id: req.session.userId.toString() } } });
+                await currentUser.updateOne({ $pull: { followers: { id: user._id.toString() } } });
+
+                const updatedUser = await User.findOne(currentUser._id);
+                res.status(200).json({message:"The user has been removed from followers!",status:"success",data:updatedUser.followers});
             }
-            else{
-                res.status(403).send("You are not unfollowing this user!")
-            }
+            
         } catch (err) {
+            console.log(err)
             res.status(500).send(err)
         }
     }
     else{
-        res.status(403).send("You can't unfollow yourself!")
+        res.status(403).send({message:"You can't do this!",status:"error"})
     }
+}) 
+
+router.get ('/followings/:username',csrfProtection,isAuthenticated, async(req,res)=>{
+    const user = await User.findOne({username:req.params.username});
+    if(!user){
+        return res.status(404).json({message:"User not found",status:"error"})
+    }
+    res.status(200).json({status:"success",data:user.followings})
 })
+
+router.get ('/followers/:username',csrfProtection,isAuthenticated, async(req,res)=>{
+    const user = await User.findOne({username:req.params.username});
+    if(!user){
+        return res.status(404).json({message:"User not found",status:"error"})
+    }
+    res.status(200).json({status:"success",data:user.followers})
+})
+
+
 module.exports = router;

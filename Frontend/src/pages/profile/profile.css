@@ -90,6 +90,12 @@ section{
     color: #fff;
     border-radius: 10px;
 }
+.profile-header > .profile-section >.profile-actions> .profile-edit> .follow{
+    padding: 6px 17px;
+    background-color: rgb(2, 138, 211);
+    color: #fff;
+    border-radius: 10px;
+}
 .profile-header > .profile-section > .profile-activity{
     padding: 10px 0px;
     display: flex;

@@ -13,24 +13,54 @@ import Post from "../../layouts/web/components/article/article"
 import { useSelector } from "react-redux";
 import "./profile.css"
 import 'react-loading-skeleton/dist/skeleton.css'
-export default function profile() {
+import {getUser,getUserPosts,Follow} from "../../services/Profile"
+import {ModalProfile} from "./modal/modal"
+import { toast } from 'react-toastify';
+
+
+export function Profile() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = (num) => { 
+    if(num){
+      setType(1)
+      window.history.replaceState(null, "Followings", `/profile/${username}/followings`)
+    }
+    else{
+      setType(0)
+      window.history.replaceState(null, "Followers", `/profile/${username}/followers`)
+    }
+    setOpen(true) 
+  };
+  const handleClose = () => {setOpen(false); window.history.replaceState(null, '', `/profile/${username}`)};
+  
+  const [loading,setLoading] = useState(false)
   const [noPost, setNoPost] = useState(false)
   const [noUser, setNoUser] = useState(false)
   const [posts, setPosts] =useState([])
   const [User, setUser] =useState(null)
+  const [userfollowers,setuserfollowers] = useState([]);
+  const [userFollowings , setUserFollowings] = useState([])
+  const [following, setFollowing] = useState(false)
+  const [type,setType] = useState(0); //it is used for the modal to detect to get follower or following data
   const PIC =import.meta.env.VITE_API_IMAGE_URL
   const username = useParams().username
   const { user } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    const getUser = async () => {
+    const getUserInfo = async () => {
+      setFollowing(false);
       try {
-        const response = await axios.get(import.meta.env.VITE_API_URL + '/users/' + username, {
-          withCredentials: true,
-        });
-        setUser(response.data);
+        const response = await getUser({username:username});
+        setUser(response);
+        setuserfollowers(response.followers)
+        setUserFollowings(response.followings)
+        response.followers.map(follower=>{
+          if(follower.id == user.id){
+            setFollowing(true);
+          }
+        })
       } catch (error) {
-        console.log(error.response.data);
-        if(error.response.data.status =="error"){
+        if(error.status =="error"){
           setNoUser(true)
         }
       }
@@ -38,13 +68,11 @@ export default function profile() {
   
     const getPost = async () => {
       try {
-        const response = await axios.get(import.meta.env.VITE_API_URL + '/posts/profile/' + username, {
-          withCredentials: true,
-        });
-        if(response.data.status == "warning"){
+        const response = await getUserPosts({username:username});
+        if(response.status == "warning"){
           setNoPost(true)
         }
-        setPosts(response.data.userPosts.sort((p1,p2)=>{
+        setPosts(response.userPosts.sort((p1,p2)=>{
           return new Date(p2.createdAt) - new Date(p1.createdAt)
         }));
         
@@ -52,10 +80,36 @@ export default function profile() {
       }
     };
   
-    getUser();
+    getUserInfo();
     getPost();
   }, [username]);
+
+  useEffect(()=>{
+    setOpen(false)
+    const urlContainsFollowers = window.location.href.includes('followers');
+    if(urlContainsFollowers){
+      handleOpen(0)
+    }
+    const urlContainsFollowings = window.location.href.includes('followings');
+    if(urlContainsFollowings){
+      handleOpen(1)
+    }
+    
+  },[])
   
+  const handleFollow = async() =>{
+    setLoading(true)
+    const response = await Follow({username:username})
+    if(response.status == "success"){
+      setFollowing(prev=>!prev);
+      setuserfollowers(response.data);
+      setLoading(false)
+    }
+    else{
+      toast.error(response.message)
+    }
+    setLoading(false)
+  }
   
   if(noUser){
     return (<div>Something went wrong</div>)
@@ -83,11 +137,10 @@ export default function profile() {
                     <p> {username}</p>
                   </div>
                   <div className="profile-edit">
-                    {username != user.username ?null :
+                    {username != user.username ? <button className='follow disabled:opacity-50' disabled={loading ? true:false} onClick={handleFollow}>{following ? 'Following' : 'Follow'}</button> :
                       <NavLink to={"/settings"}>
                       Edit profile
                     </NavLink>
-  
                     }
                   </div>
                 </div>
@@ -98,17 +151,21 @@ export default function profile() {
                       <span className='mx-1'>post</span>
                     </div>
                     <div className='profile-followers'>
-                      <button>
-                        <span className='mx-1'>{User && User.followers.length}</span>
+                      <button onClick={() => {handleOpen(0);}}>
+                        <span className='mx-1'>{User && userfollowers.length}</span>
                         <span className='mx-1'>followers</span>
                       </button>
                     </div>
                     <div className='profile-followings'>
-                      <button>
-                        <span className='mx-1'>{User && User.followings.length}</span>
+                      <button onClick={() => {handleOpen(1);}}>
+                        <span className='mx-1'>{User && userFollowings.length}</span>
                         <span className='mx-1'>followings</span>
                       </button>
                     </div>
+                    {
+                    open &&
+                    <ModalProfile open={open} handleClose={handleClose} type = {type} username={username} setuserfollowers={setuserfollowers}/>
+                    }
                   </div>
                 </div>
               </div>
@@ -121,7 +178,7 @@ export default function profile() {
                 </button>
               </div>
               <div className='profile-body-content justify-start'>
-                { noPost ? <div>No Post</div> :
+                { noPost ? <div className='flex justify-center items-center p-4'>No Post Found</div> :
                 posts.length > 0 ? (
                   posts.map(post => (
                     <Post
