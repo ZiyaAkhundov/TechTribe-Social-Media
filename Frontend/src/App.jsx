@@ -91,11 +91,11 @@ if(loading){
                   path={route.path}
                   element={
                     <>
-                      <Messenger func={sidebarAction} state={sidebar} />
+                    <Messenger func={sidebarAction} state={sidebar} />
                       <main className="flex-auto height-100%">
                         <route.component />
                       </main>
-                    </>
+                    </>  
                   }
                 />
               )

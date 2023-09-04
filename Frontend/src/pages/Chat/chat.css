@@ -33,3 +33,6 @@ em-emoji-picker{
     bottom: 54px;
     right: 60px;
 }
+.chat-message{
+    margin-top: 20px !important;
+}

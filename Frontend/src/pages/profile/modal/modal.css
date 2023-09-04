@@ -28,11 +28,21 @@
     background-color: #F2F2F2;
     box-shadow: 0px 0px 20px -18px;
   }
-  
+  .profile-btn.fl:hover {
+    background-color: rgb(4, 110, 167);
+    box-shadow: 0px 0px 20px -18px;
+  }
   .profile-btn:active {
     transform: scale(0.95);
   }
-
+  .fl{
+    background-color: rgb(2, 138, 211);
+    color: #fff;
+  }
+  .profile-btn.rm{
+    background-color: rgb(211, 2, 2);
+    color: #fff;
+  }
 /*spinner*/
 .loader {
     display: flex;

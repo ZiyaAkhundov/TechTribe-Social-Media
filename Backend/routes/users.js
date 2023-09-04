@@ -143,21 +143,36 @@ router.get('/:username',csrfProtection,isAuthenticated, async(req,res)=>{
         if(!user){
             return res.status(404).json({message:"User not found", status: "error"});
         }
-        res.status(200).json({username: user.username,followers : user.followers,followings : user.followings,picture : user.picture});
+        res.status(200).json({id:user._id,username: user.username,followers : user.followers,followings : user.followings,picture : user.picture});
     } catch (err) {
         return res.status(500).send(err);
     }
 })
 
-//get all users
-router.get('/list',csrfProtection,isAuthenticated, async(req,res)=>{
+//get users
+router.get('/query/users', csrfProtection, isAuthenticated, async (req, res) => {
+    let query = req.query.user;
+    if(!query){
+        return
+    }
     try {
-        const users = await User.find({});
-        res.status(200).json(users);
+        const listUsers = await User.find({ 
+            $or: [ 
+               { username: { '$regex': '.*' + query + '.*' ,$options:'i'} },
+             ] 
+           }).exec();
+           let array =[];
+            listUsers.map(user=>{
+                if(user.id !== req.session.userId.toString()){
+                    const {id,username,picture} = user
+                     array.push({id,username,picture})
+                }
+           })
+        res.status(200).json({ status: "success", data: array });
     } catch (err) {
         return res.status(500).send(err);
     }
-})
+});
 
 //follow-unfollow a user
 router.put('/:username/follow',csrfProtection,isAuthenticated, async(req,res)=>{

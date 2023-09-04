@@ -114,10 +114,10 @@ const handleFollow = async(data)=>{
                       </NavLink>
                       {user.username === username ? (
                         type ? (
-                          <button className="profile-btn" onClick={() => handleFollow(data.username)}>Following</button>
+                          <button className="profile-btn fl" onClick={() => handleFollow(data.username)}>Following</button>
                         ) : (
                           <button
-                            className="profile-btn"
+                            className="profile-btn rm"
                             onClick={() => handleRemoveFollower(data.username)}
                           >
                             Remove
@@ -127,7 +127,7 @@ const handleFollow = async(data)=>{
                       ? null : curUserFollowings.some(
                           (element) => element.username === data.username
                         ) ? (
-                        <button className="profile-btn" onClick={() => handleFollow(data.username)}>Following</button>
+                        <button className="profile-btn fl" onClick={() => handleFollow(data.username)}>Following</button>
                       ) : (
                         <button
                           className="profile-btn"

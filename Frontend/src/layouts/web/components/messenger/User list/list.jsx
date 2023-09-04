@@ -1,46 +1,36 @@
 import { Avatar } from '@mui/material'
-import React from 'react'
-import { NavLink } from "react-router-dom"
-import img from "../../../../../assets/image/_DSC0187.jpg"
-export default function List({funct}) {
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
+import {getRooms} from "../../../../../services/Message"
+import { useSelector } from "react-redux";
+
+
+export default function List({funct,setChat,chat}) {
+    const { user } = useSelector((state) => state.auth);
+    const PIC =import.meta.env.VITE_API_IMAGE_URL
+    const navigate =useNavigate()
+    useEffect(()=>{
+        const rooms = async()=>{
+            const response= await getRooms(user.id)
+            if(response.status=="success"){
+                setChat(response.data)
+            }
+        }
+        rooms()
+    },[])
   return (
     <nav className="px-2 asideNav">
             <ul className="flex flex-col gap-1">
-                <li>
-                    <NavLink  onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        <Avatar alt="akhundov_ziya" src={img} className='border' sx={{ width: 24, height: 24 }}/>
-                        <span className='mx-1'>akhundov_ziya</span>
-                    </NavLink>
+                {chat && 
+                chat.map(data=>
+                <li onClick={funct} key={data.id}>
+                    <div onClick={()=>navigate(`/Chat/${data.id}`)}  className="h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600 cursor-pointer">
+                        <Avatar alt="akhundov_ziya" src={PIC+data.picture} className='border' sx={{ width: 24, height: 24 }}/>
+                        <span className='mx-1'>{data.username}</span>
+                    </div>
                 </li>
-                <li>
-                    <NavLink  onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        <Avatar alt="akhundov_ziya" src={img} className='border' sx={{ width: 24, height: 24 }}/>
-                        <span className='mx-1'>akhundov_ziya</span>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink  onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                       <Avatar alt="akhundov_ziya" src={img} className='border' sx={{ width: 24, height: 24 }}/>
-                        <span className='mx-1'>akhundov_ziya</span>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        <Avatar alt="akhundov_ziya" src={img} className='border' sx={{ width: 24, height: 24 }}/>
-                        <span className='mx-1'>akhundov_ziya</span>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink  onClick={funct} className={({ isActive, isPending }) =>
-                        isPending ? "" : isActive ? "bg-active h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600" : "h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600"}>
-                        <Avatar alt="akhundov_ziya" src={img} className='border' sx={{ width: 24, height: 24 }}/>
-                        <span className='mx-1'>akhundov_ziya</span>
-                    </NavLink>
-                </li>
+                )
+                }
             </ul>
         </nav>
   )

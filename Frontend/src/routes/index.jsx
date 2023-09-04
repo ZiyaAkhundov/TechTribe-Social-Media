@@ -33,6 +33,12 @@ import {Profile} from "../pages/profile/profile"
       layout:"chat"
     },
     {
+      path:"/Chat/:id",
+      component: Chat,
+      auth:true,
+      layout:"chat"
+    },
+    {
       path:"/Feeds",
       component: Feeds,
       auth:true,

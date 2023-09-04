@@ -1,0 +1,17 @@
+.modal-box{
+    border-radius: 5px;
+}
+.chatModal-body{
+    overflow-y: auto;
+    min-height: 300px;
+    max-height: 400px;
+}
+.chatModal-body .chat-search{
+    border-bottom: 1px solid rgb(218, 218, 218);
+}
+.chatModal-body .chat-search input{
+    width: 100%;
+    padding: 5px 10px;
+    margin-block: 5px;
+    outline: none;
+}

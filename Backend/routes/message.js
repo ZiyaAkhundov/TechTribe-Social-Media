@@ -4,36 +4,35 @@ const Room = require('../models/MessengerRoom');
 
 //create a new message
 router.post("/", async (req, res) => {
-    const newMessage = await new Message(req.body)
+    const newMessage =  new Message(req.body)
     try {
         const saveMessage = await newMessage.save();
-        res.status(200).json(saveMessage);
+        res.status(200).json({status:"success",data:saveMessage});
     } catch (err) {
       res.status(500).send(err);
     }
   });
-  
+
 //get a room messages by userId
-router.get("/:roomId", async (req, res) => {
+router.get("/room/:roomId/:userId", async (req, res) => {
     const roomId = req.params.roomId
-    const userId = req.body.userId
+    const user = req.params.userId
     try {
         const findroom = await Room.findOne({
             _id: roomId,
             $or: [
-                { members: {$in:[userId]} }
+                { members: {$in:[user]} }
               ]
         })
         if(!findroom){
-            console.log(roomId)
             return res.status(404).json("You are not allowed to access this")
         }
         const findMessages = await  Message.find({roomId: roomId})
         if(findMessages.length <= 0){
-            res.status(404).json("No messages found")
+            res.status(200).json({message:"No messages found",status:"warning"})
             return
         }
-        res.status(200).json(findMessages);
+        res.status(200).json({status:"success",data:findMessages});
     } catch (err) {
       res.status(500).send(err);
     }
