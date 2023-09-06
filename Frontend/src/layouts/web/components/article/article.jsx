@@ -38,9 +38,15 @@ export default function post(props) {
     if(response.status == "success"){
       toast.success(response.message)
       const getPost = await getPosts()
-      props.setPosts(getPost.sort((p1,p2)=>{
-              return new Date(p2.createdAt) - new Date(p1.createdAt)
-            }))
+     if(getPost.status == "success"){
+       props.setPosts(getPost.data.sort((p1,p2)=>{
+               return new Date(p2.createdAt) - new Date(p1.createdAt)
+             }))
+     }
+     else{
+      props.setPosts([])
+      props.setNoPost(true)
+     }
     }
   }
 

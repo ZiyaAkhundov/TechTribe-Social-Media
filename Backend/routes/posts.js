@@ -114,7 +114,7 @@ router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
     return res.status(200).json({message:"There are no posts",status: "warning"})
   }
 
-    res.status(200).json(postsWithUsername);
+    res.status(200).json({data:postsWithUsername,status:"success"});
   } catch (err) {
     res.status(500).json(err);
   }
@@ -187,7 +187,7 @@ router.put('/comment/:id', isAuthenticated,csrfProtection, async (req, res) => {
 });
 
 // comment like
-router.put('/comment/:id/:commentId', isAuthenticated, csrfProtection, async (req, res) => {
+router.put('/comment/:id/:commentId/like', isAuthenticated, csrfProtection, async (req, res) => {
     try {
         const postId = req.params.id;
         const commentId = req.params.commentId;
@@ -232,7 +232,7 @@ router.delete('/comment/:id/:commentId/delete',isAuthenticated,csrfProtection, a
             return;
         }
 
-        const commentIndex = post.comments.findIndex(comment => comment._id.toString() === commentId);
+        const commentIndex = post.comments.findIndex(comment => comment._id === commentId);
 
         if (commentIndex === -1) {
             return res.status(404).json({ message: 'Comment not found', status: 'error' });
@@ -256,40 +256,105 @@ router.delete('/comment/:id/:commentId/delete',isAuthenticated,csrfProtection, a
 })
 
 // comment a reply
-router.put('/comment/:id/:userId/:commentId',isAuthenticated, async (req, res) => {
+router.put('/comment/:id/:commentId/reply',isAuthenticated,csrfProtection, async (req, res) => {
     try {
         const postId = req.params.id;
-        const userId = req.params.userId;
+        const userId = req.session.userId.toString();
         const commentIdToReply = req.params.commentId;
 
         const post = await Post.findById(postId);
+        const user = await User.findById(userId)
 
         if (!post) {
-            res.status(404).json("Post not found");
+            res.status(404).json({message:"Post not found",status:"error"});
             return;
         }
 
         const commentToReply = post.comments.find(comment => comment._id === commentIdToReply);
 
         if (!commentToReply) {
-            res.status(404).json("Comment to reply not found");
+            res.status(404).json({message:"Comment not found",status:'error'});
             return;
         }
 
-        const newReplyComment = { userId, context: req.body.context };
+        const newReplyComment = { _id:uuidv4(),username: user.username, context: req.body.context,userImg:user.picture};
 
         if (!commentToReply.replies) {
             commentToReply.replies = [];
         }
-        commentToReply.replies.push(newReplyComment);
+        commentToReply.commentReply.push(newReplyComment);
 
         await post.save();
+        const comments = await Post.findById(req.params.id);
         
-        res.status(200).json("Comment reply sent successfully");
+        res.status(200).json({message:"Comment reply sent successfully",status:"success",data:comments.comments});
     } catch (err) {
         res.status(500).json(err);
     }
 });
+
+// delete reply
+router.delete('/comment/:id/:commentId/:replyId/delete',isAuthenticated,csrfProtection, async(req,res)=>{
+    try {
+        const postId = req.params.id;
+        const commentId = req.params.commentId;
+        const replyId = req.params.replyId
+        const post = await Post.findById(postId);
+        if (!post) {
+            res.status(404).json({ message: "Post not found", status: "error" });
+            return;
+        }
+        
+        const comment = post.comments.find((comment) => comment._id.toString() === commentId);
+        if (!comment) {
+            res.status(404).json({ message: "Comment not found", status: "error" });
+            return;
+        }
+        
+        const commentIndex = comment.commentReply.findIndex((reply) => reply._id.toString() === replyId);
+        if (commentIndex === -1) {
+            res.status(404).json({ message: "Reply not found", status: "error" });
+            return;
+        }
+
+        if (commentIndex === -1) {
+            return res.status(404).json({ message: 'Comment not found', status: 'error' });
+        }
+        const commentreply = comment.commentReply[commentIndex];
+       
+
+        if (commentreply.username === req.session.username) {
+            const update = {
+                $pull: {
+                    'comments.$[outer].commentReply': { _id: replyId }
+                }
+            };
+        
+            const options = {
+                arrayFilters: [{ 'outer._id': commentId }]
+            };
+        console.log(update)
+            const updatedPost = await Post.findOneAndUpdate(
+                { _id: postId },
+                update,
+                options,
+                { new: true } 
+            );
+               
+            if (!updatedPost) {
+                return res.status(404).json({ message: "Post not found", status: "error" });
+            }
+            const renewedPost = await Post.findById(postId)
+            return res.status(200).json({ message: 'Comment has been deleted!', status: 'success', data: renewedPost.comments });
+        } else {
+            return res.status(403).json({ message: "You can't delete this comment", status: "error" });
+        }
+        
+    } catch (err){
+        console.log(err)
+        res.status(500).json(err)
+    }
+})
 
 
 module.exports = router

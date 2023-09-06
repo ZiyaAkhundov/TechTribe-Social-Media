@@ -17,7 +17,7 @@ export default function conversation({func,state}) {
 
   return (
     <aside className={classNames({
-        'w-72 overflow-hidden h-100dvh transition ease-in-out duration-300 bg-messengerAside fixed z-50 pt-6 flex flex-col nav-aside translate-x-250 md:translate-x-0 md:relative': !state,
+        'w-72 overflow-hidden h-100dvh transition ease-in-out duration-300 bg-messengerAside fixed z-50 pt-6 flex flex-col nav-aside -translate-x-[290px] md:translate-x-0 md:relative': !state,
         'w-72 overflow-hidden h-100dvh transition ease-in-out duration-300 bg-messengerAside fixed z-50 pt-6 flex flex-col nav-aside md:translate-x-0 md:relative': state
       })}>
         <div className='flex flex-row'>

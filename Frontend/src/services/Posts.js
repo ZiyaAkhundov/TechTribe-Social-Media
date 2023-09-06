@@ -45,7 +45,16 @@ export const getPosts = async () => {
   };
   export const CommentLike = async (data) => {
     try {
-      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId)
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/like')
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  export const ReplyComment = async (data) => {
+    try {
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/reply',{context:data.context})
       return response;
     } catch (error) {
       throw error;
@@ -64,6 +73,15 @@ export const getPosts = async () => {
   export const CommentDelete = async (data) => {
     try {
       const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/delete',data)
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  export const ReplyDelete = async (data) => {
+    try {
+      const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/'+ data.replyId + '/delete')
       return response;
     } catch (error) {
       throw error;

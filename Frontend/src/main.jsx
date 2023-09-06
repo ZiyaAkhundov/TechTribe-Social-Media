@@ -4,7 +4,6 @@ import App from './App.jsx'
 import './assets/index.css'
 import { Provider } from "react-redux";
 import store from "./stores/index"
-import { unstable_HistoryRouter as HistoryRouter  } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 

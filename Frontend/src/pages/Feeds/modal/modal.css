@@ -10,6 +10,10 @@
     outline: none;
     border-radius: 10px;
 }
+.feed-modal-box{
+    max-height: 90dvh;
+    overflow-y: auto;
+}
 .modal-head{
     text-align: center;
     padding: 8px 0;
@@ -28,9 +32,9 @@
 .modal-body-top .modal-text-input{
     width: 100%;
     height: 46px;
-    border-radius: 30px;
+    border-radius: 10px;
     border: 1px solid #ccc;
-    padding-left: 12px;
+    padding-inline: 12px;
     outline: none;
 }
 .modal-buttons{
@@ -59,4 +63,15 @@
     top: -5px;
     right: 5px;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 535px) {
+    .feed-modal-box{
+        width: 400px;
+    }
+}
+@media only screen and (max-width: 415px) {
+    .feed-modal-box{
+        width: 300px;
+    }
 }

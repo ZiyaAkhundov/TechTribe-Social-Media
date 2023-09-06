@@ -50,6 +50,9 @@ label{
     margin-inline: 15px;
     color: rgb(92, 92, 92);
 }
+.ps-change-form{
+  padding-bottom: 20px;
+}
 
 .spinner-container{
   background-color: #0000007a;
@@ -189,5 +192,31 @@ label{
   
     100% {
       background-color: transparent;
+    }
+  }
+  @media only screen and (max-width: 1042px) {
+    .user-info-inputs{
+      display: flex;
+      flex-direction: column;
+    }
+    .user-info-inputs > div{
+      margin-bottom: 10px;
+    }
+    .settings-card{
+      width: 500px;
+    }
+  }
+  @media only screen and (max-width: 525px) {
+    .settings-image,.settings-image img,.s-profile-picture{
+      width: 200px !important;
+      height: 200px !important;
+    }
+    .settings-card{
+      width: 300px;
+    }
+  }
+  @media only screen and (max-width: 325px) {
+    .settings-card{
+      width: 200px;
     }
   }

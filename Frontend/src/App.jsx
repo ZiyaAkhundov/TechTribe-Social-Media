@@ -93,7 +93,7 @@ if(loading){
                     <>
                     <Messenger func={sidebarAction} state={sidebar} />
                       <main className="flex-auto height-100%">
-                        <route.component />
+                        <route.component func={sidebarAction}/>
                       </main>
                     </>  
                   }

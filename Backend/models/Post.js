@@ -1,16 +1,26 @@
 const mongoose = require('mongoose');
 
+function createUserFields() {
+    return {
+        _id: 'string',
+        userId: 'string',
+        username: 'string',
+        context: 'string',
+        userImg: 'string',
+        createdAt: { type: Date, default: Date.now }
+    };
+  }
+
 const CommentSchema = new mongoose.Schema({
-    _id: 'string',
-    userId: 'string',
-    username: 'string',
-    context: 'string',
-    userImg: 'string',
+    ...createUserFields(),
     commentLikes: {
         type: [String], // Change this to an array of strings
         default: []
     },
-    createdAt: { type: Date, default: Date.now }
+    commentReply:{
+        type: [createUserFields()],
+        default: []
+    },
 });
 
 const PostSchema = new mongoose.Schema(

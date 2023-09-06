@@ -35,9 +35,10 @@ export default function Feeds() {
         const response = await getPosts()
         if(response.status == "warning"){
           setNoPost(true)
+          setPosts([])
         }
         else{
-          setPosts(response.sort((p1,p2)=>{
+          setPosts(response.data.sort((p1,p2)=>{
             return new Date(p2.createdAt) - new Date(p1.createdAt)
           }));
         }
@@ -79,13 +80,14 @@ export default function Feeds() {
                 </div>
             </div>
             <div>
-              {noPost ? <div>No Post</div> :
+              {noPost ? <div className='flex justify-center items-center text-center py-9'>No posts found.<br></br> You can follow the accounts and see their posts here</div> :
               posts.length > 0 ? (
                 posts.map(post => (
                   <Post
                     key={post._id}
                     post = {post}
                     setPosts={setPosts}
+                    setNoPost={setNoPost}
                   />
                 ))
               ) : (
@@ -156,7 +158,7 @@ export default function Feeds() {
               )}
             </div>
               </div>
-              <Modal open={open} handleClose={handleClose} handleOpen={handleOpen} setPosts={setPosts}/>
+              <Modal open={open} handleClose={handleClose} handleOpen={handleOpen} setPosts={setPosts} setNoPost={setNoPost}/>
             <div className='w-1/2 feeds-action relative'>
             <aside>
               <Card sx={{ maxWidth: 300 }} className='w-[300px]'>

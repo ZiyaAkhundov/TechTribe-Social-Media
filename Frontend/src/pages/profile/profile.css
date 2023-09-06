@@ -131,3 +131,94 @@ section{
     width: 100%;
 }
 
+@media only screen and (max-width: 992px) {
+    .profile{
+        padding: 20px 20px;
+    }
+    .profile-header{
+        padding: 20px 10px 30px 10px;
+    }
+    .profile-header .profile-img{
+        width: 110px;
+        height: 110px;
+    }
+    .profile-pic{
+        width: 110px !important;
+        height: 110px !important;
+    }
+    .profile-header > .profile-section{
+        padding: 5px 25px;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .profile-header > .profile-section{
+        padding: 5px 50px;
+    }
+}
+
+@media only screen and (max-width: 593px) {
+    .profile-header > .profile-section{
+        padding: 5px 20px;
+    }
+    .profile-header > .profile-section >.profile-actions>.profile-username p {
+        font-size: 20px;
+    }
+    .profile-header > .profile-section > .profile-activity > .profile-activity-main {
+        font-size: 14px;
+        column-gap: 5px;
+    }
+    .profile-actions > .profile-edit a, 
+    .profile-header > .profile-section >.profile-actions> .profile-edit> div>.follow{
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    .profile-header .profile-img{
+        width: 70px;
+        height: 70px;
+    }
+    .profile-pic{
+        width: 70px !important;
+        height: 70px !important;
+    }
+}
+
+@media only screen and (max-width: 525px) {
+    .chat-btn{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .profile-actions > .profile-edit a,
+    .profile-header > .profile-section >.profile-actions> .profile-edit> div>.follow{
+        padding: 4px 7px;
+        font-size: 10px;
+    }
+    .profile-header > .profile-section >.profile-actions{
+        column-gap: 10px;
+    }
+    .profile-header {
+        padding: 10px 3px 20px 3px;
+    }
+}
+
+@media only screen and (max-width: 395px) {
+    .profile-header > .profile-section{
+        padding: 5px 15px;
+    }
+    .profile-header > .profile-section >.profile-actions>.profile-username p {
+        font-size: 17px;
+    }
+    .profile-header > .profile-section > .profile-activity > .profile-activity-main {
+        font-size: 12px;
+        column-gap: 3px;
+    }
+}
+
+@media only screen and (max-width: 355px) {
+    .profile-actions > .profile-edit a,
+    .profile-header > .profile-section >.profile-actions> .profile-edit> div>.follow{
+        padding: 2px 4px;
+        font-size: 8px;
+    }
+}

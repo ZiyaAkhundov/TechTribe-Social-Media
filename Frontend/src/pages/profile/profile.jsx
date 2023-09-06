@@ -141,7 +141,7 @@ export function Profile() {
                         src={User.picture ? PIC + User.picture : null}
                         alt=""
                         sx={{ width: 140, height: 140 }}
-                        className="border"
+                        className="border profile-pic"
                       />
                     ) : (
                       <Skeleton
@@ -169,7 +169,9 @@ export function Profile() {
                         >
                           {following ? "Following" : "Follow"}
                         </button>
-                        <EmailOutlinedIcon className="mx-2 !h-9 !w-9 cursor-pointer" onClick={createRoom}/>
+                        <button className='chat-btn' onClick={createRoom}>
+                        <EmailOutlinedIcon className="mx-2 !h-9 !w-9 cursor-pointer chat-svg" />
+                        </button>
                       </div>
                     ) : (
                       <NavLink to={"/settings"}>Edit profile</NavLink>
@@ -297,7 +299,7 @@ export function Profile() {
                     No Post Found
                   </div>
                 ) : posts.length > 0 ? (
-                  posts.map((post) => <Post key={post._id} post={post} />)
+                  posts.map((post) => <Post key={post._id} post={post} setNoPost={setNoPost} setPosts={setPosts}/>)
                 ) : (
                   <Card className="w-[80%] mx-auto">
                     <CardHeader

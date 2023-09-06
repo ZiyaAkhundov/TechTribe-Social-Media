@@ -13,7 +13,7 @@ import './modal.css'
 import { toast } from 'react-toastify';
 import axios from 'axios'
 
-export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
+export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPost}) {
   const textInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const [file,setFile] = useState(null);
@@ -61,7 +61,6 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
               withCredentials: true,
             }
           );
-          console.log(uploadResponse)
         } catch (error) {
           if (error.response) {
             toast.error(error.response.data.error);
@@ -74,11 +73,14 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
         if (response.status == "success") {
           toast.success(response.message);
           const getPost = await getPosts();
-          setPosts(
-            getPost.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
-            })
-          );
+          if(getPost.status == 'success'){
+            setPosts(
+              getPost.data.sort((p1, p2) => {
+                return new Date(p2.createdAt) - new Date(p1.createdAt);
+              })
+            );
+            setNoPost(false)
+          }
           setFile(null);
           handleClose();
         } else {
@@ -90,8 +92,8 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts}) {
     };
   return (
     <div>
-      <Modal open={open} onClose={handleClose} className="modal">
-        <Box className="modal-box">
+      <Modal open={open} onClose={handleClose} className="modal overflow-y-auto">
+        <Box className="modal-box feed-modal-box">
           <div className="modal-head border-0">
             <Typography variant="span">Create New Post</Typography>
           </div>

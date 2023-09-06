@@ -28,7 +28,7 @@ export default function settings() {
         <div className="settings-header">
           <div className="settings-image">
             <div onClick={handleOpen} className='relative overflow-hidden'>
-              <Avatar sx={{ width: 200, height: 200 }} src={user.picture ? PF + user.picture : null} className='cursor-pointer border' title="Change Profile Picture"></Avatar>
+              <Avatar sx={{ width: 200, height: 200 }} src={user.picture ? PF + user.picture : null} className='cursor-pointer border s-profile-picture' title="Change Profile Picture"></Avatar>
               {loader ? (
                 <div className='absolute top-0 left-0 w-full h-full spinner-container'>
                   <div className="spinner center absolute top-0 left-0">
@@ -80,7 +80,7 @@ export default function settings() {
             <Form className='w-full flex items-center flex-col'>
               <div className='w-full'>
                 <p className='userData'>User information</p>
-                <div className='flex justify-start items-center mt-3 mb-2'>
+                <div className='user-info-inputs flex justify-start items-center mt-3 mb-2'>
                   <div className='w-full flex flex-col h-14'>
                     <label htmlFor="">Email</label>
                     <Field type="text" name="email" placeholder="Email" className='px-2 w-90 mx-3 py-1 border border-gray-400 rounded-md focus:outline-none focus:border-blue-600 ' />
@@ -119,7 +119,7 @@ export default function settings() {
             }
           }}
             validationSchema={passwordValidation}>
-            <Form className='w-full flex items-center flex-col flex-wrap'>
+            <Form className='w-full flex items-center flex-col flex-wrap ps-change-form'>
               <div className='w-full'>
                 <p className='userPassword'>Change Password</p>
                 <div className='flex items-center flex-col'>

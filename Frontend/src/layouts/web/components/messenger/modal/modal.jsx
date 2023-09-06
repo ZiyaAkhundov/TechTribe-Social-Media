@@ -43,7 +43,7 @@ export default function ModalChat({open,handleClose,setChat}) {
   return (
     <div>
       <Modal open={open} onClose={handleClose} className="modal">
-        <Box className="modal-box">
+        <Box className="modal-box chat-box-modal">
         <div className="modal-head border-0 relative border-b">
             <Typography variant="span" className="text-1 font-semibold">
               Create Chat
