@@ -16,7 +16,7 @@ router.get('/user-data',isAuthenticated, async (req, res) => {
         if (!user) {
           return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json({username: user.username, id: user._id, email: user.email, followers: user.followers, followings: user.followings,picture: user.picture});
+        res.status(200).json({username: user.username, id: user._id, email: user.email,picture: user.picture});
 
     } else {
       res.status(401).json({ message: 'User not authenticated' });

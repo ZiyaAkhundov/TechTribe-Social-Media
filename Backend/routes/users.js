@@ -7,6 +7,19 @@ const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')
 const multer = require('multer')
 
+async function followWFData(followId) {
+    const user = await User.findById(followId);
+    const username = user.username;
+    const userPic = user.picture;
+    const followWithUserData = {
+      id:followId,
+      username,
+      userPic,
+    };
+  
+    return followWithUserData;
+  }
+
 const fileFilter = (req, file, cb) => {
     var filetypes = /jpeg|jpg|png/;
     var mimetype = filetypes.test(file.mimetype);
@@ -87,12 +100,15 @@ router.put('/update',csrfProtection,isAuthenticated, async(req,res)=>{
             if(req.body.username){
                 req.session.username = req.body.username
             }
-            const data = {
-                username: user.username,
-                email: user.email,
-                img: user.picture,
+            const userData = await User.findById(req.session.userId.toString())
+            const structure = {
+                id:userData._id,
+                username: userData.username,
+                email: userData.email,
+                picture: userData.picture
             }
-            res.status(200).json({message:"Account has been updated",status: "success",data:data});
+
+            res.status(200).json({message:"Account has been updated",status: "success",data:structure});
         } catch (err) {
             return res.status(500).send(err);
         }
@@ -143,7 +159,17 @@ router.get('/:username',csrfProtection,isAuthenticated, async(req,res)=>{
         if(!user){
             return res.status(404).json({message:"User not found", status: "error"});
         }
-        res.status(200).json({id:user._id,username: user.username,followers : user.followers,followings : user.followings,picture : user.picture});
+        const followers = await Promise.all(
+            user.followers.map(async (follower) => {
+                return await followWFData(follower)
+            })
+        );
+        const followings = await Promise.all(
+            user.followings.map(async (following) => {
+                return await followWFData(following)
+            })
+        );
+        res.status(200).json({id:user._id,username: user.username,followers : followers,followings : followings,picture : user.picture});
     } catch (err) {
         return res.status(500).send(err);
     }
@@ -174,26 +200,37 @@ router.get('/query/users', csrfProtection, isAuthenticated, async (req, res) => 
     }
 });
 
+
 //follow-unfollow a user
 router.put('/:username/follow',csrfProtection,isAuthenticated, async(req,res)=>{
     if(req.session.username !== req.params.username){
         try {
             const user = await User.findOne({username:req.params.username});
             const currentUser = await User.findById(req.session.userId.toString());
-            if (!user.followers.some(obj => obj.id === req.session.userId.toString())) {
-                const newFollower = { id: req.session.userId.toString(), username: req.session.username, userPic: currentUser.picture };
-                await user.updateOne({ $push: { followers: newFollower } });
-                await currentUser.updateOne({ $push: { followings: { id: user._id.toString(), username: user.username, userPic: user.picture } } });
-                
-                const updatedUser = await User.findById(user._id);
-                res.status(200).json({ message: "User has been followed!", status: "success",data:updatedUser.followers });
-            } else {
-                await user.updateOne({ $pull: { followers: { id: req.session.userId.toString() } } });
-                await currentUser.updateOne({ $pull: { followings: { id: user._id.toString() } } });
-
-                const updatedUser = await User.findOne(user._id);
-                res.status(200).json({message:"User has been unfollowed!",status:"success",data:updatedUser.followers});
+            if(!user && !currentUser){
+                return res.status(404).json({message:"user not found!", status:"error"})
             }
+            let message;
+            if (!user.followers.some(id => id === req.session.userId.toString())) {
+
+                await user.updateOne({ $push: { followers: req.session.userId.toString() } });
+                await currentUser.updateOne({ $push: { followings: user._id.toString() } });
+                
+                  message = "User has been followed!"
+            } else {
+                await user.updateOne({ $pull: { followers:req.session.userId.toString()  } });
+                await currentUser.updateOne({ $pull: { followings:  user._id.toString()  } });
+
+                message = "User has been unfollowed!"
+            }
+
+            const updatedUser = await User.findById(user._id);
+            const fulldata = await Promise.all(
+                updatedUser.followers.map(async (follower) => {
+                    return await followWFData(follower)
+                })
+            );
+            res.status(200).json({ message: message, status: "success",data:fulldata });
             
         } catch (err) {
             console.log(err)
@@ -215,8 +252,13 @@ router.put('/:username/follow/remove',csrfProtection,isAuthenticated, async(req,
                 await user.updateOne({ $pull: { followings: { id: req.session.userId.toString() } } });
                 await currentUser.updateOne({ $pull: { followers: { id: user._id.toString() } } });
 
-                const updatedUser = await User.findOne(currentUser._id);
-                res.status(200).json({message:"The user has been removed from followers!",status:"success",data:updatedUser.followers});
+                const updatedUser = await User.findById(user._id);
+                const fulldata = await Promise.all(
+                    updatedUser.followers.map(async (follower) => {
+                        return await followWFData(follower)
+                    })
+                );
+                res.status(200).json({message:"The user has been removed from followers!",status:"success",data:fulldata});
             }
             
         } catch (err) {
@@ -234,7 +276,12 @@ router.get ('/followings/:username',csrfProtection,isAuthenticated, async(req,re
     if(!user){
         return res.status(404).json({message:"User not found",status:"error"})
     }
-    res.status(200).json({status:"success",data:user.followings})
+    const fulldata = await Promise.all(
+        user.followings.map(async (following) => {
+            return await followWFData(following)
+        })
+    );
+    res.status(200).json({status:"success",data:fulldata})
 })
 
 router.get ('/followers/:username',csrfProtection,isAuthenticated, async(req,res)=>{
@@ -242,7 +289,12 @@ router.get ('/followers/:username',csrfProtection,isAuthenticated, async(req,res
     if(!user){
         return res.status(404).json({message:"User not found",status:"error"})
     }
-    res.status(200).json({status:"success",data:user.followers})
+    const fulldata = await Promise.all(
+        user.followers.map(async (follower) => {
+            return await followWFData(follower)
+        })
+    );
+    res.status(200).json({status:"success",data:fulldata})
 })
 
 

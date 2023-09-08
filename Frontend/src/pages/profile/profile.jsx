@@ -106,6 +106,7 @@ export function Profile() {
     if(response.status == "success"){
       setFollowing(prev=>!prev);
       setuserfollowers(response.data);
+      console.log(response.data)
       setLoading(false)
     }
     else{

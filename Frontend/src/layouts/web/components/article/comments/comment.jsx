@@ -81,7 +81,9 @@ export default function Comment({comment,postId,setComments,setCommentsLength}) 
     useEffect(()=>{
       if(comment.commentReply.length > 0){
         setReplyComments(true)
+        return
       }
+      setReplyComments(false)
     },[comment])
 
   return (

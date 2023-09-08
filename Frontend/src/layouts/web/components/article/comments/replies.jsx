@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect}from 'react'
 import Avatar from "@mui/material/Avatar";
 import TimeAgo from 'react-timeago'
 import IconButton from '@mui/material/IconButton';
@@ -9,12 +9,14 @@ import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import { useSelector } from "react-redux";
-import {ReplyDelete} from "../../../../../services/Posts"
+import {ReplyDelete,replyCommentLike} from "../../../../../services/Posts"
 
 const ITEM_HEIGHT = 20;
 export default function Replies({commentreply,postId,setComments,commentId}) {
     const PF = import.meta.env.VITE_API_IMAGE_URL;
     const { user } = useSelector((state) => state.auth);
+    const [commentLikeLength, setCommentLikeLength] = useState(commentreply.commentLikes.length);
+    const [commentIsLike, setCommentIsLike] = useState(false);
     const formatter = buildFormatter(EnStrings);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openddown = Boolean(anchorEl);
@@ -23,6 +25,30 @@ export default function Replies({commentreply,postId,setComments,commentId}) {
     };
     const handleClose = () => {
       setAnchorEl(null);
+    };
+
+    useEffect(() => {
+      const userLikes = commentreply.commentLikes.some((likes) =>
+        likes.includes(user.id)
+      );
+      setCommentLikeLength(commentreply.commentLikes.length);
+      if (userLikes) {
+        setCommentIsLike(true);
+      } else {
+        setCommentIsLike(false);
+      }
+    }, [user.id,commentreply.commentLikes]);
+
+    const handleCommentLike = async (replyId) => {
+      try {
+         await replyCommentLike({ postId: postId, commentId: commentId, replyId:replyId});
+      } catch (error) {
+        console.log(error);
+      }
+      setCommentLikeLength(
+        commentIsLike ? commentLikeLength - 1 : commentLikeLength + 1
+      );
+      setCommentIsLike((prev) => !prev);
     };
 
     const handleDelete = async(replyId)=>{
@@ -34,13 +60,12 @@ export default function Replies({commentreply,postId,setComments,commentId}) {
         toast.error(response.message)
       }
     }
-
   return (
     <div className="my-1 mx-6" >
               <div className="flex justify-between items-center p-3">
                 <div className="flex justify-start items-center">
                   <Avatar
-                    src={PF + commentreply.userImg}
+                    src={PF + commentreply.userPicture}
                     sx={{ height: 30, width: 30 }}
                     className="rounded-full border"
                   ></Avatar>
@@ -95,11 +120,11 @@ export default function Replies({commentreply,postId,setComments,commentId}) {
               </div>
               <div className="cm-actions flex justify-between px-5">
                 <button
-                  className={ "text-blue-500" }
-                  onClick={() => console.log(commentreply._id)}
+                  className={commentIsLike ? "text-blue-500" : null}
+                  onClick={() => handleCommentLike(commentreply._id)}
                 >
                   <ThumbUpOutlinedIcon />
-                  <span></span>
+                  <span>{commentLikeLength}</span>
                   <span>likes</span>
                 </button>
                 <TimeAgo

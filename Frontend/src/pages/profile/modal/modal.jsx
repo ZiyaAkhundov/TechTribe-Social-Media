@@ -8,6 +8,7 @@ import {getFolowers,getFolowings,removeFollower,Follow} from '../../../services/
 import CloseIcon from '@mui/icons-material/Close';
 import './modal.css'
 import { toast } from 'react-toastify';
+import { Avatar } from '@mui/material';
 
 export  function ModalProfile({open,handleClose,type,username,setuserfollowers}) {
   const PIC =import.meta.env.VITE_API_IMAGE_URL
@@ -95,7 +96,7 @@ const handleFollow = async(data)=>{
                 </div>
               </div>
             ) : (
-             data.length ? data.map((data) => {
+             data.length > 0 ? data.map((data) => {
                 return (
                   <div key={data.id}>
                     <div className="p-2 flex items-center justify-between">
@@ -104,9 +105,9 @@ const handleFollow = async(data)=>{
                         onClick={handleClose}
                       >
                         <div className="flex justify-start items-center gap-2">
-                          <img
-                            src={PIC + data.userPic}
-                            alt="User picture"
+                          <Avatar
+                            src={data.userPic && PIC + data.userPic}
+                            alt='Image'
                             className="h-11 w-11 border-2 rounded-full"
                           />
                           <p>{data.username}</p>

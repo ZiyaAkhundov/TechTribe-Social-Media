@@ -7,6 +7,80 @@ const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')
 dotenv.config()
 
+async function addUsernameAndUserPicture(data) {
+    return await Promise.all(
+      data.map(async (post) => {
+        const { userId } = post;
+        const user = await User.findById(userId);
+        const username = user.username;
+        const userPicture = user.picture;
+  
+        const postWithUser = {
+          ...post.toObject(),
+          username,
+          userPicture,
+          comments: await Promise.all(
+            post.comments.map(async (comment) => {
+              const user = await User.findById(comment.userId);
+              const username = user.username;
+              const userImg = user.picture;
+  
+              const commentWithUser = {
+                ...comment.toObject(),
+                username,
+                userImg,
+                commentReply: await Promise.all(
+                  comment.commentReply.map(async (reply) => {
+                    const user = await User.findById(reply.userId);
+                    const username = user.username;
+                    const userImg = user.picture;
+  
+                    return {
+                      ...reply.toObject(),
+                      username,
+                      userPicture: userImg,
+                    };
+                  })
+                ),
+              };
+  
+              return commentWithUser;
+            })
+          ),
+        };
+  
+        return postWithUser;
+      })
+    );
+  }  
+
+  async function commentsWFData(comment) {
+    const user = await User.findById(comment.userId);
+    const username = user.username;
+    const userImg = user.picture;
+  
+    const commentWithUser = {
+      ...comment.toObject(),
+      username,
+      userImg,
+      commentReply: await Promise.all(
+        comment.commentReply.map(async (reply) => {
+          const user = await User.findById(reply.userId);
+          const username = user.username;
+          const userImg = user.picture;
+  
+          return {
+            ...reply.toObject(),
+            username,
+            userPicture: userImg,
+          };
+        })
+      ),
+    };
+  
+    return commentWithUser;
+  }
+
 //create a post
 router.post('/', isAuthenticated, async(req,res)=>{
     if (req.body.userId != req.session.userId.toString()) {
@@ -38,21 +112,21 @@ router.post('/', isAuthenticated, async(req,res)=>{
 })
 
 //update a post
-router.put('/:id',isAuthenticated, async(req,res)=>{
-    try {
-        const post = await  Post.findById(req.params.id);
-        if(post.userId === req.body.userId){
-            await post.updateOne({$set: req.body});
-            res.status(200).json("Post has been updated!");
-        }
-        else{
-            res.status(403).json("You can't update");
-        }
+// router.put('/:id',isAuthenticated, async(req,res)=>{
+//     try {
+//         const post = await  Post.findById(req.params.id);
+//         if(post.userId === req.body.userId){
+//             await post.updateOne({$set: req.body});
+//             res.status(200).json("Post has been updated!");
+//         }
+//         else{
+//             res.status(403).json("You can't update");
+//         }
         
-    } catch (err){
-        res.status(500).json(err)
-    }
-})
+//     } catch (err){
+//         res.status(500).json(err)
+//     }
+// })
 
 //delete a post
 router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
@@ -77,10 +151,10 @@ router.get('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     try {
         const post = await Post.findById(req.params.id);
         if(!post){
-            res.status(404).json("Post not found")
+            res.status(404).json({message:"Post not found",status:'error'})
             return
         }
-        res.status(200).json(post)
+        res.status(200).json({status:"success",data:post})
     } catch (err){
         res.status(500).json(err)
     }
@@ -96,26 +170,17 @@ router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
         return Post.find({ userId: friendId.id });
       })
     );
+
     const concatedData=userPosts.concat(...friendPosts);
-    const postsWithUsername = await Promise.all(
-        concatedData.map(async (post) => {
-          const { userId } = post;
-          const user = await User.findById(userId);
-          const username=user.username;
-          const userPicture = user.picture;
-          return {
-            ...post.toObject(),
-            username,
-            userPicture
-          };
-        })
-      );
+    const postsWithUsername = await addUsernameAndUserPicture(concatedData);
+      
   if(!postsWithUsername.length){
     return res.status(200).json({message:"There are no posts",status: "warning"})
   }
 
     res.status(200).json({data:postsWithUsername,status:"success"});
   } catch (err) {
+    console.log(err)
     res.status(500).json(err);
   }
 });
@@ -133,12 +198,7 @@ router.get('/profile/:username',isAuthenticated, async(req,res)=>{
         res.status(200).json({message:"There are no posts",status: "warning"})
         return;
        }
-       const userPicture = user.picture;
-       const userPosts = posts.map((post) => ({
-        ...post.toObject(),
-        userPicture: userPicture,
-        username: user.username
-      }));
+       const userPosts = await addUsernameAndUserPicture(posts);
         res.status(200).json({userPosts});
     } catch (err){
         res.status(500).json(err)
@@ -177,11 +237,17 @@ router.put('/comment/:id', isAuthenticated,csrfProtection, async (req, res) => {
             res.status(404).json({message:"User not found",status:"error"});
             return;
         }
-        const newComment = { _id:uuidv4(),username: user.username, context: req.body.context,userImg:user.picture};
+        const newComment = { _id:uuidv4(),userId:user._id, context: req.body.context};
         await Post.updateOne({ _id: req.params.id }, { $push: { comments: newComment } });
-        const comments = await Post.findById(req.params.id);
-        res.status(200).json({message:"The post was commented successfully", status:"success", data:comments.comments});
+        const data = await Post.findById(req.params.id);
+        const commentwFullData = await Promise.all(
+            data.comments.map(async (comment) => {
+              return await commentsWFData(comment)
+            })
+          );
+        res.status(200).json({message:"The post was commented successfully", status:"success", data:commentwFullData});
     } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 });
@@ -240,12 +306,17 @@ router.delete('/comment/:id/:commentId/delete',isAuthenticated,csrfProtection, a
 
         const comment = post.comments[commentIndex];
 
-        if (comment.username === req.session.username) {
+        if (comment.userId === req.session.userId.toString()) {
 
             post.comments.pull(commentId);
             await post.save();
+            const commentwFullData = await Promise.all(
+                post.comments.map(async (comment) => {
+                  return await commentsWFData(comment)
+                })
+              );
 
-            return res.status(200).json({ message: 'Comment has been deleted!', status: 'success',data: post.comments });
+            return res.status(200).json({ message: 'Comment has been deleted!', status: 'success',data: commentwFullData });
         } else {
             return res.status(403).json({message:"You can't delete this comment",status: "error"});
         }
@@ -277,18 +348,61 @@ router.put('/comment/:id/:commentId/reply',isAuthenticated,csrfProtection, async
             return;
         }
 
-        const newReplyComment = { _id:uuidv4(),username: user.username, context: req.body.context,userImg:user.picture};
+        const newReplyComment = { _id:uuidv4(),userId: user._id, context: req.body.context};
 
-        if (!commentToReply.replies) {
-            commentToReply.replies = [];
-        }
         commentToReply.commentReply.push(newReplyComment);
 
         await post.save();
-        const comments = await Post.findById(req.params.id);
+        const postData = await Post.findById(req.params.id);
+        const commentwFullData = await Promise.all(
+            postData.comments.map(async (comment) => {
+              return await commentsWFData(comment)
+            })
+          );
         
-        res.status(200).json({message:"Comment reply sent successfully",status:"success",data:comments.comments});
+        res.status(200).json({message:"Comment reply sent successfully",status:"success",data:commentwFullData});
     } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// comment reply like
+router.put('/comment/:postId/:commentId/:replyId/like', isAuthenticated, csrfProtection, async (req, res) => {
+    try {
+        const {postId , commentId ,replyId} = req.params
+
+        const post = await Post.findById(postId);
+        if (!post) {
+            res.status(404).json({ message: "Post not found", status: "error" });
+            return;
+        }
+
+        const comment = post.comments.find(comment => comment._id.toString() === commentId);
+
+        if (!comment) {
+            res.status(404).json({ message: "Comment not found", status: "error" });
+            return;
+        }
+
+        const commentIndex = comment.commentReply.findIndex((reply) => reply._id.toString() === replyId);
+        if (commentIndex === -1) {
+            res.status(404).json({ message: "Reply not found", status: "error" });
+            return;
+        }
+
+        const userId = req.session.userId.toString();
+
+        if (comment.commentReply[commentIndex].commentLikes.includes(userId)) {
+            comment.commentReply[commentIndex].commentLikes.pull(userId);
+            await post.save();
+            res.status(200).json({message:"The comment was unliked successfully", status:"success"});
+        } else {
+            comment.commentReply[commentIndex].commentLikes.push(userId);
+            await post.save();
+            res.status(200).json({message:"The comment was liked successfully", status:"success"});
+        }
+    } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
 });
@@ -317,13 +431,9 @@ router.delete('/comment/:id/:commentId/:replyId/delete',isAuthenticated,csrfProt
             return;
         }
 
-        if (commentIndex === -1) {
-            return res.status(404).json({ message: 'Comment not found', status: 'error' });
-        }
         const commentreply = comment.commentReply[commentIndex];
-       
 
-        if (commentreply.username === req.session.username) {
+        if (commentreply.userId === req.session.userId.toString()) {
             const update = {
                 $pull: {
                     'comments.$[outer].commentReply': { _id: replyId }
@@ -333,7 +443,7 @@ router.delete('/comment/:id/:commentId/:replyId/delete',isAuthenticated,csrfProt
             const options = {
                 arrayFilters: [{ 'outer._id': commentId }]
             };
-        console.log(update)
+
             const updatedPost = await Post.findOneAndUpdate(
                 { _id: postId },
                 update,
@@ -345,7 +455,12 @@ router.delete('/comment/:id/:commentId/:replyId/delete',isAuthenticated,csrfProt
                 return res.status(404).json({ message: "Post not found", status: "error" });
             }
             const renewedPost = await Post.findById(postId)
-            return res.status(200).json({ message: 'Comment has been deleted!', status: 'success', data: renewedPost.comments });
+            const commentwFullData = await Promise.all(
+                renewedPost.comments.map(async (comment) => {
+                  return await commentsWFData(comment)
+                })
+              );
+            return res.status(200).json({ message: 'Comment has been deleted!', status: 'success', data: commentwFullData });
         } else {
             return res.status(403).json({ message: "You can't delete this comment", status: "error" });
         }

@@ -4,19 +4,17 @@ function createUserFields() {
     return {
         _id: 'string',
         userId: 'string',
-        username: 'string',
         context: 'string',
-        userImg: 'string',
-        createdAt: { type: Date, default: Date.now }
+        createdAt: { type: Date, default: Date.now },
+        commentLikes: {
+            type: [String], 
+            default: []
+        },
     };
   }
 
 const CommentSchema = new mongoose.Schema({
     ...createUserFields(),
-    commentLikes: {
-        type: [String], // Change this to an array of strings
-        default: []
-    },
     commentReply:{
         type: [createUserFields()],
         default: []

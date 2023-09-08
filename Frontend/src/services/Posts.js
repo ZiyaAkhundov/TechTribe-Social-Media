@@ -52,6 +52,15 @@ export const getPosts = async () => {
     }
   };
 
+  export const replyCommentLike = async (data) => {
+    try {
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/'+ data.replyId +'/like')
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   export const ReplyComment = async (data) => {
     try {
       const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/reply',{context:data.context})
