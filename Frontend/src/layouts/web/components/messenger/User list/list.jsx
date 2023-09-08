@@ -25,7 +25,7 @@ export default function List({funct,setChat,chat}) {
                 chat.map(data=>
                 <li onClick={funct} key={data.id}>
                     <div onClick={()=>navigate(`/Chat/${data.id}`)}  className="h-10 flex items-center text-base font-semibold px-4 rounded  text-gray-600 cursor-pointer">
-                        <Avatar alt="akhundov_ziya" src={PIC+data.picture} className='border' sx={{ width: 24, height: 24 }}/>
+                        <Avatar alt="akhundov_ziya" src={data.picture && PIC+data.picture} className='border' sx={{ width: 24, height: 24 }}/>
                         <span className='mx-1'>{data.username}</span>
                     </div>
                 </li>

@@ -8,3 +8,12 @@ export const getUsers = async (data) => {
       throw error;
     }
   };
+
+  export const getUserbyId = async (data) => {
+    try {
+      const response = await get(`users/id/${data}`)
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };

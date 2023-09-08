@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const Post = require('../models/Post');
 const bcrypt = require('bcryptjs');
 const path= require('path');
 const jwt = require('jsonwebtoken');
@@ -170,6 +171,19 @@ router.get('/:username',csrfProtection,isAuthenticated, async(req,res)=>{
             })
         );
         res.status(200).json({id:user._id,username: user.username,followers : followers,followings : followings,picture : user.picture});
+    } catch (err) {
+        return res.status(500).send(err);
+    }
+})
+router.get('/id/:id',csrfProtection,isAuthenticated, async(req,res)=>{
+    const id = req.params.id;
+    try {
+        const user = await User.findById(id);
+        if(!user){
+            return res.status(404).json({message:"User not found", status: "error"});
+        }
+        const post = await Post.find({userId:user._id})
+        res.status(200).json({status:"success", data:{id:user._id,username: user.username,followers : user.followers.length,followings : user.followings.length,post: post.length, picture : user.picture}});
     } catch (err) {
         return res.status(500).send(err);
     }

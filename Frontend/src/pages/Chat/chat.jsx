@@ -7,6 +7,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import logo from "../../assets/image/logo.png"
 import {getARoom,sendMessage,getMessages} from '../../services/Message'
+import {getFolowings} from "../../services/Profile"
 import {io} from 'socket.io-client'
 import "./chat.css"
 
@@ -89,6 +90,12 @@ export default function chat({func}) {
             createdAt: Date.now()
          })
       })
+      socket.current.on('disconnect', () => {
+        console.log('You have been disconnected from the chat');
+      });
+      return () => {
+        socket.current.disconnect();
+      };
     },[])
 
     useEffect(()=>{
@@ -122,12 +129,19 @@ export default function chat({func}) {
       }
     }
     useEffect(()=>{
-      socket.current.emit('addUser', user.id);
-      socket.current.on('getUsers',(users)=>{
-         setOnlineUsers(user.followings.filter((f)=>users.some((u)=>u.userId ===f.id)))
-      })
+      const followings = async()=>{
+        const response = await getFolowings({username:user.username})
+        if(response.status == 'success'){
+          socket.current.emit('addUser', user.id);
+          socket.current.on('getUsers',(users)=>{
+            setOnlineUsers(response.data.filter((f)=>users.some((u)=>u.userId ===f.id)))
+         })
+        }
+      }
+      followings()
     },[user])
 
+    
   return (
     <div className="chat-box flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen">
       {roomId ? (
@@ -164,7 +178,7 @@ export default function chat({func}) {
                     })}
 
                   <img
-                    src={PIC + receiverUser.picture}
+                    src={receiverUser.picture && PIC + receiverUser.picture}
                     alt=""
                     className="w-10 sm:w-16 h-10 sm:h-16 rounded-full border"
                   />

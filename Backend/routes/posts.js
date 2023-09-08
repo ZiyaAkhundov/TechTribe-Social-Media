@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const Post = require('../models/Post');
+const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 const isAuthenticated =require('../middleware/authentication.js')
@@ -8,19 +9,17 @@ const csrfProtection = require('../middleware/csrfProtection')
 dotenv.config()
 
 async function addUsernameAndUserPicture(data) {
-    return await Promise.all(
-      data.map(async (post) => {
-        const { userId } = post;
+        const { userId } = data;
         const user = await User.findById(userId);
         const username = user.username;
         const userPicture = user.picture;
   
         const postWithUser = {
-          ...post.toObject(),
+          ...data.toObject(),
           username,
           userPicture,
           comments: await Promise.all(
-            post.comments.map(async (comment) => {
+            data.comments.map(async (comment) => {
               const user = await User.findById(comment.userId);
               const username = user.username;
               const userImg = user.picture;
@@ -50,8 +49,6 @@ async function addUsernameAndUserPicture(data) {
         };
   
         return postWithUser;
-      })
-    );
   }  
 
   async function commentsWFData(comment) {
@@ -146,17 +143,24 @@ router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
 })
 
 //get a post
-router.get('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
+router.get('/find/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     
     try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+             res.status(400).json({ message: "Invalid post", status: 'error' });
+             return
+          }
         const post = await Post.findById(req.params.id);
         if(!post){
             res.status(404).json({message:"Post not found",status:'error'})
             return
         }
-        res.status(200).json({status:"success",data:post})
+        const postsWithUsername = await addUsernameAndUserPicture(post);
+
+        res.status(200).json({status:"success",data:postsWithUsername})
     } catch (err){
         res.status(500).json(err)
+        console.log(err)
     }
 })
 
@@ -166,13 +170,17 @@ router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
     const currentUser = await User.findById(req.session.userId);
     const userPosts = await Post.find({ userId: currentUser._id });
     const friendPosts = await Promise.all(
-      currentUser.followings.map((friendId) => {
-        return Post.find({ userId: friendId.id });
+      currentUser.followings.map(async(friendId) => {
+        return await Post.find({ userId: friendId });
       })
     );
 
     const concatedData=userPosts.concat(...friendPosts);
-    const postsWithUsername = await addUsernameAndUserPicture(concatedData);
+    const postsWithUsername = await Promise.all(
+        concatedData.map(async (post) => {
+          return await addUsernameAndUserPicture(post)
+        })
+      );
       
   if(!postsWithUsername.length){
     return res.status(200).json({message:"There are no posts",status: "warning"})
@@ -198,7 +206,11 @@ router.get('/profile/:username',isAuthenticated, async(req,res)=>{
         res.status(200).json({message:"There are no posts",status: "warning"})
         return;
        }
-       const userPosts = await addUsernameAndUserPicture(posts);
+       const userPosts = await Promise.all(
+        posts.map(async (post) => {
+          return await addUsernameAndUserPicture(post)
+        })
+      );
         res.status(200).json({userPosts});
     } catch (err){
         res.status(500).json(err)

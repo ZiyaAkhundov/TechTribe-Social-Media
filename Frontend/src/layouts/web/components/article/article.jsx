@@ -37,16 +37,20 @@ export default function post(props) {
     const response = await PostDelete({postId:props.post._id})
     if(response.status == "success"){
       toast.success(response.message)
-      const getPost = await getPosts()
-     if(getPost.status == "success"){
-       props.setPosts(getPost.data.sort((p1,p2)=>{
-               return new Date(p2.createdAt) - new Date(p1.createdAt)
-             }))
-     }
-     else{
-      props.setPosts([])
-      props.setNoPost(true)
-     }
+      if(!props.self){
+        const getPost = await getPosts()
+       if(getPost.status == "success"){
+         props.setPosts(getPost.data.sort((p1,p2)=>{
+                 return new Date(p2.createdAt) - new Date(p1.createdAt)
+               }))
+       }
+       else{
+        props.setPosts([])
+        props.setNoPost(true)
+       }
+       return
+      }
+      props.setDeleted(true)
     }
   }
 

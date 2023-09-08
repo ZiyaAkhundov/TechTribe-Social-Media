@@ -17,6 +17,9 @@
         height: calc(100% - theme('spacing.4'));
     }
 }
+#root{
+    background-color: #fafaff85;
+}
 .navbar{
     border-bottom: 1px solid #ecf1f6;
     box-shadow: 2px 0 4px 1px rgba(0,0,0,.1);

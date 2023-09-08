@@ -10,7 +10,7 @@ export const getPosts = async () => {
 
   export const getAPost = async (data) => {
     try {
-      const response = await get('posts/' + data.id)
+      const response = await get('posts/find/' + data.id)
       return response;
     } catch (error) {
       throw error;

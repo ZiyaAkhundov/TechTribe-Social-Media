@@ -7,6 +7,7 @@ import Login from "../pages/Auth/Login/Login"
 import Chat from "../pages/Chat/chat"
 import Feeds from "../pages/Feeds/feeds"
 import {Profile} from "../pages/profile/profile"
+import {Post} from "../pages/Post/post"
   export const routes = [
     {
       path:"/",
@@ -59,6 +60,12 @@ import {Profile} from "../pages/profile/profile"
     {
       path:"/Profile/:username/followings",
       component: Profile,
+      auth:true,
+      layout:"main"
+    },
+    {
+      path:"Post/:id",
+      component: Post,
       auth:true,
       layout:"main"
     },
