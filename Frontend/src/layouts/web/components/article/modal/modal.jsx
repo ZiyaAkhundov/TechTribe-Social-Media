@@ -85,7 +85,7 @@ export default function articleModal({
               <div className="article-modal-user">
                 <div className="flex justify-start items-center p-3">
                   <Avatar
-                    src={PF + data.userPicture}
+                    src={data.userPicture && PF + data.userPicture}
                     sx={{ height: 40, width: 40 }}
                     className="rounded-full"
                   ></Avatar>

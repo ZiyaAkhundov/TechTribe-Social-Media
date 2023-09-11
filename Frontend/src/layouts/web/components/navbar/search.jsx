@@ -6,6 +6,11 @@ import { NavLink } from 'react-router-dom';
 export default function search() {
   const PIC =import.meta.env.VITE_API_IMAGE_URL
     const [searchValue,setSearchValue]= useState([]);
+    let timeoutId
+    const debounce = (callback) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(()=>callback(),800)
+    };
   const searchUsers = async(data)=>{
     if(!data){
         setSearchValue([])
@@ -25,7 +30,7 @@ export default function search() {
         <input
           type="text"
           placeholder="Search"
-          onChange={(e) => searchUsers(e.target.value)}
+          onInput={(e) => {debounce (()=>searchUsers(e.target.value))}}
           className="w-full p-2 bg-gray-50 rounded border outline-none focus:outline-none focus:border-blue-400 focus:bg-searchFocus"
         />
         
@@ -33,7 +38,7 @@ export default function search() {
                 <div className=" w-[91%] sm:w-[94%] md:w-[97%] p-2  absolute  max-h-52 overflow-y-auto min-h-[100px] bg-white border shadow-sm">
                 {searchValue.map(user=>(
                 <NavLink to={`../Profile/${user.username}`} key={user.id} className="flex items-center p-3 cursor-pointer" onClick={()=>setSearchValue([])}>
-                    <Avatar src={PIC+user.picture} sx={{height:40,width:40}} alt="" className="border"/>
+                    <Avatar src={user.picture && PIC + user.picture} sx={{height:40,width:40}} alt="" className="border"/>
                     <h3 className="mx-4">{user.username}</h3>
                 </NavLink>
                 ))}

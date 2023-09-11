@@ -4,79 +4,11 @@ const Post = require('../models/Post');
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
+const addUsernameAndUserPicture = require('../functions/addUsernameAndUserPicture')
+const commentsWFData = require('../functions/commentsWFData')
 const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')
 dotenv.config()
-
-async function addUsernameAndUserPicture(data) {
-        const { userId } = data;
-        const user = await User.findById(userId);
-        const username = user.username;
-        const userPicture = user.picture;
-  
-        const postWithUser = {
-          ...data.toObject(),
-          username,
-          userPicture,
-          comments: await Promise.all(
-            data.comments.map(async (comment) => {
-              const user = await User.findById(comment.userId);
-              const username = user.username;
-              const userImg = user.picture;
-  
-              const commentWithUser = {
-                ...comment.toObject(),
-                username,
-                userImg,
-                commentReply: await Promise.all(
-                  comment.commentReply.map(async (reply) => {
-                    const user = await User.findById(reply.userId);
-                    const username = user.username;
-                    const userImg = user.picture;
-  
-                    return {
-                      ...reply.toObject(),
-                      username,
-                      userPicture: userImg,
-                    };
-                  })
-                ),
-              };
-  
-              return commentWithUser;
-            })
-          ),
-        };
-  
-        return postWithUser;
-  }  
-
-  async function commentsWFData(comment) {
-    const user = await User.findById(comment.userId);
-    const username = user.username;
-    const userImg = user.picture;
-  
-    const commentWithUser = {
-      ...comment.toObject(),
-      username,
-      userImg,
-      commentReply: await Promise.all(
-        comment.commentReply.map(async (reply) => {
-          const user = await User.findById(reply.userId);
-          const username = user.username;
-          const userImg = user.picture;
-  
-          return {
-            ...reply.toObject(),
-            username,
-            userPicture: userImg,
-          };
-        })
-      ),
-    };
-  
-    return commentWithUser;
-  }
 
 //create a post
 router.post('/', isAuthenticated, async(req,res)=>{
@@ -165,30 +97,47 @@ router.get('/find/:id',isAuthenticated,csrfProtection, async(req,res)=>{
 })
 
 //get feed posts
-router.get('/feed/posts',isAuthenticated, csrfProtection, async (req, res) => {
+const ITEMS_PER_LIMIT = 5; 
+
+router.get('/feed/posts', isAuthenticated, csrfProtection, async (req, res) => {
   try {
+    const limit = parseInt(req.query.limit) || 1;
     const currentUser = await User.findById(req.session.userId);
-    const userPosts = await Post.find({ userId: currentUser._id });
+
+    
+    const skipCount = (limit - 1) * ITEMS_PER_LIMIT;
+
+    const userPosts = await Post.find({ userId: currentUser._id })
+      .sort({ createdAt: -1 })
+      .skip(skipCount)
+      .limit(ITEMS_PER_LIMIT);
+
     const friendPosts = await Promise.all(
-      currentUser.followings.map(async(friendId) => {
-        return await Post.find({ userId: friendId });
+      currentUser.followings.map(async (friendId) => {
+        return await Post.find({ userId: friendId })
+          .sort({ createdAt: -1 })
+          .skip(skipCount)
+          .limit(ITEMS_PER_LIMIT);
       })
     );
 
-    const concatedData=userPosts.concat(...friendPosts);
-    const postsWithUsername = await Promise.all(
-        concatedData.map(async (post) => {
-          return await addUsernameAndUserPicture(post)
-        })
-      );
-      
-  if(!postsWithUsername.length){
-    return res.status(200).json({message:"There are no posts",status: "warning"})
-  }
+    const concatedData = userPosts.concat(...friendPosts);
 
-    res.status(200).json({data:postsWithUsername,status:"success"});
+    concatedData.sort((a, b) => b.createdAt - a.createdAt);
+
+    const postsWithUsername = await Promise.all(
+      concatedData.map(async (post) => {
+        return await addUsernameAndUserPicture(post);
+      })
+    );
+
+    if (!postsWithUsername.length && limit == 1) {
+      return res.status(200).json({ message: "There are no posts", status: "warning" });
+    }
+
+    res.status(200).json({ data: postsWithUsername, status: "success" });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json(err);
   }
 });

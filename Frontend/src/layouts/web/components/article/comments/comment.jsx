@@ -12,6 +12,7 @@ import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 import { CommentLike,CommentDelete,ReplyComment } from "../../../../../services/Posts";
 import { useSelector } from "react-redux";
 import Replies from './replies'
+import { NavLink } from 'react-router-dom';
 
 const ITEM_HEIGHT = 20;
 export default function Comment({comment,postId,setComments,setCommentsLength}) {
@@ -90,16 +91,16 @@ export default function Comment({comment,postId,setComments,setCommentsLength}) 
     <div className="comments-section" key={comment._id}>
       <div className="article-comment" >
         <div className="flex justify-between items-center p-3">
-          <div className="flex justify-start items-center">
+          <NavLink to={`../profile/${comment.username}`} className="flex justify-start items-center">
             <Avatar
-              src={PF + comment.userImg}
+              src={comment.userImg && PF + comment.userImg}
               sx={{ height: 30, width: 30 }}
               className="rounded-full border"
             ></Avatar>
             <h3 className="mx-2 text-1 article-comment-username">
               {comment.username}
             </h3>
-          </div>
+          </NavLink>
           <div>
             <div>
               <IconButton

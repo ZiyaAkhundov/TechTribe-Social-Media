@@ -16,6 +16,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Modal from "./modal/modal"
+import useCopyToClipboard from '../../../../hooks/copyToClipboard/useCopyToClipboard';
 
 const ITEM_HEIGHT = 20;
 
@@ -23,6 +24,8 @@ export default function post(props) {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const [copyToClipboard , {success}] =useCopyToClipboard();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -38,16 +41,9 @@ export default function post(props) {
     if(response.status == "success"){
       toast.success(response.message)
       if(!props.self){
-        const getPost = await getPosts()
-       if(getPost.status == "success"){
-         props.setPosts(getPost.data.sort((p1,p2)=>{
-                 return new Date(p2.createdAt) - new Date(p1.createdAt)
-               }))
-       }
-       else{
-        props.setPosts([])
-        props.setNoPost(true)
-       }
+        const filteredData = props.posts.filter(data => data._id != props.post._id)
+         props.setPosts(filteredData)
+         if(filteredData.length == 0) props.setNoPost(true) 
        return
       }
       props.setDeleted(true)
@@ -81,7 +77,7 @@ export default function post(props) {
   const formatter = buildFormatter(EnStrings)
   const PIC =import.meta.env.VITE_API_IMAGE_URL
   return (
-    <article>
+    <article ref={props.forwardRef && props.forwardRef}>
       <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post} islike={islike} setIsLike={setIsLike} setLikeLength={setLikeLength} likelength={likelength} setCommentsLength={setCommentsLength}/>
       <div>
         <div className="article-container">
@@ -92,7 +88,7 @@ export default function post(props) {
             >
               <div className="profile-img">
                 <Avatar
-                  src={PIC + props.post.userPicture}
+                  src={props.post.userPicture && PIC + props.post.userPicture}
                   alt=""
                   sx={{ width: 45, height: 45 }}
                   className="border"
@@ -176,7 +172,7 @@ export default function post(props) {
                 </span>{" "}
                 <span>comments</span>
               </button>
-              <button className="mx-1">
+              <button className="mx-1" onClick={()=>{ copyToClipboard(`${import.meta.env.VITE_URL}/post/${props.post._id}`);toast.success('Url copied to clipboard!')}}>
                 <ShareOutlinedIcon />
               </button>
             </div>

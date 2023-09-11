@@ -132,8 +132,19 @@ router.post('/upload',csrfProtection,isAuthenticated, async(req,res) =>{
 router.put('/picture',csrfProtection,isAuthenticated, async(req,res) =>{
     try {
         const currentUser = await User.findById(req.session.userId);
+        if(!currentUser) return res.status(404).json({message:"User not found!",status:"error"})
         await currentUser.updateOne({$set:{picture: req.body.picture}})
         return res.status(200).json({message:'Photo uploaded successfully', status: 'success'})
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+router.delete('/picture',csrfProtection,isAuthenticated, async(req,res) =>{
+    try {
+        const currentUser = await User.findById(req.session.userId);
+        if(!currentUser) return res.status(404).json({message:"User not found!",status:"error"})
+        await currentUser.updateOne({ $unset: { picture: 1 } });
+        return res.status(200).json({message:'Photo removed successfully', status: 'success'})
     } catch (error) {
         res.status(500).json(error)
     }

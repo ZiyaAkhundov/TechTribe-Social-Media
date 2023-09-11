@@ -13,7 +13,7 @@ import './modal.css'
 import { toast } from 'react-toastify';
 import axios from 'axios'
 
-export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPost}) {
+export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPost,setLimit}) {
   const textInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const [file,setFile] = useState(null);
@@ -72,14 +72,11 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
         const response = await createPost(newPost);
         if (response.status == "success") {
           toast.success(response.message);
-          const getPost = await getPosts();
+          const getPost = await getPosts(1);
           if(getPost.status == 'success'){
-            setPosts(
-              getPost.data.sort((p1, p2) => {
-                return new Date(p2.createdAt) - new Date(p1.createdAt);
-              })
-            );
+            setPosts(getPost.data);
             setNoPost(false)
+            setLimit(2)
           }
           setFile(null);
           handleClose();
@@ -99,7 +96,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
           </div>
           <form className="modal-body" onSubmit={handleSubmit}>
             <div className="modal-body-top">
-              <Avatar alt="user" src={PF + user.picture} sx={{ width: 46, height: 46 }} />
+              <Avatar src={user.picture && PF + user.picture} sx={{ width: 46, height: 46 }} />
               <input
                 ref={textInputRef} 
                 className="modal-text-input"

@@ -1,7 +1,7 @@
 import {get,put,del,post} from "../utils/request"
-export const getPosts = async () => {
+export const getPosts = async (limit) => {
     try {
-      const response = await get('posts/feed/posts')
+      const response = await get(`posts/feed/posts?limit=${limit}`)
       return response;
     } catch (error) {
       throw error;

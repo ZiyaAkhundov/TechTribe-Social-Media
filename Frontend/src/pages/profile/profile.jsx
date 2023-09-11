@@ -300,7 +300,7 @@ export function Profile() {
                     No Post Found
                   </div>
                 ) : posts.length > 0 ? (
-                  posts.map((post) => <Post key={post._id} post={post} setNoPost={setNoPost} setPosts={setPosts}/>)
+                  posts.map((post) => <Post key={post._id} post={post} setNoPost={setNoPost} setPosts={setPosts} posts={posts}/>)
                 ) : (
                   <Card className="w-[80%] mx-auto">
                     <CardHeader

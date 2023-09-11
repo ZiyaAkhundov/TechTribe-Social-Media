@@ -1,0 +1,35 @@
+.post-user-pic{
+    height: 7rem !important;
+    width: 7rem !important;
+}
+@media only screen and (max-width: 1268px){ 
+    .post-cont{
+        flex-direction: column;
+    }
+    .post-as-div{
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 35px;
+    }
+}
+@media only screen and (max-width: 475px){ 
+    .aside-post{
+        width: 90% !important;
+        max-width: 90% !important;
+        height: 10rem !important;
+    }
+    .post-user-pic{
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .post-user-name{
+        font-size: 1.7rem !important;
+    }
+    .post-user-data{
+        font-size: 0.8rem !important;
+        column-gap: 0.4rem;
+        padding-bottom: 10px;
+    }
+}

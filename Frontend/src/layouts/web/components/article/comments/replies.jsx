@@ -1,4 +1,5 @@
 import React, {useState, useEffect}from 'react'
+import { NavLink } from 'react-router-dom';
 import Avatar from "@mui/material/Avatar";
 import TimeAgo from 'react-timeago'
 import IconButton from '@mui/material/IconButton';
@@ -63,16 +64,16 @@ export default function Replies({commentreply,postId,setComments,commentId}) {
   return (
     <div className="my-1 mx-6" >
               <div className="flex justify-between items-center p-3">
-                <div className="flex justify-start items-center">
+                <NavLink to={`../profile/${commentreply.username}`} className="flex justify-start items-center">
                   <Avatar
-                    src={PF + commentreply.userPicture}
+                    src={commentreply.userPicture && PF + commentreply.userPicture}
                     sx={{ height: 30, width: 30 }}
                     className="rounded-full border"
                   ></Avatar>
                   <h3 className="mx-2 text-1 article-comment-username">
                     {commentreply.username}
                   </h3>
-                </div>
+                </NavLink>
                 <div>
                   <div>
                     <IconButton
