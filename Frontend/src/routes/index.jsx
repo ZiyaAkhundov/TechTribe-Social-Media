@@ -5,7 +5,7 @@ import Contact from "../pages/Contact/contact"
 import Register from "../pages/Auth/Register/Register"
 import Login from "../pages/Auth/Login/Login"
 import Chat from "../pages/Chat/chat"
-import Feeds from "../pages/Feeds/feeds"
+import Feeds from "../pages/Feeds/Feeds"
 import {Profile} from "../pages/profile/profile"
 import {Post} from "../pages/Post/post"
   export const routes = [
