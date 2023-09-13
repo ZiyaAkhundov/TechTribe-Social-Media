@@ -28,7 +28,7 @@ function App() {
   const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     setLoading(true);
-    axios.get('http://localhost:5000/auth/user-data', { withCredentials: true })
+    axios.get('https://techtribebackend.onrender.com/auth/user-data', { withCredentials: true })
       .then(response => {
             dispatch(login(response.data)); 
       })
