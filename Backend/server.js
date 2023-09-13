@@ -77,7 +77,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      secure: false,
+      secure: true,
       sameSite: 'lax',
       maxAge: 3600000,
     },
