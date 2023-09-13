@@ -12,14 +12,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Skeleton from '@mui/material/Skeleton';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
-import './feed.css'
-import '../../layouts/web/components/article/article.css'
-import Modal from './modal/modal'
 import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import PhotoOutlinedIcon from '@mui/icons-material/PhotoOutlined';
+import Modal from './modal/modal'
 import Post from '../../layouts/web/components/article/article'
 import { useSelector } from "react-redux";
 import {getPosts} from "../../services/Posts"
+import './feed.css'
+import '../../layouts/web/components/article/article.css'
 
 export default function Feeds() {
   const [noPost,setNoPost] = useState(false)

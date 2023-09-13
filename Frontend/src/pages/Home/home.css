@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+.home-container::-webkit-scrollbar {
+    width: 0.5rem;
+}
+.home-container::-webkit-scrollbar-thumb {
+    height:0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    background-color: #a6a6a6;
+}
+.home-container {
+    padding: 20px;
+    height: calc(100% - 55px);
+    background-color: #fff;
+}
+.follow-instagram, .follow-github,.follow-linkedin{
+    padding: 20px 40px;
+    margin-top: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+.follow-instagram{
+    background: linear-gradient(to left, #405de6, #5851db, #833ab4, #e1306c);
+}
+.follow-github{
+    background: linear-gradient(to left, #40424b, #343438, #333135, #252225);
+}
+.follow-linkedin{
+    background: linear-gradient(to left, #4777df, #325dbc, #1e48a2, #133888);
+}
+.follow-instagram .title, .follow-github .title,.follow-linkedin .title{
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+}
+.follow-instagram a,.follow-github a,.follow-linkedin a{
+    display: inline-flex;
+    height: 40px;
+    border-radius: 4px;
+    background: #fff;
+    align-items: center;
+    padding: 0 25px;
+    color: #222;
+    margin-top: 15px;
+}
+.follow-instagram i,.follow-github i , .follow-linkedin i{
+    font-size: 45px;
+    color: #fff;
+    margin-right: 50px;
+    position: relative;
+    z-index: 1;
+}
+.follow-instagram i::after,.follow-github i::after,.follow-linkedin i::after {
+    content: "";
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255,255,255,.1);
+    position: absolute;
+    bottom: -10px;
+    right: -20px;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+@media only screen and (max-width: 1200px) {
+    .follow-instagram, .follow-github, .follow-linkedin{
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+}

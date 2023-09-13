@@ -1,0 +1,15 @@
+.contact-container::-webkit-scrollbar {
+    width: 0.5rem;
+}
+.contact-container::-webkit-scrollbar-thumb {
+    height:0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    background-color: #a6a6a6;
+}
+.contact-container {
+    padding: 10px;
+    height: calc(100% - 55px);
+    background-color: #fff;
+}

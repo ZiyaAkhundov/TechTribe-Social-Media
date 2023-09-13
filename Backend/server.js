@@ -17,6 +17,8 @@ const userRoutes =require("./routes/users.js")
 const postRoutes = require("./routes/posts.js")
 const mesRoomRoutes = require("./routes/mesRoom.js")
 const MessageRoutes = require("./routes/message.js")
+const ReportRoutes = require("./routes/report.js")
+const ContactRoute = require('./routes/contact')
 
 
 const port =5000;
@@ -89,6 +91,9 @@ app.use("/users", cors(corsOptions), userRoutes);
 app.use("/posts", cors(corsOptions), postRoutes);
 app.use("/messageroom", cors(corsOptions), mesRoomRoutes);
 app.use("/message", cors(corsOptions), MessageRoutes);
+app.use("/report", cors(corsOptions), ReportRoutes);
+app.use("/contact", cors(corsOptions), ContactRoute);
+
   
   app.post('/logout', (req, res) => {
     req.session.destroy(err => {

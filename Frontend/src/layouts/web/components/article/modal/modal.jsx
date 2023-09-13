@@ -21,7 +21,9 @@ export default function articleModal({
   setIsLike,
   setLikeLength,
   likelength,
-  setCommentsLength
+  setCommentsLength,
+  handleOpenReportModal,
+  handleReport
 }) {
 
   const PF = import.meta.env.VITE_API_IMAGE_URL;
@@ -115,16 +117,30 @@ export default function articleModal({
                 </div>
               </div>
               {comments.length > 0 ? (
-                comments.map((comment) => 
-                  <Comment comment = {comment} postId={data._id} key={comment._id} setComments={setComments} setCommentsLength={setCommentsLength}/>
-                )
+                comments.map((comment) => (
+                  <Comment
+                    comment={comment}
+                    postId={data._id}
+                    key={comment._id}
+                    setComments={setComments}
+                    setCommentsLength={setCommentsLength}
+                    handleReport={handleReport}
+                    handleOpenReportModal={handleOpenReportModal}
+                  />
+                ))
               ) : (
                 <div className="text-center p-4">No comments found!</div>
               )}
             </div>
             <div className="commentInput">
               <div>
-                <input type="text" placeholder="Write a comment" value={value} onChange={(e)=>setValue(e.target.value)} onKeyUp={handleKeyUp}/>
+                <input
+                  type="text"
+                  placeholder="Write a comment"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  onKeyUp={handleKeyUp}
+                />
                 <button onClick={handleComment}>Post</button>
               </div>
             </div>

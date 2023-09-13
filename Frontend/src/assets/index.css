@@ -36,8 +36,56 @@ aside{
     height: 25px !important;
     width: 25px !important;
 }
+textarea {
+    resize: none  !important;
+}
 @media only screen and (max-width: 440px){
     .nav-username{
         display: none !important;
+    }
+    .search-div,.search-input{
+        width: 240px;
+    }
+}
+@media only screen and (max-width: 1200px){
+    .search-box{
+        width: 75% !important;
+    }
+}
+@media only screen and (max-width: 992px){
+    .search-box{
+        width: 71% !important;
+    }
+}
+@media only screen and (max-width: 768px){
+    /* .search-div,.search-input{
+        width: 270px;
+    } */
+}
+@media only screen and (max-width: 550px){
+    .search-picture{
+        height: 20px !important;
+        width: 20px !important;
+    }
+    .search-username{
+        font-size: 14px;
+    }
+    .search-div,.search-input{
+        width: 210px;
+    }
+}
+@media only screen and (max-width: 375px){
+    .search-box{
+        width: 61% !important;
+    }
+}
+@media only screen and (max-width: 355px){
+    .search-div,.search-input{
+        width: 200px;
+    }
+}
+@media only screen and (max-width: 305px){
+    .search-div,.search-input{
+        width: 170px;
     }
 }

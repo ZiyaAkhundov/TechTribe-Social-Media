@@ -267,22 +267,23 @@ router.put('/:username/follow',csrfProtection,isAuthenticated, async(req,res)=>{
     }
 }) 
 
-//remove follow a user
+//remove follower/follow a user
 router.put('/:username/follow/remove',csrfProtection,isAuthenticated, async(req,res)=>{
     if(req.session.username !== req.params.username){
         try {
             const user = await User.findOne({username:req.params.username});
             const currentUser = await User.findById(req.session.userId.toString());
-            if (user.followings.some(obj => obj.id === req.session.userId.toString())) {
-                await user.updateOne({ $pull: { followings: { id: req.session.userId.toString() } } });
-                await currentUser.updateOne({ $pull: { followers: { id: user._id.toString() } } });
+            if (user.followings.some(obj => obj === req.session.userId.toString())) {
+                await user.updateOne({ $pull: {followings: req.session.userId.toString() } });
+                await currentUser.updateOne({ $pull: { followers: user._id.toString() } });
 
-                const updatedUser = await User.findById(user._id);
+                const updatedUser = await User.findById(req.session.userId);
                 const fulldata = await Promise.all(
                     updatedUser.followers.map(async (follower) => {
                         return await followWFData(follower)
                     })
                 );
+                console.log(fulldata)
                 res.status(200).json({message:"The user has been removed from followers!",status:"success",data:fulldata});
             }
             

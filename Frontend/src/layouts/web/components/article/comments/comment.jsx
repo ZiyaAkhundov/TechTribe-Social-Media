@@ -15,7 +15,7 @@ import Replies from './replies'
 import { NavLink } from 'react-router-dom';
 
 const ITEM_HEIGHT = 20;
-export default function Comment({comment,postId,setComments,setCommentsLength}) {
+export default function Comment({comment,postId,setComments,setCommentsLength,handleReport,handleOpenReportModal}) {
     const PF = import.meta.env.VITE_API_IMAGE_URL;
     const { user } = useSelector((state) => state.auth);
     const [commentIsLike, setCommentIsLike] = useState(false);
@@ -89,9 +89,12 @@ export default function Comment({comment,postId,setComments,setCommentsLength}) 
 
   return (
     <div className="comments-section" key={comment._id}>
-      <div className="article-comment" >
+      <div className="article-comment">
         <div className="flex justify-between items-center p-3">
-          <NavLink to={`../profile/${comment.username}`} className="flex justify-start items-center">
+          <NavLink
+            to={`../profile/${comment.username}`}
+            className="flex justify-start items-center"
+          >
             <Avatar
               src={comment.userImg && PF + comment.userImg}
               sx={{ height: 30, width: 30 }}
@@ -125,7 +128,8 @@ export default function Comment({comment,postId,setComments,setCommentsLength}) 
                   style: {
                     maxHeight: ITEM_HEIGHT * 4.5,
                     width: "20ch",
-                    boxShadow: '0px 1px 1px 0px rgb(177 177 177 / 20%), 0px 2px 3px 1px rgb(147 147 147 / 14%), 0px 2px 2px 1px rgb(212 212 212 / 12%)'
+                    boxShadow:
+                      "0px 1px 1px 0px rgb(177 177 177 / 20%), 0px 2px 3px 1px rgb(147 147 147 / 14%), 0px 2px 2px 1px rgb(212 212 212 / 12%)",
                   },
                 }}
               >
@@ -138,7 +142,15 @@ export default function Comment({comment,postId,setComments,setCommentsLength}) 
                   </MenuItem>
                 ) : null}
                 {user.username != comment.username ? (
-                  <MenuItem onClick={handleClose}>Report</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      handleOpenReportModal();
+                      handleReport({ type: 2 ,postId:postId,commentId:comment._id});
+                    }}
+                  >
+                    Report
+                  </MenuItem>
                 ) : null}
               </Menu>
             </div>
@@ -188,14 +200,22 @@ export default function Comment({comment,postId,setComments,setCommentsLength}) 
             </div>
           </div>
         )}
-        {replycomments && 
-        <div onClick={()=>setShowReply(prev=>!prev)}>
-          <span className='text-blue-600 cursor-pointer'>Show replies</span>
-        </div>
-        }
-        {showReply && 
+        {replycomments && (
+          <div onClick={() => setShowReply((prev) => !prev)}>
+            <span className="text-blue-600 cursor-pointer">Show replies</span>
+          </div>
+        )}
+        {showReply &&
           comment.commentReply.map((commentreply) => (
-            <Replies commentreply={commentreply} key={commentreply._id} postId={postId} setComments={setComments} commentId={comment._id}/>
+            <Replies
+              commentreply={commentreply}
+              key={commentreply._id}
+              postId={postId}
+              setComments={setComments}
+              commentId={comment._id}
+              handleReport={handleReport}
+              handleOpenReportModal={handleOpenReportModal}
+            />
           ))}
       </div>
     </div>

@@ -1,0 +1,20 @@
+@media only screen and (max-width: 575px) {
+    .report-modal-box{
+        width: 440px !important;
+    }   
+}
+@media only screen and (max-width: 475px) {
+    .report-modal-box{
+        width: 350px !important;
+    }   
+}
+@media only screen and (max-width: 380px) {
+    .report-modal-box{
+        width: 300px !important;
+    }   
+}
+@media only screen and (max-width: 320px) {
+    .report-modal-box{
+        width: 250px !important;
+    }   
+}

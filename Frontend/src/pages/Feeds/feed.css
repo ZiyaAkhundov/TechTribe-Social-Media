@@ -1,6 +1,9 @@
 .content::-webkit-scrollbar {
     width: 0.5rem;
 }
+.vlist::-webkit-scrollbar {
+    width: 0.5rem;
+}
 .content{
     background-color: #fafaff85;
 }

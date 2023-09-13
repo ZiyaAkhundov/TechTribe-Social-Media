@@ -50,7 +50,7 @@ router.post('/register', csrfProtection,[ body('email').isEmail().normalizeEmail
             email,
             password : hashedPassword,
         })
-        const user= await newUser.save();
+        await newUser.save();
         res.status(200).json({message:'Registration successful', status: 'success'});
     } catch (err){
         res.status(500).json(err)

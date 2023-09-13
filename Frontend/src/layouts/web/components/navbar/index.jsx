@@ -40,7 +40,7 @@ export default function Navbar({func}) {
   };
   const PF= import.meta.env.VITE_API_IMAGE_URL
   return (
-    <div className="navbar  bg-bgMain h-14 flex justify-between px-3 md:z-50 relative items-center">
+    <div className={`navbar bg-bgMain h-14 flex px-3 md:z-50 items-center ${user ? 'justify-between' : 'justify-between lg:justify-end'}`}>
       <button type="button" className="lg:hidden" onClick={func}>
         <i className="fa-solid fa-bars"></i>
       </button>

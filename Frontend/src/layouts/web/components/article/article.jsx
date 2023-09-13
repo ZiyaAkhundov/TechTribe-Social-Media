@@ -16,6 +16,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Modal from "./modal/modal"
+import ReportModal from '../report/report';
 import useCopyToClipboard from '../../../../hooks/copyToClipboard/useCopyToClipboard';
 
 const ITEM_HEIGHT = 20;
@@ -24,6 +25,11 @@ export default function post(props) {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const [openReportModal, setOpenReportModal] = useState(false);
+  const handleOpenReportModal = () => setOpenReportModal(true);
+  const handleCloseReportModal = () => setOpenReportModal(false);
+  const [reportData, setReportData] = useState()
 
   const [copyToClipboard , {success}] =useCopyToClipboard();
 
@@ -74,11 +80,44 @@ export default function post(props) {
       setLikeLength(islike ? likelength - 1 : likelength + 1)
       setIsLike(prev=>!prev)
     }
+
+    const handleReport = (data)=>{
+      const {type,postId,commentId,replyId} = data
+      const schema ={
+        type: type,
+        postId:postId
+      }
+      if(type == 1) setReportData(schema)
+      else if(type == 2) setReportData({...schema,commentId})
+      else if(type == 3) setReportData({...schema,commentId,replyId})
+    }
+
+
   const formatter = buildFormatter(EnStrings)
   const PIC =import.meta.env.VITE_API_IMAGE_URL
+
   return (
     <article ref={props.forwardRef && props.forwardRef}>
-      <Modal open={openModal} handleClose={handleCloseModal} handleOpen={handleOpenModal} data={props.post} islike={islike} setIsLike={setIsLike} setLikeLength={setLikeLength} likelength={likelength} setCommentsLength={setCommentsLength}/>
+      <Modal
+        open={openModal}
+        handleClose={handleCloseModal}
+        handleOpen={handleOpenModal}
+        handleReport={handleReport}
+        handleOpenReportModal={handleOpenReportModal}
+        data={props.post}
+        islike={islike}
+        setIsLike={setIsLike}
+        setLikeLength={setLikeLength}
+        likelength={likelength}
+        setCommentsLength={setCommentsLength}
+      />
+      {openReportModal && (
+        <ReportModal
+          open={openReportModal}
+          handleClose={handleCloseReportModal}
+          data = {reportData}
+        />
+      )}
       <div>
         <div className="article-container">
           <div className="article-head">
@@ -132,25 +171,33 @@ export default function post(props) {
                     },
                   }}
                 >
-                  {user.id==props.post.userId ? 
-                  <MenuItem onClick={handleDelete} className=' !text-red-500'>
-                    Delete
-                  </MenuItem>: null}
-                  {user.id!=props.post.userId ? 
-                  <MenuItem onClick={handleClose} >
-                    Report
-                  </MenuItem> : null}
+                  {user.id == props.post.userId ? (
+                    <MenuItem onClick={handleDelete} className=" !text-red-500">
+                      Delete
+                    </MenuItem>
+                  ) : null}
+                  {user.id != props.post.userId ? (
+                    <MenuItem
+                      onClick={() => {
+                        handleClose();
+                        handleOpenReportModal();
+                        handleReport({type:1,postId:props.post._id})
+                      }}
+                    >
+                      Report
+                    </MenuItem>
+                  ) : null}
                 </Menu>
               </div>
             </div>
           </div>
           <div className="context py-3">
-            <h3 className="post-desc pt-3">{props.post.desc && props.post.desc}</h3>
+            <h3 className="post-desc pt-3">
+              {props.post.desc && props.post.desc}
+            </h3>
           </div>
           <div className="context-img">
-            {props.post.img &&
-              <img src={PIC+props.post.img} alt="" />
-            }
+            {props.post.img && <img src={PIC + props.post.img} alt="" />}
           </div>
           <div className="article-actions">
             <div className="btns flex">
@@ -165,14 +212,18 @@ export default function post(props) {
               </button>
               <button className="mx-1" onClick={handleOpenModal}>
                 <ModeCommentOutlinedIcon />
-                <span>
-                  {commentsLength
-                    ? commentsLength
-                    : null}
-                </span>{" "}
+                <span>{commentsLength ? commentsLength : null}</span>{" "}
                 <span>comments</span>
               </button>
-              <button className="mx-1" onClick={()=>{ copyToClipboard(`${import.meta.env.VITE_URL}/post/${props.post._id}`);toast.success('Url copied to clipboard!')}}>
+              <button
+                className="mx-1"
+                onClick={() => {
+                  copyToClipboard(
+                    `${import.meta.env.VITE_URL}/post/${props.post._id}`
+                  );
+                  toast.success("Url copied to clipboard!");
+                }}
+              >
                 <ShareOutlinedIcon />
               </button>
             </div>
