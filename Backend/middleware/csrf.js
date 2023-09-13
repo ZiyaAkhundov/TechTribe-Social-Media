@@ -3,9 +3,9 @@ const generateCSRFToken = require('../csrf/csrf'); // Replace with the actual pa
 const csrfTokenMiddleware = (req, res, next) => {
   const csrfToken = generateCSRFToken();
   res.cookie('csrf-token', csrfToken, {
-    httpOnly: false,
+    httpOnly: true,
     secure: true,
-    sameSite: 'lax',
+    sameSite: 'none',
     maxAge: 3600000,
     domain: 'techtribe-social.netlify.app',
     path: '/',

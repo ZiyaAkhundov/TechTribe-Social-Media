@@ -77,9 +77,9 @@ router.post('/login', async (req, res) => {
 
     const csrfToken = generateCSRFToken();
     res.cookie('csrf-token', csrfToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 3600000,
       domain: 'techtribe-social.netlify.app',
       path: '/',
@@ -87,9 +87,9 @@ router.post('/login', async (req, res) => {
 
     const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
     res.cookie('jwtToken', accessToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 3600000,
       domain: 'techtribe-social.netlify.app',
       path: '/',
