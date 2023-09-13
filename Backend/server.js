@@ -81,7 +81,7 @@ app.use(
       secure: true,
       sameSite: 'lax',
       maxAge: 3600000,
-      domain:'https://techtribe-social.netlify.app/'
+      domain:'https://techtribe-social.netlify.app'
     },
     name: 'ps_session',
   })
