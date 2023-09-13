@@ -77,9 +77,11 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
+      httpOnly: true,
       secure: true,
       sameSite: 'lax',
       maxAge: 3600000,
+      domain:'https://techtribe-social.netlify.app/'
     },
     name: 'ps_session',
   })
