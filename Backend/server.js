@@ -79,7 +79,6 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
       maxAge: 3600000,
       domain:'https://techtribe-social.netlify.app'
     },
