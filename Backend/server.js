@@ -76,12 +76,13 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
+    proxy: true,
     cookie: {
       httpOnly: true,
       secure: true,
       maxAge: 3600000,
       sameSite: 'none',
-      domain:'techtribe-social.netlify.app'
+      domain:'techtribebackend.onrender.com'
     },
     name: 'ps_session',
   })

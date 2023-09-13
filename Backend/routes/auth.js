@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
       secure: true,
       sameSite: 'none',
       maxAge: 3600000,
-      domain: 'techtribe-social.netlify.app',
+      domain: 'techtribebackend.onrender.com',
       path: '/',
      });
 
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
       secure: true,
       sameSite: 'none',
       maxAge: 3600000,
-      domain: 'techtribe-social.netlify.app',
+      domain: 'techtribebackend.onrender.com',
       path: '/',
     });
 
