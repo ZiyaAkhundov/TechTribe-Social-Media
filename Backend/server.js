@@ -118,7 +118,7 @@ app.listen(port,()=>{
 const io = require("socket.io")(8900,{
   pingTimeout: 60000,
   cors:{
-    origin: 'http://localhost:5173'
+    origin: 'https://techtribe-social.netlify.app'
   }
 })
 

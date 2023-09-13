@@ -7,7 +7,7 @@ const csrfTokenMiddleware = (req, res, next) => {
     secure: true,
     sameSite: 'lax',
     maxAge: 3600000,
-    domain: 'localhost',
+    domain: 'techtribe-social.netlify.app',
     path: '/',
    });
   next();
