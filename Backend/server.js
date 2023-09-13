@@ -80,7 +80,7 @@ app.use(
       httpOnly: true,
       secure: true,
       maxAge: 3600000,
-      domain:'https://techtribe-social.netlify.app'
+      domain:'techtribe-social.netlify.app'
     },
     name: 'ps_session',
   })
