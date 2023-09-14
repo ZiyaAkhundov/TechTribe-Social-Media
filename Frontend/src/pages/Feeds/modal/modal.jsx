@@ -52,7 +52,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
         newPost.img = filename;
         try {
           const uploadResponse = await axios.post(
-            "http://techtribe-api.onrender.com/users/upload",
+            "https://techtribe-api.onrender.com/users/upload",
             formData,
             {
               headers: {
