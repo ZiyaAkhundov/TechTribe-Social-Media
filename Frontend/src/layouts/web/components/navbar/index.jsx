@@ -127,7 +127,6 @@ export default function Navbar({func}) {
           Log in
         </NavLink>
       )}
-        
       </div>
     </div>
   )
