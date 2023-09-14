@@ -82,7 +82,7 @@ app.use(
       secure: true,
       maxAge: 3600000,
       sameSite: 'none',
-      domain:'techtribebackend.onrender.com'
+      domain:'techtribe-social-media.vercel.app'
     },
     name: 'ps_session',
   })

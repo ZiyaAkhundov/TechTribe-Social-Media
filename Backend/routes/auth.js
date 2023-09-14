@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
       secure: false,
       sameSite: 'none',
       maxAge: 3600000,
-      domain: 'techtribebackend.onrender.com',
+      domain: 'techtribe-social-media.vercel.app',
       path: '/',
      });
 
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
       secure: true,
       sameSite: 'none',
       maxAge: 3600000,
-      domain: 'techtribebackend.onrender.com',
+      domain: 'techtribe-social-media.vercel.app',
       path: '/',
     });
 

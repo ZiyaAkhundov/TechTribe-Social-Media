@@ -7,7 +7,7 @@ const csrfTokenMiddleware = (req, res, next) => {
     secure: false,
     sameSite: 'none',
     maxAge: 3600000,
-    domain: 'techtribebackend.onrender.com',
+    domain: 'techtribe-social-media.vercel.app',
     path: '/',
    });
   next();
