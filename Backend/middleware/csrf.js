@@ -4,7 +4,7 @@ const csrfTokenMiddleware = (req, res, next) => {
   const csrfToken = generateCSRFToken();
   res.cookie('csrf-token', csrfToken, {
     httpOnly: false,
-    secure: false,
+    secure: true,
     sameSite: 'none',
     maxAge: 3600000,
     domain: 'techtribe-api.onrender.com',
