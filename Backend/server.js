@@ -26,9 +26,9 @@ const port =5000;
 dotenv.config()
 
 const corsOptions = {
-  origin: 'https://techtribe-social.netlify.app',
-  credentials: true,
-};
+    origin: 'https://techtribe-social.netlify.app', 
+    credentials: true, 
+  };
   
 
   mongoose.connect( process.env.MONGOOSE, {
@@ -88,13 +88,7 @@ app.use(
   })
 );
 app.use("/img",express.static(path.join(__dirname, "public/img")))
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
-  }
-  next();
-});
+
 app.use("/auth", cors(corsOptions), authRoutes);
 app.use("/users", cors(corsOptions), userRoutes);
 app.use("/posts", cors(corsOptions), postRoutes);
