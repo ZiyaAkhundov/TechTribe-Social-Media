@@ -111,13 +111,13 @@ app.use("/contact", cors(corsOptions), ContactRoute);
     });
   });
 
-app.listen(port,()=>{
+const server = app.listen(port,()=>{
    
     console.log("Server listening on port: " + port)
 })
 
 // socket
-const io = require("socket.io")(8900,{
+const io = require("socket.io")(server,{
   pingTimeout: 60000,
   cors:{
     origin: 'https://techtribe-social.netlify.app'

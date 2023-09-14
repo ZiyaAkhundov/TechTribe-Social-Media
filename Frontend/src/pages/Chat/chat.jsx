@@ -13,7 +13,7 @@ import "./chat.css"
 
 
 export default function chat({func}) {
-   const socket = useRef(io('ws://localhost:8900'))
+   const socket = useRef(io('https://techtribe-api.onrender.com'))
 
    const { user } = useSelector((state) => state.auth);
    const chatBoxRef = useRef(null);
@@ -82,7 +82,7 @@ export default function chat({func}) {
     
 
     useEffect(()=>{
-      socket.current = io('ws://localhost:8900/')
+      socket.current = io('https://techtribe-api.onrender.com/')
       socket.current.on('getMessage',(data)=>{
          setArrivalMessage({
             sender:data.senderId,
