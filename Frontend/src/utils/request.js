@@ -1,10 +1,12 @@
+import Cookies from 'js-cookie';
+
 // utils/request.js
+
+
 export const request = async (url, data = false, method = 'GET') => {
   function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
+    return Cookies.get(name);
+}
   const options = {
     method,
     credentials: "include",
