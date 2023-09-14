@@ -14,11 +14,6 @@ import {userData} from "../../../services/Auth"
 export default function modal({open,setLoader,handleClose}) {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
 
     const fileInputRef = useRef(null);
 
@@ -44,7 +39,7 @@ export default function modal({open,setLoader,handleClose}) {
 
         try {
             handleClose()
-            const uploadResponse = await axios.post('http://techtribe-api.onrender.com/users/upload', formData, {
+            const uploadResponse = await axios.post('https://techtribe-api.onrender.com/users/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
