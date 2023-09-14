@@ -44,9 +44,8 @@ export default function modal({open,setLoader,handleClose}) {
 
         try {
             handleClose()
-            const uploadResponse = await axios.post('http://localhost:5000/users/upload', formData, {
+            const uploadResponse = await axios.post('http://techtribe-api.onrender.com/users/upload', formData, {
                 headers: {
-                    'X-CSRF-Token': getCookie('csrf-token'),
                     'Content-Type': 'multipart/form-data',
                 },
                 withCredentials: true,
