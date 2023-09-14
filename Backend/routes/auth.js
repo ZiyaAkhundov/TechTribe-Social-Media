@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
 
     const csrfToken = generateCSRFToken();
     res.cookie('csrf-token', csrfToken, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       sameSite: 'none',
       maxAge: 3600000,

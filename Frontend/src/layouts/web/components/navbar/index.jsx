@@ -23,7 +23,7 @@ export default function Navbar({func}) {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:5000/logout", null, { withCredentials: true });
+      await axios.post("https://techtribebackend.onrender.com/logout", null, { withCredentials: true });
       dispatch(logout()); 
       window.location.href = "/auth/login";
     } catch (error) {

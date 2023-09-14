@@ -3,7 +3,7 @@ const generateCSRFToken = require('../csrf/csrf'); // Replace with the actual pa
 const csrfTokenMiddleware = (req, res, next) => {
   const csrfToken = generateCSRFToken();
   res.cookie('csrf-token', csrfToken, {
-    httpOnly: true,
+    httpOnly: false,
     secure: true,
     sameSite: 'none',
     maxAge: 3600000,
