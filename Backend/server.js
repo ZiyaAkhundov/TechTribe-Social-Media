@@ -58,12 +58,6 @@ app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', "default-src 'self'");
   next();
 });
-app.use((req, res, next) => {
-  if (req.method == "OPTIONS") {
-    return res.status(200).json({});
-  }
-  next();
-});
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
@@ -94,7 +88,13 @@ app.use(
   })
 );
 app.use("/img",express.static(path.join(__dirname, "public/img")))
-
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+  next();
+});
 app.use("/auth", cors(corsOptions), authRoutes);
 app.use("/users", cors(corsOptions), userRoutes);
 app.use("/posts", cors(corsOptions), postRoutes);
