@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
     res.cookie('csrf-token', csrfToken, {
       httpOnly: false,
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       maxAge: 3600000,
       domain: 'techtribebackend.onrender.com',
       path: '/',
