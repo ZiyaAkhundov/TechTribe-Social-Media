@@ -1,18 +1,11 @@
-import Cookies from 'js-cookie';
-
 // utils/request.js
 
-
 export const request = async (url, data = false, method = 'GET') => {
-  function getCookie(name) {
-    return Cookies.get(name);
-}
   const options = {
     method,
     credentials: "include",
     headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': getCookie('csrf-token'),
+      'Content-Type': 'application/json'
     }
   };
 
