@@ -9,7 +9,7 @@
           },
           {
             "key": "Access-Control-Allow-Origin",
-            "value": "*"
+            "value": "https://techtribe-social.netlify.app"
           },
           {
             "key": "Access-Control-Allow-Methods",
