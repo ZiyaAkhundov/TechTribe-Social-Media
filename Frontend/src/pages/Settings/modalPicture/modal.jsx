@@ -49,9 +49,10 @@ export default function modal({open,setLoader,handleClose}) {
               }
             );
             if (uploadResponse.status === "success") {
+                console.log(true)
+                setLoader(false)
+                getData()
               toast.success("Photo Successfully Uploaded");
-              setLoader(false);
-              getData();
             } else {
               return toast.error(uploadResponse.message);
             }
@@ -69,34 +70,62 @@ export default function modal({open,setLoader,handleClose}) {
         }
     }
     return (
-        <div>
-            <Modal open={open} onClose={handleClose} className='modal flex justify-center items-center' 
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}>
-                <Fade in={open}>
-                    <Box className='pictureModal bg-white w-72 rounded-md outline-none overflow-hidden'>
-                        <div className='modal-head border-0 border-b'>
-                            <Typography id="transition-modal-title" variant="h6" component="h2">
-                                Change Profile Image
-                            </Typography>
-                        </div>
-                        <div className="body">
-                            <button onClick={handleButtonClick} className='text-blue-700 bg-white py-2 w-full border-b'>Upload Photo</button>
-                            {user.picture ?
-                            <button onClick={delPicture} className='text-red-700 bg-white py-2 w-full  border-b'>Remove Current Photo</button>
-                            : null
-                            }
-                            <button className='bg-white py-2 w-full border-b' onClick={handleClose}>Cancel</button>
-                            <form encType="multipart/form-data">
-                                <input type="file" ref={fileInputRef} accept="image/jpeg,image/png" className='hidden' onChange={handleFileChange}/>
-                            </form>
-                        </div>
-                    </Box>
-                </Fade>
-            </Modal>
-        </div>
+      <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          className="modal flex justify-center items-center"
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={open}>
+            <Box className="pictureModal bg-white w-72 rounded-md outline-none overflow-hidden">
+              <div className="modal-head border-0 border-b">
+                <Typography
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Change Profile Image
+                </Typography>
+              </div>
+              <div className="body">
+                <button
+                  onClick={handleButtonClick}
+                  className="text-blue-700 bg-white py-2 w-full border-b"
+                >
+                  Upload Photo
+                </button>
+                {user.picture ? (
+                  <button
+                    onClick={delPicture}
+                    className="text-red-700 bg-white py-2 w-full  border-b"
+                  >
+                    Remove Current Photo
+                  </button>
+                ) : null}
+                <button
+                  className="bg-white py-2 w-full border-b"
+                  onClick={handleClose}
+                >
+                  Cancel
+                </button>
+                <form encType="multipart/form-data">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/jpeg,image/png"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </form>
+              </div>
+            </Box>
+          </Fade>
+        </Modal>
+      </div>
     );
   }

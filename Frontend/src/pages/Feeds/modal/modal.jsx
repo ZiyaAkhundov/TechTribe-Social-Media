@@ -17,7 +17,6 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
   const textInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
-  const [image, setImage] = useState();
   const { user } = useSelector((state) => state.auth);
   const handleButtonClick = () => {
     textInputRef.current.focus();
@@ -32,21 +31,19 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let formData;
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        return toast.error("Invalid File Type. Please select a valid image file.");
+    }
+      formData = new FormData();
+      formData.append('image', file);
+    }
     const newPost = {
       userId: user.id,
       desc: textInputRef.current.value,
-      image: image && image,
+      image: formData && formData,
     };
-    if (file) {
-      if (file.type !== "image/") {
-        return toast.error("Invalid File Type");
-      }
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-    }
     try {
       const response = await createPost(newPost);
       if (response.status == "success") {
@@ -59,7 +56,6 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
           setLimit(2);
         }
         setFile(null);
-        setImage(null);
         handleClose();
       } else {
         toast.error(response.message);

@@ -26,8 +26,8 @@ router.post('/', parser.single('image'),isAuthenticated,csrfProtection, async(re
       newPost = new Post({
         userId: userId,
         img: {
-          public_id: result.public_id,
-          url: result.secure_url
+          public_id: result.filename,
+          url: result.path
         },
         desc: desc
       });
@@ -52,7 +52,14 @@ router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     try {
         const post = await  Post.findById(req.params.id);
         if(post.userId === req.session.userId.toString()){
-            await cloudinary.uploader.destroy(post.img.public_id)
+            if(post.img){
+                try {
+                    await cloudinary.uploader.destroy(post.img.public_id);
+                } catch (cloudinaryError) {
+                    console.error('Cloudinary Error:', cloudinaryError);
+                    return res.status(500).json({ message: 'Failed to delete photo', status: 'error' });
+                }
+            }
             await post.deleteOne();
             res.status(200).json({message:"Post has been deleted!", status:"success"});
         }
