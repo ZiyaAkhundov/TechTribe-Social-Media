@@ -104,9 +104,9 @@ router.put('/picture', parser.single('image'), csrfProtection, isAuthenticated, 
         console.log('req.file: '+req.file)
         if (req.file) {
             const result = req.file;
-            console.log("result: "+ result)
-            console.log('req.public_id: '+result.public_id)
-            console.log('req.secure_url: '+result.secure_url)
+            console.log("result: " + JSON.stringify(result));
+            console.log('req.public_id: '+JSON.stringify(result.public_id))
+            console.log('req.secure_url: '+JSON.stringify(result.secure_url))
             await currentUser.updateOne({
                 $set: {
                     picture:
