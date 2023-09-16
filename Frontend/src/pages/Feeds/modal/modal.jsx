@@ -55,6 +55,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
           },
         }
       );
+      console.log(response)
       const result = JSON.parse(response)
       if (result.status == "success") {
         toast.success(result.message);
