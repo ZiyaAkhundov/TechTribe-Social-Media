@@ -26,7 +26,6 @@ router.post('/', parser.single('image'), isAuthenticated, csrfProtection, async 
         if (req.file) {
             const result = req.file;
             
-            // Upload the image to Cloudinary
             const cloudinaryResponse = await cloudinary.uploader.upload(result.path);
             
             newPost = new Post({

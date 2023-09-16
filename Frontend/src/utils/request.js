@@ -1,12 +1,15 @@
 // utils/request.js
 
-export const request = async (url, data = false, method = 'GET') => {
+export const request = async (url, data = false,customHeaders = {}, method = 'GET') => {
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+  };
+
+  const headers = customHeaders ? customHeaders : defaultHeaders;
   const options = {
     method,
     credentials: "include",
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: headers
   };
 
   if (data && (method === 'POST' || method === 'PUT')) {
@@ -26,7 +29,8 @@ export const request = async (url, data = false, method = 'GET') => {
   }
 };
 
-export const post = (url, data) => request(url, data, 'POST');
-export const put = (url, data) => request(url, data, 'PUT');
-export const del = (url, data) => request(url, data, 'DELETE');
-export const get = (url) => request(url, false, 'GET');
+export const post = (url, data, customHeaders = {}) => request(url, data, customHeaders, 'POST');
+export const put = (url, data, customHeaders = {}) => request(url, data, customHeaders, 'PUT');
+export const del = (url, data, customHeaders = {}) => request(url, data, customHeaders, 'DELETE');
+export const get = (url, customHeaders = {}) => request(url, false, customHeaders, 'GET');
+
