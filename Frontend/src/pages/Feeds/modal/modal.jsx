@@ -1,4 +1,4 @@
-import {useEffect, useRef,useState} from 'react';
+import {useRef,useState} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -17,7 +17,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
   const textInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
-  const [image, setImage] = useEffect();
+  const [image, setImage] = useState();
   const { user } = useSelector((state) => state.auth);
   const handleButtonClick = () => {
     textInputRef.current.focus();
