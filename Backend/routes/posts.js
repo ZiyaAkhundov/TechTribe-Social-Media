@@ -59,8 +59,10 @@ router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
         const post = await  Post.findById(req.params.id);
         if(post.userId === req.session.userId.toString()){
             if(post.img.public_id){
+                const public_id = post.img.public_id;
+                console.log(true)
                 try {
-                    await cloudinary.uploader.destroy(post.img.public_id);
+                    await cloudinary.uploader.destroy(public_id);
                 } catch (cloudinaryError) {
                     console.error('Cloudinary Error:', cloudinaryError);
                     return res.status(500).json({ message: 'Failed to delete photo', status: 'error' });
