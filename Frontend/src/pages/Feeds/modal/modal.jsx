@@ -55,8 +55,9 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
           },
         }
       );
-      if (response.status == "success") {
-        toast.success(response.message);
+      const result = JSON.parse(response)
+      if (result.status == "success") {
+        toast.success(result.message);
 
         const getPost = await getPosts(1);
         if (getPost.status == "success") {
@@ -67,7 +68,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
         setFile(null);
         handleClose();
       } else {
-        toast.error(response.message);
+        toast.error(result.message);
       }
     } catch (err) {
       toast.error(err);
