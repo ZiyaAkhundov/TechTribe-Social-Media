@@ -58,7 +58,7 @@ router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     try {
         const post = await  Post.findById(req.params.id);
         if(post.userId === req.session.userId.toString()){
-            if(post.img){
+            if(!post.img == null && !post.img == undefined){
                 try {
                     await cloudinary.uploader.destroy(post.img.public_id);
                 } catch (cloudinaryError) {

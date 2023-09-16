@@ -16,7 +16,6 @@ import { NavLink } from 'react-router-dom';
 
 const ITEM_HEIGHT = 20;
 export default function Comment({comment,postId,setComments,setCommentsLength,handleReport,handleOpenReportModal}) {
-    const PF = import.meta.env.VITE_API_IMAGE_URL;
     const { user } = useSelector((state) => state.auth);
     const [commentIsLike, setCommentIsLike] = useState(false);
     const [commentLikeLength, setCommentLikeLength] = useState(0);
@@ -96,7 +95,7 @@ export default function Comment({comment,postId,setComments,setCommentsLength,ha
             className="flex justify-start items-center"
           >
             <Avatar
-              src={comment.userImg && PF + comment.userImg}
+              src={comment.userImg && comment.userImg.url}
               sx={{ height: 30, width: 30 }}
               className="rounded-full border"
             ></Avatar>

@@ -14,7 +14,6 @@ import {ReplyDelete,replyCommentLike} from "../../../../../services/Posts"
 
 const ITEM_HEIGHT = 20;
 export default function Replies({commentreply,postId,setComments,commentId,handleOpenReportModal,handleReport}) {
-    const PF = import.meta.env.VITE_API_IMAGE_URL;
     const { user } = useSelector((state) => state.auth);
     const [commentLikeLength, setCommentLikeLength] = useState(commentreply.commentLikes.length);
     const [commentIsLike, setCommentIsLike] = useState(false);
@@ -69,7 +68,7 @@ export default function Replies({commentreply,postId,setComments,commentId,handl
           className="flex justify-start items-center"
         >
           <Avatar
-            src={commentreply.userPicture && PF + commentreply.userPicture}
+            src={commentreply.userPicture && commentreply.userPicture.url}
             sx={{ height: 30, width: 30 }}
             className="rounded-full border"
           ></Avatar>
