@@ -28,7 +28,7 @@ function App() {
   const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     setLoading(true);
-    axios.get('https://techtribe-api.onrender.com/auth/user-data', { withCredentials: true })
+    axios.get(`${import.meta.env.VITE_URL}/auth/user-data`, { withCredentials: true })
       .then(response => {
             dispatch(login(response.data)); 
       })

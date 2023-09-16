@@ -25,7 +25,7 @@ const port =5000;
 dotenv.config()
 
 const corsOptions = {
-    origin: 'https://techtribe-social.netlify.app', 
+    origin: process.env.CORS_URL_OPTION, 
     credentials: true, 
   };
   

@@ -41,10 +41,7 @@ export default function modal({open,setLoader,handleClose}) {
 
         try {
             handleClose()
-            const uploadResponse = await axios.post('https://techtribe-api.onrender.com/users/picture', file, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            const uploadResponse = await axios.put(`${import.meta.env.VITE_API_URL}/users/picture`, file, {
                 withCredentials: true,
             });
             getData();
