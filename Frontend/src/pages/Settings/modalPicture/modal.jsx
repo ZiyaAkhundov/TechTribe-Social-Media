@@ -35,6 +35,7 @@ export default function modal({open,setLoader,handleClose}) {
         setLoader(true);
         const formData = new FormData();
         formData.append('image', selectedFile);
+        console.log(formData)
 
         try {
             handleClose()
