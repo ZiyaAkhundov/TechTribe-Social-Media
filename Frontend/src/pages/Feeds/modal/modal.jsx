@@ -45,7 +45,16 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
     formData.append('desc', textInputRef.current.value);
     
     try {
-      const response = await createPost(formData);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/posts/`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       if (response.status == "success") {
         toast.success(response.message);
 

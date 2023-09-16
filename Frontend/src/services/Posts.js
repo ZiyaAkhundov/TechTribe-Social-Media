@@ -19,7 +19,7 @@ export const getPosts = async (limit) => {
 
   export const createPost = async (data) => {
     try {
-      const response = await post('posts/',data,true)
+      const response = await post('posts/',data)
       return response;
     } catch (error) {
       throw error;
