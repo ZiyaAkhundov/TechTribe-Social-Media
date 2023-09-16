@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 3600000,
+      maxAge: 3600000 * 7,
       domain: 'techtribe-api.onrender.com',
       path: '/',
      });
@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 3600000,
+      maxAge: 3600000 * 7,
       domain: 'techtribe-api.onrender.com',
       path: '/',
     });

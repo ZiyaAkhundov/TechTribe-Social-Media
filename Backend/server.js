@@ -79,7 +79,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: true,
-      maxAge: 3600000,
+      maxAge: 3600000 * 7,
       sameSite: 'none',
       domain:'techtribe-api.onrender.com'
     },
