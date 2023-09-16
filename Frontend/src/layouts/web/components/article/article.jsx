@@ -197,7 +197,7 @@ export default function post(props) {
             </h3>
           </div>
           <div className="context-img">
-            {props.post.img && <img src={PIC + props.post.img.url} alt="" />}
+            {props.post.img && <img src={props.post.img.url} alt="" />}
           </div>
           <div className="article-actions">
             <div className="btns flex">
