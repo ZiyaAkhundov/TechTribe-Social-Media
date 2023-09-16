@@ -23,6 +23,7 @@ export default function Comment({comment,postId,setComments,setCommentsLength,ha
     const [showReply, setShowReply] = useState(false)
     const [reply, setReply] = useState(false)
     const [replyContext, setReplyContext] = useState('')
+    const[disable,setDisable] = useState(false)
     const formatter = buildFormatter(EnStrings);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openddown = Boolean(anchorEl);
@@ -33,11 +34,13 @@ export default function Comment({comment,postId,setComments,setCommentsLength,ha
       setAnchorEl(null);
     };
     const sendReply = async (id) => {
+      setDisable(true)
       const response = await ReplyComment({ postId: postId, commentId: id,context: replyContext });
       if(response.status == 'success'){
         setComments(response.data)
         setCommentsLength(response.data.length)
         setReplyContext('')
+        setDisable(false)
         return
       }
       toast.error(response.message)
@@ -191,8 +194,9 @@ export default function Comment({comment,postId,setComments,setCommentsLength,ha
                 placeholder="Reply comment"
               />
               <button
-                className="px-2 py-1 bg-blue-500 text-white rounded mx-1"
+                className={`px-2 py-1 bg-blue-500 text-white rounded mx-1 ${disable ? 'opacity-60':null}`}
                 onClick={() => sendReply(comment._id)}
+                disabled={disable}
               >
                 send
               </button>

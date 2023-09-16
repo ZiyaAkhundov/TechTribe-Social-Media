@@ -16,6 +16,7 @@ import axios from 'axios'
 export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPost,setLimit}) {
   const textInputRef = useRef(null);
   const fileInputRef = useRef(null);
+  const[disable,setDisable] = useState(false)
   const [file, setFile] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const handleButtonClick = () => {
@@ -31,6 +32,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setDisable(true)
     
     const formData = new FormData();
     
@@ -57,7 +59,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
       );
       if (response.data.status == "success") {
         toast.success(response.data.message);
-
+        setDisable(false)
         const getPost = await getPosts(1);
         if (getPost.status == "success") {
           setPosts(getPost.data);
@@ -67,9 +69,11 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
         setFile(null);
         handleClose();
       } else {
+        setDisable(false)
         toast.error(response.data.message);
       }
     } catch (err) {
+      setDisable(false)
       toast.error(err);
     }
 };
@@ -90,7 +94,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
                 type="text"
                 placeholder="Write a post."
               />
-              <Button type="submit" variant="contained" height="10px">
+              <Button disabled={disable} type="submit" variant="contained" height="10px" className={`${disable ? 'opacity-60' : null}`}>
                 Share
               </Button>
             </div>

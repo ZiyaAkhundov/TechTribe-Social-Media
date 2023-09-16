@@ -29,6 +29,7 @@ export default function articleModal({
   const PF = import.meta.env.VITE_API_IMAGE_URL;
   const [comments,setComments] = useState(data.comments)
   const [value,setValue] = useState("");
+  const[disable,setDisable] = useState(false)
 
   const handleLike = async () => {
     try {
@@ -41,12 +42,14 @@ export default function articleModal({
   };
 
   const handleComment = async() => {
+    setDisable(true)
     if(value){
       const response = await PostComment({postId: data._id,context:value})
       if(response.status == "success"){
         setComments(response.data)
         setCommentsLength(prev=> prev+1)
         setValue("")
+        setDisable(false)
       }
       else{
         toast.error(response.message)
@@ -141,7 +144,7 @@ export default function articleModal({
                   onChange={(e) => setValue(e.target.value)}
                   onKeyUp={handleKeyUp}
                 />
-                <button onClick={handleComment}>Post</button>
+                <button onClick={handleComment} disabled={disable} className={disabled ? 'opacity-60':null}>Post</button>
               </div>
             </div>
           </div>

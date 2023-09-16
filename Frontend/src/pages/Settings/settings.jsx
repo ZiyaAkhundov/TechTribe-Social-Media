@@ -16,6 +16,7 @@ export default function settings() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [loader,setLoader] = useState(false);
+  const[disable,setDisable] = useState(false)
 
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -61,16 +62,20 @@ export default function settings() {
             email: user.email
           }} onSubmit={async (values) => {
             try {
+              setDisable(true)
               const response = await changeUserData(values);
               if (response.status == 'success') {
                 dispatch(login(response.data))
                 toast.success(response.message);
+                setDisable(false)
               }
               else {
                 toast.error(response.message)
+                setDisable(false)
               }
 
             } catch (error) {
+              setDisable(false)
               toast.error(error.message)
             }
           }}
@@ -92,7 +97,7 @@ export default function settings() {
                   </div>
                 </div>
                 <div className='m-3 flex justify-end'>
-                  <button type='submit' className='btn px-3 py-1 bg-green-700 text-white rounded-md disabled:bg-green-500'>Save</button>
+                  <button type='submit' disabled={disable} className='btn px-3 py-1 bg-green-700 text-white rounded-md disabled:bg-green-500'>Save</button>
                 </div>
               </div>
             </Form>
@@ -104,16 +109,20 @@ export default function settings() {
             repeatNewPassword: ''
           }} onSubmit={async (values, { resetForm }) => {
             try {
+              setDisable(true)
               const response = await changeUserData(values);
               if (response.status == 'success') {
                 dispatch(login(response.data))
                 toast.success(response.message);
                 resetForm();
+                setDisable(false)
               }
               else {
+                setDisable(false)
                 toast.error(response.message)
               }
             } catch (error) {
+              setDisable(false)
               toast.error(error.message)
             }
           }}
@@ -136,7 +145,7 @@ export default function settings() {
                   </div>
                 </div>
                 <div className='mx-3 flex justify-end'>
-                  <button type='submit' className='btn px-3 py-1 cursor-pointer bg-blue-700 text-white rounded-md disabled:bg-blue-500 disabled:cursor-default'>Change Password</button>
+                  <button type='submit' disabled={disable} className='btn px-3 py-1 cursor-pointer bg-blue-700 text-white rounded-md disabled:bg-blue-500 disabled:cursor-default'>Change Password</button>
                 </div>
               </div>
             </Form>

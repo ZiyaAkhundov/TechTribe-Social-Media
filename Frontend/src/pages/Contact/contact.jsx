@@ -7,11 +7,14 @@ export default function contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const[disable,setDisable] = useState(false)
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setDisable(true)
     const response = await createContact({name,email,message});
     if(response.status == "success"){
+      setDisable(false)
       toast.success(response.message)
       setName('');setEmail('');setMessage('')
     }
@@ -58,7 +61,7 @@ export default function contact() {
             multiline
             rows={4}
           />
-          <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+          <Button variant="contained" disabled={disable} type="submit" sx={{ mt: 2 }} className={`${disable ? 'opacity-60': null}`}>
             Submit
           </Button>
         </form>

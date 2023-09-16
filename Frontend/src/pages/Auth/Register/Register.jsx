@@ -9,6 +9,7 @@ import '../assets/css/auth.css'
 
 export default function Register() {
   let navigate = useNavigate();
+  const[disable,setDisable] = useState(false)
   return (
     <div className="limiter">
       <div className="container-login100">
@@ -26,13 +27,16 @@ export default function Register() {
             try {
               const response = await RegisterUser(values);
               if (response.status == "success") {
+                setDisable(true)
                 toast.success(response.message)
                 navigate('/auth/login');
               }
               else {
+                setDisable(false)
                 toast.error(response.message)
               }
             } catch (error) {
+              setDisable(false)
               toast.error(error.message)
             }
           }}
@@ -68,7 +72,7 @@ export default function Register() {
                     <p>Have an account? Sign in</p>
                   </NavLink>
                   <div className="container-login100-form-btn">
-                    <button type='submit' disabled={!props.isValid || !props.dirty} className="login100-form-btn bg-auth disabled:bg-violet-600 disabled:cursor-auto">
+                    <button type='submit' disabled={!props.isValid || !props.dirty || disable} className="login100-form-btn bg-auth disabled:bg-violet-500 disabled:cursor-auto">
                       Sign up
                     </button>
                   </div>

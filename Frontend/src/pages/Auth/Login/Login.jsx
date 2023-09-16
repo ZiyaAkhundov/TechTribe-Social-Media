@@ -13,6 +13,7 @@ import '../assets/css/auth.css'
 export default function Login() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
+  const[disable,setDisable] = useState(false)
   return (
     <div className="limiter">
       <div className="container-login100">
@@ -27,17 +28,21 @@ export default function Login() {
             password: ''
           }} onSubmit={async (values) => {
             try {
+              setDisable(true)
               const response = await LoginUser(values);
               if (response.success) {
                 dispatch(login(response))
                 toast.success("Login successful")
                 navigate('../');
+                setDisable(false)
               }
               else {
+                setDisable(false)
                 toast.error(response.message)
               }
 
             } catch (error) {
+              setDisable(false)
               toast.error('Something went wrong')
             }
           }}
@@ -65,7 +70,7 @@ export default function Login() {
                     <p>Don’t have an account? Sign up</p>
                   </NavLink>
                   <div className="container-login100-form-btn flex items-center">
-                    <button type='submit' disabled={!props.isValid || !props.dirty} className="login100-form-btn bg-auth disabled:bg-violet-600 disabled:cursor-auto">
+                    <button type='submit' disabled={!props.isValid || !props.dirty || disable} className="login100-form-btn bg-auth disabled:bg-violet-500 disabled:cursor-auto">
                       Sign in
                     </button>
                   </div>

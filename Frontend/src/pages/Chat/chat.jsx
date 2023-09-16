@@ -20,6 +20,7 @@ export default function chat({func}) {
    const roomId = useParams().id;
    const [receiverUser,setReceiverUser] = useState()
    const [showPicker, setShowPicker] = useState(false);
+   const[disable,setDisable] = useState(false)
 
    const [messages,setMessages] = useState([])
    const [newMessage, setNewMessage] = useState('');
@@ -104,7 +105,7 @@ export default function chat({func}) {
 
     const handleSubmit = async(e)=>{
       e.preventDefault();
-      
+      setDisable(true)
       const message = {
          sender:user.id,
          text: newMessage,
@@ -120,10 +121,12 @@ export default function chat({func}) {
       try {
          const response = await sendMessage(message)
          if(response.status == "success"){
+          setDisable(false)
             setMessages([...messages,response.data])
             setNewMessage('')
          }
       } catch (error) {
+        setDisable(false)
          console.log(error)
       }
     }
@@ -268,7 +271,8 @@ export default function chat({func}) {
                   <button
                     type="submit"
                     onClick={handleSubmit}
-                    className="inline-flex items-center justify-center rounded-lg px-1 py-1 sm:px-4 sm:py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
+                    disabled={disable}
+                    className="inline-flex items-center justify-center rounded-lg px-1 py-1 sm:px-4 sm:py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 disabled:bg-blue-300 focus:outline-none"
                   >
                     <span className="font-bold hidden sm:flex">Send</span>
                     <svg
