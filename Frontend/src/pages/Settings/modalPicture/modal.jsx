@@ -51,10 +51,10 @@ export default function modal({open,setLoader,handleClose}) {
             if (uploadResponse.status === "success") {
               toast.success("Photo Successfully Uploaded");
               setLoader(false);
+              getData();
             } else {
               return toast.error(uploadResponse.message);
             }
-            getData();
 
         } catch (err) {
             console.error(err);
