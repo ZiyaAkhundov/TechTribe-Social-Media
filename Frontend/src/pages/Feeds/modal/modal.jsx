@@ -31,21 +31,21 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let formData;
+    
+    const formData = new FormData();
+    
     if (file) {
       if (!file.type.startsWith("image/")) {
         return toast.error("Invalid File Type. Please select a valid image file.");
-    }
-      formData = new FormData();
+      }
       formData.append('image', file);
     }
-    const newPost = {
-      userId: user.id,
-      desc: textInputRef.current.value,
-      image: formData && formData,
-    };
+    
+    formData.append('userId', user.id);
+    formData.append('desc', textInputRef.current.value);
+    
     try {
-      const response = await createPost(newPost);
+      const response = await createPost(formData);
       if (response.status == "success") {
         toast.success(response.message);
 
@@ -63,7 +63,8 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
     } catch (err) {
       toast.error(err);
     }
-  };
+};
+
   return (
     <div>
       <Modal open={open} onClose={handleClose} className="modal overflow-y-auto">

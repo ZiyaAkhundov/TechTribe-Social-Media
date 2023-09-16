@@ -13,39 +13,47 @@ const csrfProtection = require('../middleware/csrfProtection')
 dotenv.config()
 const parser = multer({ storage: storage });
 //create a post
-router.post('/', parser.single('image'),isAuthenticated,csrfProtection, async(req,res)=>{
-    const { userId, desc, image } = req.body
+router.post('/', parser.single('image'), isAuthenticated, csrfProtection, async (req, res) => {
+    const { userId, desc } = req.body;
+
     if (userId != req.session.userId.toString()) {
-        return res.status(403).json({ message: "You are not permission to perform this action!", status: "error" })
+        return res.status(403).json({ message: "You are not permission to perform this action!", status: "error" });
     }
+
     try {
         let newPost;
-    if (req.file) {
-      const result = req.file;
+        
+        if (req.file) {
+            const result = req.file;
+            
+            // Upload the image to Cloudinary
+            const cloudinaryResponse = await cloudinary.uploader.upload(result.path);
+            
+            newPost = new Post({
+                userId: userId,
+                img: {
+                    public_id: cloudinaryResponse.filename,
+                    url: cloudinaryResponse.path
+                },
+                desc: desc
+            });
+        } else if (desc) {
+            newPost = new Post({
+                userId: userId,
+                desc: desc
+            });
+        } else {
+            return res.status(400).json("Please write text or choose an image!");
+        }
 
-      newPost = new Post({
-        userId: userId,
-        img: {
-          public_id: result.filename,
-          url: result.path
-        },
-        desc: desc
-      });
-    } else if (desc) {
-      newPost = new Post({
-        userId: userId,
-        desc: desc
-      });
-    } else {
-      return res.status(400).json("Please write text or choose image!");
-    }
-
-    await newPost.save();
-    res.status(200).json({ message: "Post created successfully!", status: "success" });
+        await newPost.save();
+        res.status(200).json({ message: "Post created successfully!", status: "success" });
     } catch (err) {
-        res.status(500).json(err)
+        console.error(err);
+        res.status(500).json(err);
     }
-})
+});
+
 
 //delete a post
 router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
