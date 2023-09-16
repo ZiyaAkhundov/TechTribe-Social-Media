@@ -13,7 +13,6 @@ cloudinary.config({
       folder: 'uploads',
       format: async (req, file) => {
         // Only allow images
-        console.log(file)
         if (!file.mimetype.startsWith('image')) {
           return Promise.reject(new Error('Not an image'));
         }

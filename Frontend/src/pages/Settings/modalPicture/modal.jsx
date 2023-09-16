@@ -35,24 +35,27 @@ export default function modal({open,setLoader,handleClose}) {
         setLoader(true);
         const formData = new FormData();
         formData.append('image', selectedFile);
-        console.log(formData)
 
         try {
             handleClose()
-            const uploadResponse = await axios.put(`${import.meta.env.VITE_API_URL}/users/picture`, formData, {
+            const uploadResponse = await axios.put(
+              `${import.meta.env.VITE_API_URL}/users/picture`,
+              formData,
+              {
                 withCredentials: true,
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Make sure to set the correct content type
+                  "Content-Type": "multipart/form-data", // Make sure to set the correct content type
                 },
-            });
+              }
+            );
+            if (uploadResponse.status === "success") {
+              toast.success("Photo Successfully Uploaded");
+              setLoader(false);
+            } else {
+              return toast.error(uploadResponse.message);
+            }
             getData();
 
-            if (uploadResponse.status === "success") {
-                toast.success("Photo Successfully Uploaded");
-                setLoader(false);
-            } else {
-                toast.error(uploadResponse.message);
-            }
         } catch (err) {
             console.error(err);
         }
