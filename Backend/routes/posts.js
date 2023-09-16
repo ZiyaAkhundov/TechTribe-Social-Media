@@ -60,6 +60,7 @@ router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
         if(post.userId === req.session.userId.toString()){
             if(!post.img == null && !post.img == undefined){
                 try {
+                    console.log('public_id' + post.img.public_id)
                     await cloudinary.uploader.destroy(post.img.public_id);
                 } catch (cloudinaryError) {
                     console.error('Cloudinary Error:', cloudinaryError);
