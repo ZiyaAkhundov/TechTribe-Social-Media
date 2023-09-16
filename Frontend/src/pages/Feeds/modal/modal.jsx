@@ -59,7 +59,6 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
       );
       if (response.data.status == "success") {
         toast.success(response.data.message);
-        setDisable(false)
         const getPost = await getPosts(1);
         if (getPost.status == "success") {
           setPosts(getPost.data);
@@ -68,6 +67,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
         }
         setFile(null);
         handleClose();
+        setDisable(false)
       } else {
         setDisable(false)
         toast.error(response.data.message);
