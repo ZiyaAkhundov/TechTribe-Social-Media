@@ -4,7 +4,7 @@ export const request = async (url, data = false,customHeaders = {}, method = 'GE
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
-
+  console.log(customHeaders)
   const headers = customHeaders ? customHeaders : defaultHeaders;
   const options = {
     method,
