@@ -6,7 +6,7 @@ const csrfTokenMiddleware = (req, res, next) => {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
-    maxAge: 3600000 * 7,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     domain: 'techtribe-api.onrender.com',
     path: '/',
    });
