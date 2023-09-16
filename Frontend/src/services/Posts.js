@@ -18,11 +18,8 @@ export const getPosts = async (limit) => {
   };
 
   export const createPost = async (data) => {
-    const customHeaders = {
-      'Content-Type': 'multipart/form-data'
-    };
     try {
-      const response = await post('posts/',data,customHeaders)
+      const response = await post('posts/',data,true)
       return response;
     } catch (error) {
       throw error;
