@@ -25,14 +25,13 @@ router.post('/', parser.single('image'), isAuthenticated, csrfProtection, async 
         
         if (req.file) {
             const result = req.file;
-            
-            const cloudinaryResponse = await cloudinary.uploader.upload(result.path);
+            console.log(JSON.stringify(result))
             
             newPost = new Post({
                 userId: userId,
                 img: {
-                    public_id: cloudinaryResponse.filename,
-                    url: cloudinaryResponse.path
+                    public_id: result.filename,
+                    url: result.path
                 },
                 desc: desc
             });
