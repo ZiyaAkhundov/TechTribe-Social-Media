@@ -48,13 +48,13 @@ export default function modal({open,setLoader,handleClose}) {
                 },
               }
             );
-            if (uploadResponse.status === "success") {
+            if (uploadResponse.data.status === "success") {
                 console.log(true)
                 setLoader(false)
                 getData()
               toast.success("Photo Successfully Uploaded");
             } else {
-              return toast.error(uploadResponse.message);
+              return toast.error(uploadResponse.data.message);
             }
 
         } catch (err) {
