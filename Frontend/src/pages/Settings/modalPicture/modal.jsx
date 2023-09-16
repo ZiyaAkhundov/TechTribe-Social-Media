@@ -13,7 +13,6 @@ import {userData} from "../../../services/Auth"
 
 export default function modal({open,setLoader,handleClose}) {
     const { user } = useSelector((state) => state.auth);
-    const [file, setFile] = useState(null);
     const dispatch = useDispatch();
 
     const fileInputRef = useRef(null);
@@ -31,25 +30,25 @@ export default function modal({open,setLoader,handleClose}) {
     };
 
     const handleFileChange = async (event) => {
-        setFile(event.target.files[0])
+        const selectedFile = event.target.files[0]; 
+        if (!selectedFile) return;
         setLoader(true);
-        const reader = new FileReader();
-        reader.readAsDataURL(event.target.files[0]);
-        reader.onloadend = () => {
-            setFile(reader.result);
-        };
+        const formData = new FormData();
+        formData.append('image', selectedFile);
 
         try {
             handleClose()
-            const uploadResponse = await axios.put(`${import.meta.env.VITE_API_URL}/users/picture`, file, {
+            const uploadResponse = await axios.put(`${import.meta.env.VITE_API_URL}/users/picture`, formData, {
                 withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Make sure to set the correct content type
+                },
             });
             getData();
 
             if (uploadResponse.status === "success") {
                 toast.success("Photo Successfully Uploaded");
                 setLoader(false);
-                setImage(null)
             } else {
                 toast.error(uploadResponse.message);
             }

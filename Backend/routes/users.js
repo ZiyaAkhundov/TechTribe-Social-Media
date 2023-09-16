@@ -101,10 +101,10 @@ router.put('/picture', parser.single('image'), csrfProtection, isAuthenticated, 
     try {
         const currentUser = await User.findById(req.session.userId);
         if (!currentUser) return res.status(404).json({ message: "User not found!", status: "error" })
+        console.log(req.file)
         console.log(req.body)
         if (req.file) {
             const result = req.file;
-            console.log(result)
             await currentUser.updateOne({
                 $set: {
                     picture:
