@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux'
 import Modal from './modalPicture/modal'
 
 export default function settings() {
-  const PF= import.meta.env.VITE_API_IMAGE_URL
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -28,7 +27,7 @@ export default function settings() {
         <div className="settings-header">
           <div className="settings-image">
             <div onClick={handleOpen} className='relative overflow-hidden'>
-              <Avatar sx={{ width: 200, height: 200 }} src={user.picture ? PF + user.picture : null} className='cursor-pointer border s-profile-picture' title="Change Profile Picture"></Avatar>
+              <Avatar sx={{ width: 200, height: 200 }} src={user.picture ?  user.picture.url : null} className='cursor-pointer border s-profile-picture' title="Change Profile Picture"></Avatar>
               {loader ? (
                 <div className='absolute top-0 left-0 w-full h-full spinner-container'>
                   <div className="spinner center absolute top-0 left-0">

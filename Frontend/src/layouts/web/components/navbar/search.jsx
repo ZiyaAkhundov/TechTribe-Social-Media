@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 export default function search() {
-  const PIC =import.meta.env.VITE_API_IMAGE_URL
   const { user } = useSelector((state) => state.auth);
     const [searchValue,setSearchValue]= useState([]);
     let timeoutId
@@ -48,7 +47,7 @@ if(!user) return
                 onClick={() => setSearchValue([])}
               >
                 <Avatar
-                  src={user.picture && PIC + user.picture}
+                  src={user.picture && user.picture.url}
                   sx={{ height: 40, width: 40 }}
                   alt=""
                   className="border search-picture"

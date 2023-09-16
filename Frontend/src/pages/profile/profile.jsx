@@ -45,7 +45,6 @@ export function Profile() {
   const [userFollowings , setUserFollowings] = useState([])
   const [following, setFollowing] = useState(false)
   const [type,setType] = useState(0); //it is used for the modal to detect to get follower or following data
-  const PIC =import.meta.env.VITE_API_IMAGE_URL
   const username = useParams().username
   const { user } = useSelector((state) => state.auth);
 
@@ -139,7 +138,7 @@ export function Profile() {
                   <button className="change-img">
                     {User ? (
                       <Avatar
-                        src={User.picture ? PIC + User.picture : null}
+                        src={User.picture ? User.picture.url : null}
                         alt=""
                         sx={{ width: 140, height: 140 }}
                         className="border profile-pic"

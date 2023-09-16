@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('../models/User');
 const Post = require('../models/Post');
 const mongoose = require('mongoose');
+const { cloudinary, storage } = require('../utils/cloudinary');
+const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 const addUsernameAndUserPicture = require('../functions/addUsernameAndUserPicture')
@@ -9,59 +11,48 @@ const commentsWFData = require('../functions/commentsWFData')
 const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')
 dotenv.config()
-
+const parser = multer({ storage: storage });
 //create a post
-router.post('/', isAuthenticated, async(req,res)=>{
-    if (req.body.userId != req.session.userId.toString()) {
+router.post('/', parser.single('image'),isAuthenticated,csrfProtection, async(req,res)=>{
+    const { userId, desc, image } = req.body
+    if (userId != req.session.userId.toString()) {
         return res.status(403).json({ message: "You are not permission to perform this action!", status: "error" })
     }
-    if(req.body.img){
-        const ext = (req.body.img)
-        .split('.')
-        .filter(Boolean)
-        .slice(-1)
-        .join('.')
-        if (ext != "png" && ext != "jpeg" && ext != "jpg") {
-            return res.status(400).json({ message: "Invalid file type. Only PNG and JPEG allowed.", status: "error" });
-        }
+    try {
+        let newPost;
+    if (req.file) {
+      const result = req.file;
+
+      newPost = new Post({
+        userId: userId,
+        img: {
+          public_id: result.public_id,
+          url: result.secure_url
+        },
+        desc: desc
+      });
+    } else if (desc) {
+      newPost = new Post({
+        userId: userId,
+        desc: desc
+      });
+    } else {
+      return res.status(400).json("Please write text or choose image!");
     }
-    
-    if(req.body.desc || req.body.img){
-        const newPost =  new Post(req.body)
-            try {
-                await newPost.save();
-                res.status(200).json({ message: "Post created succesfully!", status: "success" });
-            } catch (err) {
-                res.status(500).json(err)
-            }
-    }
-    else{
-        return res.status(400).json("Please write text or choose image!")
+
+    await newPost.save();
+    res.status(200).json({ message: "Post created successfully!", status: "success" });
+    } catch (err) {
+        res.status(500).json(err)
     }
 })
-
-//update a post
-// router.put('/:id',isAuthenticated, async(req,res)=>{
-//     try {
-//         const post = await  Post.findById(req.params.id);
-//         if(post.userId === req.body.userId){
-//             await post.updateOne({$set: req.body});
-//             res.status(200).json("Post has been updated!");
-//         }
-//         else{
-//             res.status(403).json("You can't update");
-//         }
-        
-//     } catch (err){
-//         res.status(500).json(err)
-//     }
-// })
 
 //delete a post
 router.delete('/:id',isAuthenticated,csrfProtection, async(req,res)=>{
     try {
         const post = await  Post.findById(req.params.id);
         if(post.userId === req.session.userId.toString()){
+            await cloudinary.uploader.destroy(post.img.public_id)
             await post.deleteOne();
             res.status(200).json({message:"Post has been deleted!", status:"success"});
         }

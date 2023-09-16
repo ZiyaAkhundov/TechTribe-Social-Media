@@ -20,7 +20,6 @@ const MessageRoutes = require("./routes/message.js")
 const ReportRoutes = require("./routes/report.js")
 const ContactRoute = require('./routes/contact')
 
-
 const port =5000;
 
 dotenv.config()
@@ -87,7 +86,6 @@ app.use(
     name: 'ps_session',
   })
 );
-app.use("/img",express.static(path.join(__dirname, "public/img")))
 
 app.use("/auth", cors(corsOptions), authRoutes);
 app.use("/users", cors(corsOptions), userRoutes);

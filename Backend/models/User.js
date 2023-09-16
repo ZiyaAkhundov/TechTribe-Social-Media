@@ -22,8 +22,12 @@ const UserSchema = new mongoose.Schema(
             unique: true,
         },
         picture: {
-            type: String,
-            default: '',
+            public_id: {
+                type: String
+            },
+            url:{
+                type: String
+            }
         },
         followers: {
             type: [String],

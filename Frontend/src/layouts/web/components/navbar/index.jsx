@@ -60,7 +60,7 @@ export default function Navbar({func}) {
             aria-expanded={open ? 'true' : undefined}
           >
             <Typography sx={{ minWidth: 100,marginInline:1 }} className="nav-username">{user.username}</Typography>
-            <Avatar sx={{ width: 32, height: 32 }} src={user.picture ? PF + user.picture : null} className="border"></Avatar>
+            <Avatar sx={{ width: 32, height: 32 }} src={user.picture ? user.picture.url : null} className="border"></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -101,7 +101,7 @@ export default function Navbar({func}) {
       >
         <MenuItem onClick={handleClose}>
           <NavLink to={`/profile/${user.username}`} className='flex items-center'>
-          <Avatar src={user.picture ? PF + user.picture : null} className="border"/> Profile
+          <Avatar src={user.picture ? user.picture.url : null} className="border"/> Profile
           </NavLink>
         </MenuItem>
         <Divider />

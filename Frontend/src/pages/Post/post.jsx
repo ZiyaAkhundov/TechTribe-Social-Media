@@ -59,7 +59,7 @@ export  function Post() {
           <aside className="aside-post max-w-[400px] w-[400px] shadow-lg flex justify-center bg-white h-64 relative top-6 rounded">
         {userData ? <NavLink to={`../profile/${userData.username}`} >
           <div className="post-user py-2 flex flex-col items-center">
-            <Avatar src={PIC+userData.picture} className='h-28 w-28 border post-user-pic'/>
+            <Avatar src={userData.picture && userData.picture.url} className='h-28 w-28 border post-user-pic'/>
             <h3 className='text-4xl overflow-x-auto max-w-[600px] post-user-name'>{userData.username}</h3>
           </div>
           <div className='flex gap-3 justify-center post-user-data'>

@@ -18,7 +18,6 @@ export default function chat({func}) {
    const { user } = useSelector((state) => state.auth);
    const chatBoxRef = useRef(null);
    const roomId = useParams().id;
-   const PIC =import.meta.env.VITE_API_IMAGE_URL
    const [receiverUser,setReceiverUser] = useState()
    const [showPicker, setShowPicker] = useState(false);
 
@@ -178,7 +177,7 @@ export default function chat({func}) {
                     })}
 
                   <img
-                    src={receiverUser.picture && PIC + receiverUser.picture}
+                    src={receiverUser.picture && receiverUser.picture.url}
                     alt=""
                     className="w-10 sm:w-16 h-10 sm:h-16 rounded-full border"
                   />

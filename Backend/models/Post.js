@@ -28,8 +28,12 @@ const PostSchema = new mongoose.Schema(
             require: true
         },
         img: {
-            type: 'string',
-            default: ''
+            public_id: {
+                type: String
+            },
+            url:{
+                type: String
+            }
         },
         desc: {
             type: 'string',

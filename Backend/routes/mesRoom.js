@@ -91,24 +91,4 @@ router.get("/find/room/:roomId",isAuthenticated,csrfProtection, async (req, res)
   }
 });
 
-  //find two users message room
-  // router.get("/find/:firstUser/:secondUser", async (req, res) => {
-  //   const firstUser = req.params.firstUser;
-  //   const secondUser = req.params.secondUser;
-  //   try {
-  //       const findRoom = await Room.findOne({
-  //           $or: [
-  //             { members: [firstUser, secondUser] },
-  //             { members: [secondUser, firstUser] }
-  //           ]
-  //         });
-  //       if(!findRoom){
-  //           res.status(404).json("No Room found");
-  //           return
-  //       }
-  //           res.status(200).json(findRoom);
-  //   } catch (err) {
-  //     res.status(500).send(err);
-  //   }
-  // });
 module.exports =router;

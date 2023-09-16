@@ -2,11 +2,13 @@ const router = require('express').Router();
 const User = require('../models/User');
 const Post = require('../models/Post');
 const bcrypt = require('bcryptjs');
+const { cloudinary, storage } = require('../utils/cloudinary');
 const path= require('path');
 const jwt = require('jsonwebtoken');
 const isAuthenticated =require('../middleware/authentication.js')
 const csrfProtection = require('../middleware/csrfProtection')
 const multer = require('multer')
+const parser = multer({ storage: storage });
 
 async function followWFData(followId) {
     const user = await User.findById(followId);
@@ -20,29 +22,7 @@ async function followWFData(followId) {
   
     return followWithUserData;
   }
-
-const fileFilter = (req, file, cb) => {
-    var filetypes = /jpeg|jpg|png/;
-    var mimetype = filetypes.test(file.mimetype);
-    var extname = filetypes.test(path.extname(file.originalname).toLowerCase()); // Fixed typo here
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
-
-    cb(new Error('Invalid File Type'))
-  };
   
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "public/img");
-    },
-    filename: (req, file, cb) => {
-      cb(null, req.body.name);
-      console.log(true);
-    },
-  });
-  
-  const upload = multer({ storage: storage, fileFilter: fileFilter });
 //update user
 router.put('/update',csrfProtection,isAuthenticated, async(req,res)=>{
         if (req.body.currentPassword && req.body.newPassword && req.body.repeatNewPassword) {
@@ -116,25 +96,24 @@ router.put('/update',csrfProtection,isAuthenticated, async(req,res)=>{
     
 })
 
-//upload photo
-router.post('/upload',csrfProtection,isAuthenticated, async(req,res) =>{
-    upload.single("file")(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-          return res.status(400).json({ error: err.message });
-        } else if (err) {
-          return res.status(400).json({ error: err.message });
-        }
-        res.status(200).json({ message: "File uploaded successfully" });
-      });
-})
-
 //set photo
-router.put('/picture',csrfProtection,isAuthenticated, async(req,res) =>{
+router.put('/picture', parser.single('image'), csrfProtection, isAuthenticated, async (req, res) => {
     try {
         const currentUser = await User.findById(req.session.userId);
-        if(!currentUser) return res.status(404).json({message:"User not found!",status:"error"})
-        await currentUser.updateOne({$set:{picture: req.body.picture}})
-        return res.status(200).json({message:'Photo uploaded successfully', status: 'success'})
+        if (!currentUser) return res.status(404).json({ message: "User not found!", status: "error" })
+        if (req.file) {
+            const result = req.file;
+            await currentUser.updateOne({
+                $set: {
+                    picture:
+                    {
+                        public_id: result.public_id,
+                        url: result.secure_url
+                    }
+                }
+            })
+        }
+        return res.status(200).json({ message: 'Photo uploaded successfully', status: 'success' })
     } catch (error) {
         res.status(500).json(error)
     }
@@ -143,6 +122,7 @@ router.delete('/picture',csrfProtection,isAuthenticated, async(req,res) =>{
     try {
         const currentUser = await User.findById(req.session.userId);
         if(!currentUser) return res.status(404).json({message:"User not found!",status:"error"})
+        await cloudinary.uploader.destroy(currentUser.picture.public_id)
         await currentUser.updateOne({ $unset: { picture: 1 } });
         return res.status(200).json({message:'Photo removed successfully', status: 'success'})
     } catch (error) {

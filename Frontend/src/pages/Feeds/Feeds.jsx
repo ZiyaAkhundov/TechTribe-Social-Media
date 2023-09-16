@@ -82,7 +82,7 @@ useEffect(()=>{
                   <div>
                     <Link to={"/profile/" + user.username}>
                       <Avatar
-                        src={user.picture && PIC + user.picture}
+                        src={user.picture && user.picture.url}
                         sx={{ width: 40, height: 40 }}
                         className="border"
                       />

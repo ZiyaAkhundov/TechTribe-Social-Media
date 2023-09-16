@@ -70,7 +70,7 @@ export default function ModalChat({open,handleClose,setChat}) {
                     onClick={() => createRoom(user.id)}
                   >
                     <Avatar
-                      src={PIC + user.picture}
+                      src={user.picture && user.picture.url}
                       sx={{ height: 40, width: 40 }}
                       alt=""
                       className="border"

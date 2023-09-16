@@ -7,7 +7,6 @@ import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 export default function Message({message,own,recUserPic}) {
     
     const { user } = useSelector((state) => state.auth);
-    const PIC =import.meta.env.VITE_API_IMAGE_URL
     return (
       <>
         {own ? (
@@ -20,7 +19,7 @@ export default function Message({message,own,recUserPic}) {
                 </div>
               </div>
               <img
-                src={PIC + user.picture}
+                src={user.picture.url}
                 alt="My profile"
                 className="w-6 h-6 rounded-full order-2 object-cover border"
               />
@@ -36,7 +35,7 @@ export default function Message({message,own,recUserPic}) {
                 </div>
               </div>
               <img
-                src={PIC + recUserPic}
+                src={recUserPic.url}
                 alt="My profile"
                 className="w-6 h-6 rounded-full order-1 object-cover border"
               />

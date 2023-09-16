@@ -127,7 +127,7 @@ export default function post(props) {
             >
               <div className="profile-img">
                 <Avatar
-                  src={props.post.userPicture && PIC + props.post.userPicture}
+                  src={props.post.userPicture && props.post.userPicture.url}
                   alt=""
                   sx={{ width: 45, height: 45 }}
                   className="border"
@@ -197,7 +197,7 @@ export default function post(props) {
             </h3>
           </div>
           <div className="context-img">
-            {props.post.img && <img src={PIC + props.post.img} alt="" />}
+            {props.post.img && <img src={PIC + props.post.img.url} alt="" />}
           </div>
           <div className="article-actions">
             <div className="btns flex">

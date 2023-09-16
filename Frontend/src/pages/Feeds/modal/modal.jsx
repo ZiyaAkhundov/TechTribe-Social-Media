@@ -1,4 +1,4 @@
-import {useRef,useState} from 'react';
+import {useEffect, useRef,useState} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -16,77 +16,58 @@ import axios from 'axios'
 export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPost,setLimit}) {
   const textInputRef = useRef(null);
   const fileInputRef = useRef(null);
-  const [file,setFile] = useState(null);
+  const [file, setFile] = useState(null);
+  const [image, setImage] = useEffect();
   const { user } = useSelector((state) => state.auth);
-  const PF = import.meta.env.VITE_API_IMAGE_URL
-    const handleButtonClick = () => {
-      textInputRef.current.focus();
-    };
+  const handleButtonClick = () => {
+    textInputRef.current.focus();
+  };
 
-    const handleFileOpen = ()=>{
-      fileInputRef.current.click();
-    }
-    const handleEmpty = ()=>{
-      setFile(null)
-      fileInputRef.current.value = null
-    }
-    function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-  }
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const newPost = {
-        userId: user.id,
-        desc: textInputRef.current.value,
+  const handleFileOpen = () => {
+    fileInputRef.current.click();
+  };
+  const handleEmpty = () => {
+    setFile(null);
+    fileInputRef.current.value = null;
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newPost = {
+      userId: user.id,
+      desc: textInputRef.current.value,
+      image: image && image,
+    };
+    if (file) {
+      if (file.type !== "image/") {
+        return toast.error("Invalid File Type");
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
       };
-      if (file) {
-        if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') {
-          return toast.error("Invalid File Type");
-        }
-        let formData = new FormData();
-        const filename = Date.now() + file.name;
-        formData.append("name", filename);
-        formData.append("file", file);
-        newPost.img = filename;
-        try {
-          const uploadResponse = await axios.post(
-            "https://techtribe-api.onrender.com/users/upload",
-            formData,
-            {
-              headers: {
-                "X-CSRF-Token": getCookie("csrf-token"),
-              },
-              withCredentials: true,
-            }
-          );
-        } catch (error) {
-          if (error.response) {
-            toast.error(error.response.data.error);
-          }
-        }
-      }
+    }
+    try {
+      const response = await createPost(newPost);
+      if (response.status == "success") {
+        toast.success(response.message);
 
-      try {
-        const response = await createPost(newPost);
-        if (response.status == "success") {
-          toast.success(response.message);
-          const getPost = await getPosts(1);
-          if(getPost.status == 'success'){
-            setPosts(getPost.data);
-            setNoPost(false)
-            setLimit(2)
-          }
-          setFile(null);
-          handleClose();
-        } else {
-          toast.error(response.message);
+        const getPost = await getPosts(1);
+        if (getPost.status == "success") {
+          setPosts(getPost.data);
+          setNoPost(false);
+          setLimit(2);
         }
-      } catch (err) {
-        toast.error(err);
+        setFile(null);
+        setImage(null);
+        handleClose();
+      } else {
+        toast.error(response.message);
       }
-    };
+    } catch (err) {
+      toast.error(err);
+    }
+  };
   return (
     <div>
       <Modal open={open} onClose={handleClose} className="modal overflow-y-auto">
@@ -96,7 +77,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
           </div>
           <form className="modal-body" onSubmit={handleSubmit}>
             <div className="modal-body-top">
-              <Avatar src={user.picture && PF + user.picture} sx={{ width: 46, height: 46 }} />
+              <Avatar src={user.picture && user.picture.url} sx={{ width: 46, height: 46 }} />
               <input
                 ref={textInputRef} 
                 className="modal-text-input"
@@ -112,7 +93,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
                 <PhotoOutlinedIcon className="text-blue-500" />
                 <b>Photo</b>
               </button>
-              <input type="file" className="hidden" ref={fileInputRef} onChange={(e)=>setFile(e.target.files[0])}/>
+              <input type="file" accept='image/' className="hidden" ref={fileInputRef} onChange={(e)=>setFile(e.target.files[0])}/>
               <button
                 className="mx-2"
                 type="button"

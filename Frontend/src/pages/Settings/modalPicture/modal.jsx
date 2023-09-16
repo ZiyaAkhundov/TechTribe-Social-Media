@@ -13,6 +13,7 @@ import {userData} from "../../../services/Auth"
 
 export default function modal({open,setLoader,handleClose}) {
     const { user } = useSelector((state) => state.auth);
+    const [file, setFile] = useState(null);
     const dispatch = useDispatch();
 
     const fileInputRef = useRef(null);
@@ -30,28 +31,28 @@ export default function modal({open,setLoader,handleClose}) {
     };
 
     const handleFileChange = async (event) => {
+        setFile(event.target.files[0])
         setLoader(true);
-        const selectedFile = event.target.files[0];
-        let formData = new FormData();
-        const filename = Date.now() + selectedFile.name;
-        formData.append("name", filename);
-        formData.append("file", selectedFile);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setFile(reader.result);
+        };
 
         try {
             handleClose()
-            const uploadResponse = await axios.post('https://techtribe-api.onrender.com/users/upload', formData, {
+            const uploadResponse = await axios.post('https://techtribe-api.onrender.com/users/picture', file, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
                 withCredentials: true,
             });
-            const photoResponse = await setPhoto({ picture: filename });
             getData();
 
-            if (photoResponse.status === "success") {
+            if (uploadResponse.status === "success") {
                 toast.success("Photo Successfully Uploaded");
                 setLoader(false);
-                formData = null;
+                setImage(null)
             } else {
                 toast.error(uploadResponse.message);
             }
