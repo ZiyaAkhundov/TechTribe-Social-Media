@@ -1,7 +1,7 @@
 //Middleware
 const jwt = require('jsonwebtoken');
 const isAuthenticated = (req, res, next) => {
-    const jwtToken = req.cookies.jwtToken;
+    const jwtToken = req.cookies.TechtribeToken;
     if (jwtToken) {
       try {
         const decodedToken = jwt.verify(jwtToken, process.env.ACCESS_TOKEN_SECRET);

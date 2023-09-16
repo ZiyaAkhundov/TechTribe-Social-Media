@@ -83,7 +83,7 @@ app.use(
       sameSite: 'none',
       domain:'techtribe-api.onrender.com'
     },
-    name: 'ps_session',
+    name: 'techtribe_session',
   })
 );
 
@@ -102,9 +102,9 @@ app.use("/contact", cors(corsOptions), ContactRoute);
         console.error('Error destroying session:', err);
         return res.status(500).json({ message: 'Server error' });
       }
-      res.clearCookie("ps_session")
-      res.clearCookie('jwtToken'); 
-      res.clearCookie('csrf-token')
+      res.clearCookie("techtribe_session")
+      res.clearCookie('TechtribeToken'); 
+      res.clearCookie('csrfToken')
       res.status(200).json({ message: 'Logged out successfully' });
     });
   });
