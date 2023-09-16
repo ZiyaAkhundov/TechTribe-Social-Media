@@ -34,7 +34,7 @@ export default function modal({open,setLoader,handleClose}) {
         setFile(event.target.files[0])
         setLoader(true);
         const reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(event.target.files[0]);
         reader.onloadend = () => {
             setFile(reader.result);
         };
