@@ -103,10 +103,10 @@ router.put('/picture', parser.single('image'), csrfProtection, isAuthenticated, 
         if (!currentUser) return res.status(404).json({ message: "User not found!", status: "error" })
         console.log('req.file: '+req.file)
         if (req.file) {
-            const result = JSON.stringify(req.file);
-            console.log("result: " + JSON.stringify(result));
-            console.log('req.public_id: '+JSON.stringify(result.filename))
-            console.log('req.secure_url: '+JSON.stringify(result.path))
+            const result = req.file;
+            console.log("result: " + JSON.parse(result));
+            console.log('req.public_id: '+JSON.parse(result.filename))
+            console.log('req.secure_url: '+JSON.parse(result.path))
             await currentUser.updateOne({
                 $set: {
                     picture:
