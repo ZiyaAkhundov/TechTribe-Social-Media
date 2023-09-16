@@ -124,7 +124,17 @@ router.delete('/picture',csrfProtection,isAuthenticated, async(req,res) =>{
     try {
         const currentUser = await User.findById(req.session.userId);
         if(!currentUser) return res.status(404).json({message:"User not found!",status:"error"})
-        await cloudinary.uploader.destroy(currentUser.picture.public_id)
+        if (!currentUser.picture || !currentUser.picture.public_id) {
+            return res.status(404).json({ message: 'No photo to delete', status: 'error' });
+        }
+        console.log(currentUser.picture.public_id)
+        const public_id = currentUser.picture.public_id;
+        try {
+            await cloudinary.uploader.destroy(public_id);
+        } catch (cloudinaryError) {
+            console.error('Cloudinary Error:', cloudinaryError);
+            return res.status(500).json({ message: 'Failed to delete photo from Cloudinary', status: 'error' });
+        }
         await currentUser.updateOne({ $unset: { picture: 1 } });
         return res.status(200).json({message:'Photo removed successfully', status: 'success'})
     } catch (error) {
