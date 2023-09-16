@@ -144,7 +144,7 @@ export default function articleModal({
                   onChange={(e) => setValue(e.target.value)}
                   onKeyUp={handleKeyUp}
                 />
-                <button onClick={handleComment} disabled={disable} className={disabled ? 'opacity-60':null}>Post</button>
+                <button onClick={handleComment} disabled={disable} className={disable ? 'opacity-60':null}>Post</button>
               </div>
             </div>
           </div>
