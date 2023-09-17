@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import { Avatar } from '@mui/material';
 
 export  function ModalProfile({open,handleClose,type,username,setuserfollowers}) {
-  const PIC =import.meta.env.VITE_API_IMAGE_URL
   const [loading,setLoading] = useState(true)
   const [data,setData] = useState([])
   const [curUserFollowings,setCurUserFollowings] = useState([])
@@ -106,7 +105,7 @@ const handleFollow = async(data)=>{
                       >
                         <div className="flex justify-start items-center gap-2">
                           <Avatar
-                            src={data.userPic && PIC + data.userPic}
+                            src={data.userPic && data.userPic.url}
                             alt='Image'
                             className="h-11 w-11 border-2 rounded-full"
                           />
