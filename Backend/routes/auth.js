@@ -85,7 +85,7 @@ router.post('/login', async (req, res) => {
       path: '/',
      });
 
-    const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
     res.cookie('TechtribeToken', accessToken, {
       httpOnly: true,
       secure: true,
