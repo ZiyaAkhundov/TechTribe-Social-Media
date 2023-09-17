@@ -30,13 +30,17 @@ export default function DownloadApp() {
   }, []);
 
   return (
-    <div
-      className={`h-10 flex justify-center items-center flex-shrink-0 bg-slate-900 text-white rounded-sm mb-1 mx-1 cursor-pointer ${
-        showInstallButton ? '' : 'hidden'
-      }`}
-      id="installApp"
-    >
-      <img src={download} className="h-4 mx-1" alt="" /> Download App
+    <div>
+      {showInstallButton ? (
+        <div
+          className="h-10 flex justify-center items-center flex-shrink-0 bg-slate-900 text-white rounded-sm mb-1 mx-1 cursor-pointer"
+          id="installApp"
+        >
+          <img src={download} className="h-4 mx-1" alt="" /> Download App
+        </div>
+      ) : (
+        <p>Your PWA is installed!</p>
+      )}
     </div>
   );
 }
