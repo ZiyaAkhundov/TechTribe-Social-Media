@@ -19,32 +19,32 @@ export default defineConfig({
         start_url: '/Feeds',
         icons: [
           {
-            src: './pwa/img/36x36.png',
+            src: '36x36.png',
             sizes: '36x36',
             type: 'image/png',
           },
           {
-            src: './pwa/img/48x48.png',
+            src: '48x48.png',
             sizes: '48x48',
             type: 'image/png',
           },
           {
-            src: './pwa/img/72x72.png',
+            src: '72x72.png',
             sizes: '72x72',
             type: 'image/png'
           },
           {
-            src: './pwa/img/96x96.png',
+            src: '96x96.png',
             sizes: '96x96',
             type: 'image/png'
           },
           {
-            src: './pwa/img/144x144.png',
+            src: '144x144.png',
             sizes: '144x144',
             type: 'image/png'
           },
           {
-            src: './pwa/img/192x192.png',
+            src: '192x192.png',
             sizes: '192x192',
             type: 'image/png'
           }
