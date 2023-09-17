@@ -11,12 +11,17 @@ export default function DownloadApp() {
     const beforeInstallHandler = (e) => {
       e.preventDefault();
       beforeInstallPromptEvent = e;
-      setShowInstallButton(true);
+      // Only show the install button if the app isn't already installed
+      if (!window.matchMedia('(display-mode: standalone)').matches) {
+        setShowInstallButton(true);
+      }
     };
 
     const installButtonClickHandler = () => {
       if (beforeInstallPromptEvent) {
         beforeInstallPromptEvent.prompt();
+        // Hide the install button after prompting for install
+        setShowInstallButton(false);
       }
     };
 
@@ -38,8 +43,10 @@ export default function DownloadApp() {
   }, []);
 
   return (
-    <div className="h-10 flex justify-center items-center flex-shrink-0 bg-slate-900 text-white rounded-sm mb-1 mx-1 cursor-pointer" id="installApp">
-      <img src={download} className="h-4 mx-1" alt="" /> Download App
-    </div>
+    showInstallButton && (
+      <div className="h-10 flex justify-center items-center flex-shrink-0 bg-slate-900 text-white rounded-sm mb-1 mx-1 cursor-pointer" id="installApp">
+        <img src={download} className="h-4 mx-1" alt="" /> Download App
+      </div>
+    )
   );
 }
