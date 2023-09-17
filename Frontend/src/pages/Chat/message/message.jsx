@@ -1,8 +1,7 @@
 import React from 'react'
 import { useSelector } from "react-redux";
 import TimeAgo from 'react-timeago'
-import EnStrings from 'react-timeago/lib/language-strings/en'
-import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
+import Avatar from "@mui/material/Avatar";
 
 export default function Message({message,own,recUserPic}) {
     
@@ -18,8 +17,8 @@ export default function Message({message,own,recUserPic}) {
                   <TimeAgo date={message.createdAt}  className='absolute text-sm/[1px] p-1 -bottom-3 right-8 text-black'>11:02</TimeAgo>
                 </div>
               </div>
-              <img
-                src={user.picture.url}
+              <Avatar
+                src={user.picture && user.picture.url}
                 alt="My profile"
                 className="w-6 h-6 rounded-full order-2 object-cover border"
               />
@@ -34,8 +33,8 @@ export default function Message({message,own,recUserPic}) {
                 <TimeAgo date={message.createdAt}  className='absolute text-sm/[1px] p-1 -bottom-3 left-8 text-black'>11:02</TimeAgo>
                 </div>
               </div>
-              <img
-                src={recUserPic.url}
+              <Avatar
+                src={recUserPic && recUserPic.url}
                 alt="My profile"
                 className="w-6 h-6 rounded-full order-1 object-cover border"
               />
