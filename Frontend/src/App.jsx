@@ -40,6 +40,20 @@ function App() {
         }, 1000);
     });
   }, []); 
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('../sw.js')
+          .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+  }, []);
 if(loading){
   return (
     <div className="absolute h-100dvh w-full top-0 left-0 flex justify-center items-center flex-col">
