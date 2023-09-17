@@ -21,7 +21,9 @@ export default function DownloadApp() {
     };
 
     window.addEventListener('beforeinstallprompt', beforeInstallHandler);
-    installButton.addEventListener('click', installButtonClickHandler);
+    if(installButton){
+      installButton.addEventListener('click', installButtonClickHandler);
+    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', beforeInstallHandler);
