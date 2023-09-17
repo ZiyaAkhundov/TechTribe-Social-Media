@@ -14,6 +14,8 @@ export default function DownloadApp() {
       // Only show the install button if the app isn't already installed
       if (!window.matchMedia('(display-mode: standalone)').matches) {
         setShowInstallButton(true);
+      } else {
+        setShowInstallButton(false); // App is already installed, so hide the install button
       }
     };
 
