@@ -77,8 +77,8 @@ router.post('/login', async (req, res) => {
 
     const csrfToken = generateCSRFToken();
     res.cookie('csrfToken', csrfToken, {
-      httpOnly: false,
-      secure: false,
+      httpOnly: true,
+      secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: 'techtribe-api.onrender.com',
