@@ -29,4 +29,4 @@ export const request = async (url, data = false, method = 'GET', token) => {
 export const post = (url, data, token) => request(url, data, 'POST', token);
 export const put = (url, data, token) => request(url, data, 'PUT', token);
 export const del = (url, data, token) => request(url, data, 'DELETE', token);
-export const get = (url, token) => request(url, false, 'GET', token);
+export const get = (url) => request(url, false, 'GET');

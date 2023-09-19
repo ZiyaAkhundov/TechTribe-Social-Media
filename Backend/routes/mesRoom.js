@@ -37,7 +37,7 @@ router.post("/",isAuthenticated,csrfProtection, async (req, res) => {
   });
 
   //find a message room by userId
-router.get("/find/:userId",isAuthenticated,csrfProtection, async (req, res) => {
+router.get("/find/:userId",isAuthenticated, async (req, res) => {
     const userId = req.params.userId;
     if(userId != req.session.userId){
       return res.status(403).json("You are not permission to perform this operation!")
@@ -72,7 +72,7 @@ router.get("/find/:userId",isAuthenticated,csrfProtection, async (req, res) => {
   });
 
 //find room by id
-router.get("/find/room/:roomId",isAuthenticated,csrfProtection, async (req, res) => {
+router.get("/find/room/:roomId",isAuthenticated, async (req, res) => {
   try {
       const findRoom = await Room.findById(req.params.roomId);
 

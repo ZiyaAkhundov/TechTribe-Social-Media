@@ -1,9 +1,11 @@
 const router = require('express').Router();
 const Message = require('../models/Message');
 const Room = require('../models/MessengerRoom');
+const isAuthenticated =require('../middleware/authentication.js')
+const csrfProtection = require('../middleware/csrfProtection')
 
 //create a new message
-router.post("/", async (req, res) => {
+router.post("/",isAuthenticated,csrfProtection, async (req, res) => {
     const newMessage =  new Message(req.body)
     try {
         const saveMessage = await newMessage.save();
@@ -14,7 +16,7 @@ router.post("/", async (req, res) => {
   });
 
 //get a room messages by userId
-router.get("/room/:roomId/:userId", async (req, res) => {
+router.get("/room/:roomId/:userId",isAuthenticated, async (req, res) => {
     const roomId = req.params.roomId
     const user = req.params.userId
     try {
