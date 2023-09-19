@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux'
 import { login } from './stores/auth';
-import { tokenSet } from './stores/token';
+import { setToken } from './stores/token';
 import axios from 'axios';
 
 
@@ -31,9 +31,9 @@ function App() {
     axios.get(`${import.meta.env.VITE_API_URL}/auth/user-data`, { withCredentials: true })
       .then(response => {
             dispatch(login(response.data)); 
-            dispatch(tokenSet(response.data.token))
+            dispatch(setToken(response.data.token))
             console.log(response.data.token)
-            const { token } = useSelector((state) => state.token.token);
+            const { token } = useSelector((state) => state.token);
             console.log(token)
       })
       .catch(error => {

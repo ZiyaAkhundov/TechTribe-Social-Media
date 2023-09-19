@@ -2,7 +2,6 @@
 import { useSelector } from "react-redux";
 export const request = async (url, data = false, method = 'GET') => {
   const token = useSelector((state) => state.token)
-  console.log(token)
   const options = {
     method,
     credentials: "include",
@@ -20,11 +19,14 @@ export const request = async (url, data = false, method = 'GET') => {
     const response = await fetch(import.meta.env.VITE_API_URL + '/' + url, options);
     const result = await response.json();
     if (response.ok && response.status === 200) {
+      console.log(token)
       return result;
     } else {
+      console.log(token)
       throw result;
     }
   } catch (error) {
+    console.log(token)
     throw error;
   }
 };
