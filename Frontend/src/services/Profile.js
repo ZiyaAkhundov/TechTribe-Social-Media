@@ -1,7 +1,4 @@
 import {put,get} from "../utils/request"
-import { useSelector } from "react-redux";
-
-const token = useSelector((state) => state.token);
 
   export const getUser = async (data) => {
     try {
@@ -23,7 +20,7 @@ const token = useSelector((state) => state.token);
 
   export const Follow = async (data) => {
     try {
-      const response = await put('users/'+data.username+'/follow',null, token)
+      const response = await put('users/'+data.username+'/follow')
       return response;
     } catch (error) {
       throw error;
@@ -50,7 +47,7 @@ const token = useSelector((state) => state.token);
 
   export const removeFollower = async (data) => {
     try {
-      const response = await put('users/'+data.username+'/follow/remove',null, token)
+      const response = await put('users/'+data.username+'/follow/remove')
       return response;
     } catch (error) {
       throw error;

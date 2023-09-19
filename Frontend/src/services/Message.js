@@ -1,11 +1,8 @@
 import {get,put,del,post} from "../utils/request"
-import { useSelector } from "react-redux";
-
-const token = useSelector((state) => state.token);
 
 export const createMesRoom = async (data) => {
     try {
-      const response = await post('messageroom', data, token)
+      const response = await post('messageroom',data)
       return response;
     } catch (error) {
       throw error;
@@ -40,7 +37,7 @@ export const createMesRoom = async (data) => {
 
   export const sendMessage = async (data) => {
     try {
-      const response = await post(`message/`, data, token)
+      const response = await post(`message/`,data)
       return response;
     } catch (error) {
       throw error;

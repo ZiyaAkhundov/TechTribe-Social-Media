@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux'
 import { login } from './stores/auth';
-import { setToken } from './stores/token';
 import axios from 'axios';
 
 
@@ -31,7 +30,6 @@ function App() {
     axios.get(`${import.meta.env.VITE_API_URL}/auth/user-data`, { withCredentials: true })
       .then(response => {
             dispatch(login(response.data)); 
-            dispatch(setToken(response.data.token))
       })
       .catch(error => {
         // console.log('Error fetching user data:', error);

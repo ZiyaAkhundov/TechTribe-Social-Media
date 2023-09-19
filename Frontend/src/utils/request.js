@@ -1,13 +1,12 @@
 // utils/request.js
-export const request = async (url, data = false, method = 'GET', token) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'xsrf-token': token
-  };
+
+export const request = async (url, data = false, method = 'GET') => {
   const options = {
     method,
     credentials: "include",
-    headers: headers
+    headers: {
+      'Content-Type': 'application/json'
+    }
   };
 
   if (data && (method === 'POST' || method === 'PUT')) {
@@ -27,7 +26,7 @@ export const request = async (url, data = false, method = 'GET', token) => {
   }
 };
 
-export const post = (url, data, token) => request(url, data, 'POST', token);
-export const put = (url, data, token) => request(url, data, 'PUT', token);
-export const del = (url, data, token) => request(url, data, 'DELETE', token);
+export const post = (url, data) => request(url, data, 'POST');
+export const put = (url, data) => request(url, data, 'PUT');
+export const del = (url, data) => request(url, data, 'DELETE');
 export const get = (url) => request(url, false, 'GET');
