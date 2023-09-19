@@ -1,6 +1,7 @@
  const csrfProtection = (req, res, next) => {
     const csrfTokenFromCookies= req.cookies.csrfToken;
-    const csrfTokenFromClient = req.headers.cookie['csrfToken'];
+    const cookies = req.headers.cookie.split('; ');
+    const csrfTokenFromClient = cookies.find(cookie => cookie.startsWith('csrfToken='));
     console.log('cookies: ' + req.headers.cookie)
     console.log('csrfTokenFromCookies: '+ csrfTokenFromCookies)
     console.log('csrfTokenFromClient: '+ csrfTokenFromClient)
