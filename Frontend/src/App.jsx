@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { login } from './stores/auth';
 import { tokenSet } from './stores/token';
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
 
 function App() {
@@ -32,6 +33,9 @@ function App() {
       .then(response => {
             dispatch(login(response.data)); 
             dispatch(tokenSet(response.data.token))
+            console.log(response.data.token)
+            const { token } = useSelector((state) => state.token.token);
+            console.log(token)
       })
       .catch(error => {
         // console.log('Error fetching user data:', error);
