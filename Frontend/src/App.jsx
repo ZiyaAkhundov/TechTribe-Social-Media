@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux'
 import { login } from './stores/auth';
 import { tokenSet } from './stores/token';
 import axios from 'axios';
-import { useSelector } from "react-redux";
 
 
 function App() {
