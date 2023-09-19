@@ -10,7 +10,7 @@ import {getARoom,sendMessage,getMessages} from '../../services/Message'
 import {getFolowings} from "../../services/Profile"
 import {io} from 'socket.io-client'
 import "./chat.css"
-import { Avatar } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 
 
 export default function chat({func}) {
