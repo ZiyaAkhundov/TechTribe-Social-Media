@@ -62,6 +62,7 @@ app.use(
     crossOriginResourcePolicy: false,
 })
 );
+app.use(helmet.frameguard({ action: "DENY" }));
 app.use(nocache());
 app.use(cors(corsOptions));
 app.use(cookieParser());
