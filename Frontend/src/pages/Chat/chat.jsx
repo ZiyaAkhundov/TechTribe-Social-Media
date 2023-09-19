@@ -10,6 +10,7 @@ import {getARoom,sendMessage,getMessages} from '../../services/Message'
 import {getFolowings} from "../../services/Profile"
 import {io} from 'socket.io-client'
 import "./chat.css"
+import { Avatar } from '@mui/material';
 
 
 export default function chat({func}) {
@@ -179,7 +180,7 @@ export default function chat({func}) {
                       }
                     })}
 
-                  <img
+                  <Avatar
                     src={receiverUser.picture && receiverUser.picture.url}
                     alt=""
                     className="w-10 sm:w-16 h-10 sm:h-16 rounded-full border"
@@ -300,7 +301,7 @@ export default function chat({func}) {
           </div>
           <div className="h-full w-full flex justify-center items-center">
             <div>
-              <img src={logo} alt="TechTribe" className="h-64 w-64" />
+              <Avatar src={logo} alt="TechTribe" className="h-64 w-64" />
               <p className="text-23 font-mono">Chat with your friends 😊</p>
             </div>
           </div>
