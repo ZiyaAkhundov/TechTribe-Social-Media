@@ -12,21 +12,18 @@ export const request = async (url, data = false, method = 'GET') => {
   };
 
   if (data && (method === 'POST' || method === 'PUT')) {
-    options.body = JSON.stringify(data);
+    options.body = JSON.stringify({...data,...token});
   }
 
   try {
     const response = await fetch(import.meta.env.VITE_API_URL + '/' + url, options);
     const result = await response.json();
     if (response.ok && response.status === 200) {
-      console.log(token)
       return result;
     } else {
-      console.log(token)
       throw result;
     }
   } catch (error) {
-    console.log(token)
     throw error;
   }
 };

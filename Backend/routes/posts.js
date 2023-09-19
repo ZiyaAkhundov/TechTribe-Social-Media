@@ -105,7 +105,7 @@ router.get('/find/:id',isAuthenticated,csrfProtection, async(req,res)=>{
 //get feed posts
 const ITEMS_PER_LIMIT = 5; 
 
-router.get('/feed/posts', isAuthenticated, csrfProtection, async (req, res) => {
+router.get('/feed/posts', isAuthenticated, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 1;
     const currentUser = await User.findById(req.session.userId);
