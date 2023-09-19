@@ -1,11 +1,13 @@
 // utils/request.js
-
+import { useSelector } from "react-redux";
 export const request = async (url, data = false, method = 'GET') => {
+  const { token } = useSelector((state) => state.token);
   const options = {
     method,
     credentials: "include",
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': token,
     }
   };
 

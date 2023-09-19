@@ -16,7 +16,9 @@ router.get('/user-data',isAuthenticated, async (req, res) => {
         if (!user) {
           return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json({username: user.username, id: user._id, email: user.email,picture: user.picture});
+        const csrfToken = generateCSRFToken();
+        req.session.csrfToken =csrfToken
+        res.status(200).json({username: user.username, id: user._id, email: user.email,picture: user.picture,token:req.session.csrfToken});
 
     } else {
       res.status(401).json({ message: 'User not authenticated' });
@@ -75,16 +77,6 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ message: "Invalid Password!", success: false });
     }
 
-    const csrfToken = generateCSRFToken();
-    res.cookie('csrfToken', csrfToken, {
-      httpOnly: false,
-      secure: false,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: 'techtribe-api.onrender.com',
-      path: '/',
-     });
-
     const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
     res.cookie('TechtribeToken', accessToken, {
       httpOnly: true,
@@ -96,6 +88,8 @@ router.post('/login', async (req, res) => {
     });
 
     res.setHeader('Cache-Control', 'no-store');
+    const csrfToken = generateCSRFToken();
+    req.session.csrfToken =csrfToken
     req.session.isAuth = true;
     req.session.userId = user._id;
     req.session.username = user.username;
@@ -106,8 +100,7 @@ router.post('/login', async (req, res) => {
       id: user._id,
       email: user.email,
       picture: user.picture,
-      followers: user.followers,
-      followings: user.followings
+      token:req.session.csrfToken
     });
   } catch (err) {
     console.error('Error:', err);

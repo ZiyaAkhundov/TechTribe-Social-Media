@@ -27,7 +27,6 @@ export default function Feeds() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [posts, setPosts] =useState([])
-  const PIC =import.meta.env.VITE_API_IMAGE_URL
   const { user } = useSelector((state) => state.auth);
   const [limit, setLimit] =useState(1)
   const [loading, setLoading] = useState(false)

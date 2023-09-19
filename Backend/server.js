@@ -8,7 +8,6 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const nocache = require("nocache");
 const helmet = require('helmet')
-const csrf = require('./middleware/csrf')
 const path = require('path')
 
 const dotenv = require('dotenv');
@@ -65,7 +64,6 @@ app.use(
 app.use(nocache());
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(csrf)
 app.use(express.json())
 app.use(morgan("common"))
 app.use(
@@ -104,7 +102,6 @@ app.use("/contact", cors(corsOptions), ContactRoute);
       }
       res.clearCookie("techtribe_session")
       res.clearCookie('TechtribeToken'); 
-      res.clearCookie('csrfToken')
       res.status(200).json({ message: 'Logged out successfully' });
     });
   });
