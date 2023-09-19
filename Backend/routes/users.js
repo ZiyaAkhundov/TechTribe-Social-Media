@@ -156,7 +156,7 @@ router.delete('/:id', async(req,res)=>{
 })
 
 //get a user
-router.get('/:username',csrfProtection,isAuthenticated, async(req,res)=>{
+router.get('/:username',isAuthenticated, async(req,res)=>{
     const username = req.params.username;
     try {
         const user = await User.findOne({username: username});
@@ -178,7 +178,7 @@ router.get('/:username',csrfProtection,isAuthenticated, async(req,res)=>{
         return res.status(500).send(err);
     }
 })
-router.get('/id/:id',csrfProtection,isAuthenticated, async(req,res)=>{
+router.get('/id/:id',isAuthenticated, async(req,res)=>{
     const id = req.params.id;
     try {
         const user = await User.findById(id);
@@ -193,7 +193,7 @@ router.get('/id/:id',csrfProtection,isAuthenticated, async(req,res)=>{
 })
 
 //get users
-router.get('/query/users', csrfProtection, isAuthenticated, async (req, res) => {
+router.get('/query/users', isAuthenticated, async (req, res) => {
     let query = req.query.user;
     if(!query){
         return
@@ -289,7 +289,7 @@ router.put('/:username/follow/remove',csrfProtection,isAuthenticated, async(req,
     }
 }) 
 
-router.get ('/followings/:username',csrfProtection,isAuthenticated, async(req,res)=>{
+router.get ('/followings/:username',isAuthenticated, async(req,res)=>{
     const user = await User.findOne({username:req.params.username});
     if(!user){
         return res.status(404).json({message:"User not found",status:"error"})
@@ -302,7 +302,7 @@ router.get ('/followings/:username',csrfProtection,isAuthenticated, async(req,re
     res.status(200).json({status:"success",data:fulldata})
 })
 
-router.get ('/followers/:username',csrfProtection,isAuthenticated, async(req,res)=>{
+router.get ('/followers/:username',isAuthenticated, async(req,res)=>{
     const user = await User.findOne({username:req.params.username});
     if(!user){
         return res.status(404).json({message:"User not found",status:"error"})
