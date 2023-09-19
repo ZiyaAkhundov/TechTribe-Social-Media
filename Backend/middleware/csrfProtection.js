@@ -1,6 +1,6 @@
  const csrfProtection = (req, res, next) => {
     const csrfTokenFromSession= req.session.csrfToken;
-    const csrfTokenFromClient = req.headers.cookie['xsrf-token'];
+    const csrfTokenFromClient = req.headers.cookie['csrfToken'];
     console.log('csrfTokenFromSession: '+ csrfTokenFromSession)
     console.log('csrfTokenFromClient: '+ csrfTokenFromClient)
     if (csrfTokenFromSession !== csrfTokenFromClient) {
