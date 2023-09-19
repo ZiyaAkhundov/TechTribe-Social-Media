@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import  Message  from './message/message';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import Avatar from '@mui/material/Avatar';
 import logo from "../../assets/image/logo.png"
 import {getARoom,sendMessage,getMessages} from '../../services/Message'
 import {getFolowings} from "../../services/Profile"
 import {io} from 'socket.io-client'
 import "./chat.css"
-import Avatar from '@mui/material/Avatar';
 
 
 export default function chat({func}) {
@@ -182,7 +182,6 @@ export default function chat({func}) {
 
                   <Avatar
                     src={receiverUser.picture && receiverUser.picture.url}
-                    alt=""
                     className="w-10 sm:w-16 h-10 sm:h-16 rounded-full border"
                   />
                 </div>
