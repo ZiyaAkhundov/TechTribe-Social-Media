@@ -1,12 +1,13 @@
 // utils/request.js
 export const request = async (url, data = false, method = 'GET', token) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-CSRF-Token': 'fdgdfgdgfgdgfggdgdfgdfg'
+  };
   const options = {
     method,
     credentials: "include",
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': 'fdgdfgdgfgdgfggdgdfgdfg',
-    }
+    headers: headers
   };
 
   if (data && (method === 'POST' || method === 'PUT')) {
