@@ -5,7 +5,7 @@ export const request = async (url, data = false, method = 'GET', token) => {
     credentials: "include",
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRF-Token': token,
+      'X-CSRF-Token': 'fdgdfgdgfgdgfggdgdfgdfg',
     }
   };
 
