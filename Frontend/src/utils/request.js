@@ -2,7 +2,7 @@
 export const request = async (url, data = false, method = 'GET', token) => {
   const headers = {
     'Content-Type': 'application/json',
-    'X-': token
+    'xsrf-token': token
   };
   const options = {
     method,
