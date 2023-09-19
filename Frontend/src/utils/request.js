@@ -1,7 +1,7 @@
 // utils/request.js
 import { useSelector } from "react-redux";
 export const request = async (url, data = false, method = 'GET') => {
-  const { token } = useSelector((state) => state.token.token);
+  const token = useSelector((state) => state.token)
   console.log(token)
   const options = {
     method,
