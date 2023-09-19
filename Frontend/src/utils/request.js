@@ -1,7 +1,5 @@
 // utils/request.js
-import { useSelector } from "react-redux";
-export const request = async (url, data = false, method = 'GET') => {
-  const token = useSelector((state) => state.token.value)
+export const request = async (url, data = false, method = 'GET', token) => {
   const options = {
     method,
     credentials: "include",
@@ -12,7 +10,7 @@ export const request = async (url, data = false, method = 'GET') => {
   };
 
   if (data && (method === 'POST' || method === 'PUT')) {
-    options.body = JSON.stringify({...data,...token});
+    options.body = JSON.stringify(data);
   }
 
   try {
@@ -28,7 +26,7 @@ export const request = async (url, data = false, method = 'GET') => {
   }
 };
 
-export const post = (url, data) => request(url, data, 'POST');
-export const put = (url, data) => request(url, data, 'PUT');
-export const del = (url, data) => request(url, data, 'DELETE');
-export const get = (url) => request(url, false, 'GET');
+export const post = (url, data, token) => request(url, data, 'POST', token);
+export const put = (url, data, token) => request(url, data, 'PUT', token);
+export const del = (url, data, token) => request(url, data, 'DELETE', token);
+export const get = (url, token) => request(url, false, 'GET', token);

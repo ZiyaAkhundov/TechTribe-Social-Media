@@ -1,4 +1,8 @@
 import {get,put,del,post} from "../utils/request"
+import { useSelector } from "react-redux";
+
+const token = useSelector((state) => state.token);
+
 export const getPosts = async (limit) => {
     try {
       const response = await get(`posts/feed/posts?limit=${limit}`)
@@ -19,7 +23,7 @@ export const getPosts = async (limit) => {
 
   export const createPost = async (data) => {
     try {
-      const response = await post('posts/',data)
+      const response = await post('posts/', data, token)
       return response;
     } catch (error) {
       throw error;
@@ -28,7 +32,7 @@ export const getPosts = async (limit) => {
 
   export const PostLike = async (data) => {
     try {
-      const response = await put('posts/like/'+data.postId)
+      const response = await put('posts/like/'+data.postId, null, token)
       return response;
     } catch (error) {
       throw error;
@@ -37,7 +41,7 @@ export const getPosts = async (limit) => {
 
   export const PostComment = async (data) => {
     try {
-      const response = await put('posts/comment/'+ data.postId,data)
+      const response = await put('posts/comment/'+ data.postId, data, token)
       return response;
     } catch (error) {
       throw error;
@@ -45,7 +49,7 @@ export const getPosts = async (limit) => {
   };
   export const CommentLike = async (data) => {
     try {
-      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/like')
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/like', null, token)
       return response;
     } catch (error) {
       throw error;
@@ -54,7 +58,7 @@ export const getPosts = async (limit) => {
 
   export const replyCommentLike = async (data) => {
     try {
-      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/'+ data.replyId +'/like')
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/'+ data.replyId +'/like', null, token)
       return response;
     } catch (error) {
       throw error;
@@ -63,7 +67,7 @@ export const getPosts = async (limit) => {
 
   export const ReplyComment = async (data) => {
     try {
-      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/reply',{context:data.context})
+      const response = await put('posts/comment/'+ data.postId +'/'+ data.commentId + '/reply',{context:data.context}, token)
       return response;
     } catch (error) {
       throw error;
@@ -72,7 +76,7 @@ export const getPosts = async (limit) => {
 
   export const PostDelete = async (data) => {
     try {
-      const response = await del('posts/'+data.postId)
+      const response = await del('posts/'+data.postId,null, token)
       return response;
     } catch (error) {
       throw error;
@@ -81,7 +85,7 @@ export const getPosts = async (limit) => {
 
   export const CommentDelete = async (data) => {
     try {
-      const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/delete',data)
+      const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/delete', data, token)
       return response;
     } catch (error) {
       throw error;
@@ -90,7 +94,7 @@ export const getPosts = async (limit) => {
 
   export const ReplyDelete = async (data) => {
     try {
-      const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/'+ data.replyId + '/delete')
+      const response = await del('posts/comment/'+ data.postId +'/'+ data.commentId + '/'+ data.replyId + '/delete',null, token)
       return response;
     } catch (error) {
       throw error;

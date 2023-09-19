@@ -32,9 +32,6 @@ function App() {
       .then(response => {
             dispatch(login(response.data)); 
             dispatch(setToken(response.data.token))
-            console.log(response.data.token)
-            const { token } = useSelector((state) => state.token);
-            console.log(token)
       })
       .catch(error => {
         // console.log('Error fetching user data:', error);
