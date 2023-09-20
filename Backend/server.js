@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 var cors = require('cors')
 const mongoose = require('mongoose');
+const mongoSanitize = require('express-mongo-sanitize');
 const session = require('express-session');
 const MongoDBSession = require('connect-mongodb-session')(session); 
 const cookieParser = require('cookie-parser');
@@ -61,6 +62,15 @@ app.use(
   helmet({
     crossOriginResourcePolicy: false,
 })
+);
+app.use(
+  mongoSanitize({
+    allowDots: true,
+    replaceWith: '_',
+    onSanitize: ({ req, key }) => {
+      console.warn(`This request[${key}] will be sanitized`, req);
+    },
+  }),
 );
 app.use(helmet.frameguard({ action: "DENY" }));
 app.use(nocache());
