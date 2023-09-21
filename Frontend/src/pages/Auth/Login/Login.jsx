@@ -43,6 +43,7 @@ export default function Login() {
 
             } catch (error) {
               setDisable(false)
+              console.log(error)
               toast.error('Something went wrong')
             }
           }}
