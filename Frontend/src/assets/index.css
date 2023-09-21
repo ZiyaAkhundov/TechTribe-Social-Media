@@ -36,6 +36,9 @@ aside{
     height: 25px !important;
     width: 25px !important;
 }
+.overflow-anywhere{
+    overflow-wrap: anywhere;
+}
 textarea {
     resize: none  !important;
 }
