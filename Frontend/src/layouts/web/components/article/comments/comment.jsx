@@ -159,7 +159,7 @@ export default function Comment({comment,postId,setComments,setCommentsLength,ha
           </div>
         </div>
         <div className="article-comment-cm">
-          <h4 className="px-4">{comment.context}</h4>
+          <h4 className="px-4 overflow-anywhere flex">{comment.context}</h4>
         </div>
         <div className="cm-actions flex justify-between px-5">
           <div className="flex justify-start gap-2 items-center">

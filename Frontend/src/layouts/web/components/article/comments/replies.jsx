@@ -132,7 +132,7 @@ export default function Replies({commentreply,postId,setComments,commentId,handl
         </div>
       </div>
       <div className="article-comment-cm">
-        <h4 className="px-4">{commentreply.context}</h4>
+        <h4 className="px-4 overflow-anywhere flex">{commentreply.context}</h4>
       </div>
       <div className="cm-actions flex justify-between px-5">
         <button

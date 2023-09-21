@@ -99,7 +99,7 @@ export default function articleModal({
                   </h3>
                 </div>
                 <div className="article-user-comment">
-                  <h3>{data.desc}</h3>
+                  <h3 className="overflow-anywhere flex">{data.desc}</h3>
                   <div className="article-commet-btn">
                     <button
                       className={islike ? "text-blue-500" : null}
