@@ -182,6 +182,13 @@ section{
     }
 }
 
+@media only screen and (max-width: 640px) {
+    .profile-username {
+            overflow: auto;
+            width: 50%;
+        }
+}
+
 @media only screen and (max-width: 525px) {
     .chat-btn{
         display: none;
