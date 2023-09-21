@@ -126,6 +126,9 @@ export default function chat({func}) {
             setMessages([...messages,response.data])
             setNewMessage('')
          }
+         else{
+          setDisable(false)
+         }
       } catch (error) {
         setDisable(false)
          console.log(error)

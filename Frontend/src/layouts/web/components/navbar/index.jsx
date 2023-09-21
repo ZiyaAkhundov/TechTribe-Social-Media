@@ -100,9 +100,9 @@ export default function Navbar({func}) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <NavLink to={`/profile/${user.username}`} className='flex items-center'>
+          <a href={`../profile/${user.username}`} className='flex items-center'>
           <Avatar src={user.picture ? user.picture.url : null} className="border"/> Profile
-          </NavLink>
+          </a>
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
