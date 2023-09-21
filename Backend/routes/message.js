@@ -6,6 +6,8 @@ const csrfProtection = require('../middleware/csrfProtection')
 
 //create a new message
 router.post("/",isAuthenticated,csrfProtection, async (req, res) => {
+  if(!req.body.text) return res.status(400).json({message:'Please write something!', status:'warning'})
+  if(!req.body.sender || !req.body.roomId) return res.status(400).json({message:'Something went wrong!', status:'error'})
     const newMessage =  new Message(req.body)
     try {
         const saveMessage = await newMessage.save();

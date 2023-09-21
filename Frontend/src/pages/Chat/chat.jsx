@@ -11,6 +11,7 @@ import {getARoom,sendMessage,getMessages} from '../../services/Message'
 import {getFolowings} from "../../services/Profile"
 import {io} from 'socket.io-client'
 import "./chat.css"
+import { toast } from 'react-toastify';
 
 
 export default function chat({func}) {
@@ -63,7 +64,6 @@ export default function chat({func}) {
 
     useEffect(()=>{
       setMessages('')
-      setDisable(false)
       const getRoom = async()=>{
          const response = await getARoom(roomId)
          if(response.status=="success"){
@@ -81,7 +81,10 @@ export default function chat({func}) {
       
     },[roomId])
 
-    
+    useEffect(()=>{
+      if(newMessage) return setDisable(false)
+      setDisable(true)
+    },[newMessage])
 
     useEffect(()=>{
       socket.current = io('https://techtribe-api.onrender.com/')
@@ -108,6 +111,7 @@ export default function chat({func}) {
     const handleSubmit = async(e)=>{
       e.preventDefault();
       setDisable(true)
+      if(!newMessage) return toast.warn('Please write something!')
       const message = {
          sender:user.id,
          text: newMessage,
@@ -129,6 +133,7 @@ export default function chat({func}) {
          }
          else{
           setDisable(false)
+          toast.error(response.message)
          }
       } catch (error) {
         setDisable(false)
