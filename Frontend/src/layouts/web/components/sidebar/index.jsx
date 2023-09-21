@@ -1,6 +1,5 @@
 import logo from '../../../../assets/image/cover.png'
 import Menu from './menu'
-import DownloadApp from './DownloadApp'
 import classNames from 'classnames'
 import { NavLink } from 'react-router-dom'
 
@@ -21,7 +20,6 @@ export default function Sidebar({state,func}) {
         </div>
       </div>
       <Menu funct={func} />
-      <DownloadApp />
     </aside>
   )
 }

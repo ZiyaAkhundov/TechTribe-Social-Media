@@ -26,7 +26,6 @@ export default function articleModal({
   handleReport
 }) {
 
-  const PF = import.meta.env.VITE_API_IMAGE_URL;
   const [comments,setComments] = useState(data.comments)
   const [value,setValue] = useState("");
   const[disable,setDisable] = useState(false)
