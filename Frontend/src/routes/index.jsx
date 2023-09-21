@@ -73,7 +73,7 @@ import {Post} from "../pages/Post/post"
       path:"*",
       component: Error,
       auth:false,
-      layout:"main"
+      layout:"none"
     },
     {
       path:"/auth/login",
