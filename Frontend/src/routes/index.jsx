@@ -10,82 +10,82 @@ import {Profile} from "../pages/profile/profile"
 import {Post} from "../pages/Post/post"
   export const routes = [
     {
-      path:"/",
+      path: "/",
       component: Home,
-      auth:false,
-      layout:"main"
+      auth: false,
+      layout: "main",
     },
     {
-      path:"/Settings",
+      path: "/Settings",
       component: Settings,
-      auth:true,
-      layout:"main"
+      auth: true,
+      layout: "main",
     },
     {
-      path:"/Contact",
+      path: "/Contact",
       component: Contact,
-      auth:false,
-      layout:"main"
+      auth: false,
+      layout: "main",
     },
     {
-      path:"/Chat",
+      path: "/Chat",
       component: Chat,
-      auth:true,
-      layout:"chat"
+      auth: true,
+      layout: "chat",
     },
     {
-      path:"/Chat/:id",
+      path: "/Chat/:id",
       component: Chat,
-      auth:true,
-      layout:"chat"
+      auth: true,
+      layout: "chat",
     },
     {
-      path:"/Feeds",
+      path: "/Feeds",
       component: Feeds,
-      auth:true,
-      layout:"main"
+      auth: true,
+      layout: "main",
     },
     {
-      path:"/Profile/:username",
+      path: "/Profile/:username",
       component: Profile,
-      auth:true,
-      layout:"main"
+      auth: true,
+      layout: "main",
     },
     {
-      path:"/Profile/:username/followers",
+      path: "/Profile/:username/followers",
       component: Profile,
-      auth:true,
-      layout:"main"
+      auth: true,
+      layout: "main",
     },
     {
-      path:"/Profile/:username/followings",
+      path: "/Profile/:username/followings",
       component: Profile,
-      auth:true,
-      layout:"main"
+      auth: true,
+      layout: "main",
     },
     {
-      path:"Post/:id",
+      path: "Post/:id",
       component: Post,
-      auth:true,
-      layout:"main"
+      auth: true,
+      layout: "main",
     },
     {
-      path:"*",
+      path: "*",
       component: Error,
-      auth:false,
-      layout:"none"
+      auth: false,
+      layout: "none",
     },
     {
-      path:"/auth/login",
+      path: "/auth/login",
       component: Login,
-      auth:false,
-      layout:"none"
+      auth: false,
+      layout: "none",
     },
     {
-      path:"/auth/register",
+      path: "/auth/register",
       component: Register,
-      auth:false,
-      layout:"none"
-    }
+      auth: false,
+      layout: "none",
+    },
   ];
   export default routes; 
