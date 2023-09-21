@@ -63,6 +63,7 @@ export default function chat({func}) {
 
     useEffect(()=>{
       setMessages('')
+      setDisable(true)
       const getRoom = async()=>{
          const response = await getARoom(roomId)
          if(response.status=="success"){
