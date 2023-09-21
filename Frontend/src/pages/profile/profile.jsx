@@ -134,7 +134,7 @@ export function Profile() {
   };
 
   if (noUser) {
-    return <div>Something went wrong</div>;
+    return <div className="h-full w-full justify-center items-center text-1.5">This url is broken.</div>;
   }
   if (User) {
     return (
