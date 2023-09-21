@@ -12,7 +12,7 @@ export default function Message({message,own,recUserPic}) {
           <div className="chat-message">
             <div className="flex items-end justify-end relative">
               <div className="flex flex-col space-y-2 text-xs max-w-[18rem] mx-2 order-1 items-end">
-                <div className='px-4 py-2 rounded-lg rounded-br-none bg-blue-600 text-white w-full break-words'>
+                <div className='px-4 py-2 rounded-lg rounded-br-none bg-blue-600 text-white w-full overflow-anywhere flex'>
                   {message.text}
                   <TimeAgo date={message.createdAt}  className='absolute text-sm/[1px] p-1 -bottom-3 right-8 text-black'>11:02</TimeAgo>
                 </div>
