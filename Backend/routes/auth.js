@@ -67,12 +67,12 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      return res.status(404).json({ message: "User not found", success: false });
+      return res.status(404).json({ message: "Invalid Username or Password!", success: false });
     }
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) {
-      return res.status(403).json({ message: "Invalid Password!", success: false });
+      return res.status(403).json({ message: "Invalid Username or Password!", success: false });
     }
 
     const csrfToken = generateCSRFToken();
