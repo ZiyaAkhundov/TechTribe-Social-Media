@@ -137,7 +137,7 @@ export default function chat({func}) {
          }
       } catch (error) {
         setDisable(false)
-         console.log(error)
+        toast.error(error.message)
       }
     }
     useEffect(()=>{
