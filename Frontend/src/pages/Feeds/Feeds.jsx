@@ -73,7 +73,7 @@ useEffect(()=>{
   return (
     <div className="content overflow-auto flex-1 scroll-smooth relative">
       <div className="content-inner w-full">
-        <div className="flex w-full">
+        <div className="flex w-full h-full">
           <div className=" w-full md:w-90">
             <div className="w-[85%] mx-auto feed-top">
               <div className="m-5 bg-white border rounded-md shadow-feed">
