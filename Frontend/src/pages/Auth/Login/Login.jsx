@@ -27,6 +27,7 @@ export default function Login() {
             username: '',
             password: ''
           }} onSubmit={async (values) => {
+            try {
               setDisable(true)
               const response = await LoginUser(values);
               if (response.success) {
@@ -39,6 +40,10 @@ export default function Login() {
                 setDisable(false)
                 toast.error(response.message)
               }
+            } catch (error) {
+              setDisable(false)
+              toast.error(error.message)
+            }    
           }}
             validationSchema={validationLogin}>
             {props => (
