@@ -68,6 +68,7 @@ export default function chat({func}) {
          const response = await getARoom(roomId)
          if(response.status=="success"){
             setReceiverUser(response.data)
+            console.log(response.data)
          }
       }
       const getAllMessages = async()=>{
