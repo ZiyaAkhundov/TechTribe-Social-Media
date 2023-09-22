@@ -146,7 +146,7 @@ export default function chat({func}) {
         if(response.status == 'success'){
           socket.current.emit('addUser', user.id);
           socket.current.on('getUsers',(users)=>{
-            setOnlineUsers(response.data.filter((f)=>users.some((u)=>u.userId ===f.id)))
+            setOnlineUsers(response.data.filter((f)=>users.some((u)=>u.userId === f.id)))
          })
         }
       }

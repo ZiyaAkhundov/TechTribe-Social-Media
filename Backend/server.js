@@ -141,6 +141,7 @@ users.push({
   userId,
   socketId
 })
+console.log(users)
 }
 
 const removeUser = (socketId) => {
