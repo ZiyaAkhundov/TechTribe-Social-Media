@@ -13,6 +13,7 @@ import { CommentLike,CommentDelete,ReplyComment } from "../../../../../services/
 import { useSelector } from "react-redux";
 import Replies from './replies'
 import { NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ITEM_HEIGHT = 20;
 export default function Comment({comment,postId,setComments,setCommentsLength,handleReport,handleOpenReportModal}) {
@@ -34,6 +35,7 @@ export default function Comment({comment,postId,setComments,setCommentsLength,ha
       setAnchorEl(null);
     };
     const sendReply = async (id) => {
+      if(!replyContext) return toast.warning('Please write comment!')
       setDisable(true)
       const response = await ReplyComment({ postId: postId, commentId: id,context: replyContext });
       if(response.status == 'success'){

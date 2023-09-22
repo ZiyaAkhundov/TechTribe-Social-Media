@@ -204,6 +204,7 @@ router.put('/comment/:id', isAuthenticated,csrfProtection, async (req, res) => {
             res.status(404).json({message:"User not found",status:"error"});
             return;
         }
+        if(!req.body.context) return res.status(404).json({message:'Please write comment', status:'error'})
         const newComment = { _id:uuidv4(),userId:user._id, context: req.body.context};
         await Post.updateOne({ _id: req.params.id }, { $push: { comments: newComment } });
         const data = await Post.findById(req.params.id);
@@ -314,7 +315,7 @@ router.put('/comment/:id/:commentId/reply',isAuthenticated,csrfProtection, async
             res.status(404).json({message:"Comment not found",status:'error'});
             return;
         }
-
+        if(!req.body.context) return res.status(404).json({message:"Please write comment!", status:'error'})
         const newReplyComment = { _id:uuidv4(),userId: user._id, context: req.body.context};
 
         commentToReply.commentReply.push(newReplyComment);

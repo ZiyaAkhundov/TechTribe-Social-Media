@@ -35,7 +35,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
     setDisable(true)
     
     const formData = new FormData();
-    
+    if(!file && !textInputRef.current.value) return toast.warning('Please write text or choose image!')
     if (file) {
       if (!file.type.startsWith("image/")) {
         return toast.error("Invalid File Type. Please select a valid image file.");
