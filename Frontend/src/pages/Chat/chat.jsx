@@ -152,7 +152,7 @@ export default function chat({func}) {
       }
       followings()
     },[user])
-
+console.log(onlineUsers)
     
   return (
     <div className="chat-box flex-1 p:2 sm:p-6 justify-between flex flex-col h-[100dvh]">
