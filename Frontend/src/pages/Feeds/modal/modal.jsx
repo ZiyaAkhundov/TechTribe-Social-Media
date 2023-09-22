@@ -74,7 +74,7 @@ export default function BasicModal({open,handleOpen,handleClose,setPosts,setNoPo
       }
     } catch (err) {
       setDisable(false)
-      toast.error(err);
+      toast.error(err.message);
     }
 };
 
