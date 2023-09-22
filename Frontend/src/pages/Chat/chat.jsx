@@ -101,7 +101,7 @@ export default function chat({func}) {
       return () => {
         socket.current.disconnect();
       };
-    },[])
+    },[socket,setArrivalMessage])
 
     useEffect(()=>{
       arrivalMessage && receiverUser?.id.includes(arrivalMessage.sender) &&
