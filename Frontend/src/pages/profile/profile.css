@@ -10,7 +10,7 @@ section::-webkit-scrollbar-thumb {
 }
 section{
     overflow: auto;
-    height: calc(100% - 60px);
+    height: calc(100dvh - 60px);
 }
 .content-profile{
     background-color: #fafaff85;
