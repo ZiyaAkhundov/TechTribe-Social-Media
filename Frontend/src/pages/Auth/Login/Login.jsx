@@ -52,7 +52,7 @@ export default function Login() {
                   <div className="wrap-input100 validate-input m-b-26 relative">
                     <div>
                       <span className="label-input100">Username</span>
-                      <Field type="text" name="username" placeholder="Enter Email" className='input100' />
+                      <Field type="text" name="username" placeholder="Enter username" className='input100' />
                       <span className="focus-input100"></span>
                     </div>
                     <ErrorMessage name="username" component="small" className="block text text-sm text-red-600 absolute -bottom-6 mx-3" />
