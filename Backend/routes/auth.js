@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
     res.cookie('csrfToken', csrfToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: 'techtribe-api.onrender.com',
       path: '/',
@@ -89,7 +89,7 @@ router.post('/login', async (req, res) => {
     res.cookie('TechtribeToken', accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: 'techtribe-api.onrender.com',
       path: '/',
